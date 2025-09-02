@@ -14,17 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="50e02f6e-d1ea-4346-b814-f626d6d8ca0d" name="Changes" comment="beta">
-      <change beforePath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.11.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Components/BottomPanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Components/BottomPanel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Navigation/RootNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Navigation/RootNavigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Permissions/BluetoothPermission.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Permissions/BluetoothPermission.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Ui/Screen/AppNavigation/appMainNavigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Ui/Screen/AppNavigation/appMainNavigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Ui/Screen/Home/MenuScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Mobile/Ui/Screen/Home/MenuScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Utils/BluetoothManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Utils/BluetoothManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Utils/WindowSizeChecker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/unreallx/redrive/Utils/WindowSizeChecker.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,6 +97,11 @@
     <option name="BUILD_TARGET_KEY" value="apk" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="beta-v0.0.1" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -115,12 +110,12 @@
     &quot;assignee&quot;: &quot;iUnreallx&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/iUnreallx/ReDrive",
-    "accountId": "3719a26a-c1c3-49cd-a1e9-39c7c187e7d6"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/iUnreallx/ReDrive&quot;,
+    &quot;accountId&quot;: &quot;3719a26a-c1c3-49cd-a1e9-39c7c187e7d6&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -154,10 +149,11 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "refactor/02",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/AndStudioKotlin/ReDrive.x",
     "memory.settings.postsync.last.time.stamp": "1756830205658",
