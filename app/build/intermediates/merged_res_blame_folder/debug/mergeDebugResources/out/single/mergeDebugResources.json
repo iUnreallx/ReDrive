@@ -1,0 +1,150 @@
+[
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_chevron.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/chevron.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/xml_data_extraction_rules.xml.flat",
+        "source": "com.unreallx.redrive.app-main-61:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_music.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/music.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_gradient_to_menu.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/gradient_to_menu.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/xml_backup_rules.xml.flat",
+        "source": "com.unreallx.redrive.app-main-61:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_engine.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/engine.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_bug.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/bug.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-anydpi/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_car_background.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/car_background.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_connect.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/connect.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_fuel.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/fuel.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_map.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/map.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_reload.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/reload.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_temp.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/temp.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_bluetooth.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/bluetooth.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_connect_accent.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/connect_accent.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_chevron_vertical.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/chevron_vertical.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_settings.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/settings.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_wifi.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/wifi.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-anydpi/ic_launcher.xml"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_settings_accent.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/settings_accent.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_ai.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/ai.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_home.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/home.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_car_menu1.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/car_menu1.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/drawable_car.png.flat",
+        "source": "com.unreallx.redrive.app-main-61:/drawable/car.png"
+    },
+    {
+        "merged": "com.unreallx.redrive.app-debug-59:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.unreallx.redrive.app-main-61:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    }
+]

@@ -1,0 +1,217 @@
+//@Composable
+//fun Speedometer(
+//    modifier: Modifier = Modifier,
+//    speedMin: Float = SpeedometerConstants.SPEED_MIN,
+//    speedMax: Float = SpeedometerConstants.SPEED_MAX,
+//    sizeDp: Dp,
+//    speed: Float
+//) {
+//    val angleStart = 135f
+//    val angleEnd = 405f
+//    val sweepAngle = angleEnd - angleStart
+//
+//    val animatedSpeed by animateFloatAsState(
+//        targetValue = speed.coerceIn(speedMin, speedMax),
+//        animationSpec = tween(durationMillis = 300, easing = LinearEasing),
+//        label = "speed"
+//    )
+//
+//    val needleAngle = angleStart + (animatedSpeed - speedMin) / (speedMax - speedMin) * sweepAngle
+//    Box(
+//        modifier
+//            .size(sizeDp),
+//        contentAlignment = Alignment.BottomCenter
+//    ) {
+//        val textSizeMini = with(LocalDensity.current) {
+//            (sizeDp.toPx() / 18).toSp()
+//        }
+//        Canvas(modifier = Modifier.fillMaxSize()) {
+//            val canvasSize = size.minDimension
+//            val radius = canvasSize / 2.2f
+//            val center = Offset(size.width / 2f, size.height / 2f)
+//
+//            drawCircle(
+//                brush = Brush.radialGradient(
+//                    colors = listOf(
+//                        ReDriveColors.RadialGradient.copy(alpha = 0.5f),
+//                        Color.Transparent
+//                    ),
+//                    center = center,
+//                    radius = radius
+//                ),
+//                radius = radius,
+//                center = center
+//            )
+//
+//            val arcStrokeWidth = 50f
+//            val arcRadius = radius + arcStrokeWidth / 15f
+//
+//            drawArc(
+//                color = Color.Gray.copy(alpha = 0.4f),
+//                startAngle = angleStart,
+//                sweepAngle = sweepAngle,
+//                useCenter = false,
+//                style = Stroke(width = arcStrokeWidth, cap = StrokeCap.Round),
+//                topLeft = Offset(center.x - arcRadius, center.y - arcRadius),
+//                size = Size(arcRadius * 2, arcRadius * 2)
+//            )
+//
+//
+//            //angle design
+//            val sweepStrokeWidth = 50f
+//            val sweepRadius = radius + sweepStrokeWidth / 15f
+//
+//            val activeSweep = (needleAngle - angleStart).coerceIn(0f, sweepAngle)
+//
+//            val sweepPath = Path().apply {
+//                arcTo(
+//                    rect = Rect(
+//                        center - Offset(sweepRadius, sweepRadius),
+//                        Size(sweepRadius * 2, sweepRadius * 2)
+//                    ),
+//                    startAngleDegrees = angleStart,
+//                    sweepAngleDegrees = activeSweep,
+//                    forceMoveTo = false
+//                )
+//            }
+//
+//            val startOffset = Offset(
+//                center.x + sweepRadius * cos(angleStart * PI / 180).toFloat(),
+//                center.y + sweepRadius * sin(angleStart * PI / 180).toFloat()
+//            )
+//
+//            val effectiveAngle = if (activeSweep < 10f) angleStart + 10f else needleAngle
+//
+//            val endOffset = Offset(
+//                center.x + sweepRadius * cos(effectiveAngle * PI / 180).toFloat(),
+//                center.y + sweepRadius * sin(effectiveAngle * PI / 180).toFloat()
+//            )
+//
+//            drawPath(
+//                path = sweepPath,
+//                brush = Brush.linearGradient(
+//                    colors = listOf(
+//                        ReDriveColors.SpeedometerShape,
+//                        ReDriveColors.SpeedometerMiddle,
+//                        ReDriveColors.SpeedometerEnd
+//                    ),
+//                    start = startOffset,
+//                    end = endOffset
+//                ),
+//                style = Stroke(width = sweepStrokeWidth, cap = StrokeCap.Round)
+//            )
+//
+//            val speedMax = 280f
+//            val bigTickStep = 20f
+//            val smallDivisions = 4
+//            val smallTickStep = bigTickStep / smallDivisions
+//
+//            val totalSteps = (speedMax / smallTickStep).toInt()
+//
+//            for (i in 0..totalSteps) {
+//                val value = i * smallTickStep
+//                val fraction = value / speedMax
+//                val angle = angleStart + fraction * sweepAngle
+//                val rad = Math.toRadians(angle.toDouble())
+//
+//                val isBigTick = value % bigTickStep == 0f
+//                val tickColor = if (isBigTick) Color.White else Color.Gray
+//                val tickWidth = if (isBigTick) 4f else 2f
+//                val tickLength = if (isBigTick) 12f else 1f
+//
+//                val startRadius = radius - tickLength - 50
+//                val endRadius = radius - 30
+//
+//                val start = Offset(
+//                    x = (center.x + cos(rad) * startRadius).toFloat(),
+//                    y = (center.y + sin(rad) * startRadius).toFloat()
+//                )
+//                val end = Offset(
+//                    x = (center.x + cos(rad) * endRadius).toFloat(),
+//                    y = (center.y + sin(rad) * endRadius).toFloat()
+//                )
+//
+//                drawLine(
+//                    color = tickColor,
+//                    start = start,
+//                    end = end,
+//                    strokeWidth = tickWidth
+//                )
+//
+//                if (isBigTick) {
+//                    val textRadius = radius - 104
+//                    var textX = (center.x + cos(rad) * textRadius).toFloat()
+//                    val textY = (center.y + sin(rad) * textRadius).toFloat() + 5f
+//
+//                    if (value >= 200f) {
+//                        textX -= 10f
+//                    }
+//
+//                    drawContext.canvas.nativeCanvas.apply {
+//                        drawText(
+//                            "${value.toInt()}",
+//                            textX,
+//                            textY + 8,
+//                            android.graphics.Paint().apply {
+//                                color = android.graphics.Color.WHITE
+//                                textSize = if (value.toInt() % 40 == 0) textSizeMini.toPx() else 0f
+//                                typeface = android.graphics.Typeface.DEFAULT_BOLD
+//                                textAlign = android.graphics.Paint.Align.CENTER
+//                            }
+//                        )
+//                    }
+//                }
+//            }
+//
+//            // arrow design
+//            val needleLength = radius - 100f
+//            val needleBaseWidth = 28f
+//            val needleRad = Math.toRadians(needleAngle.toDouble())
+//
+//            val needleEnd = Offset(
+//                x = (center.x + cos(needleRad) * needleLength).toFloat(),
+//                y = (center.y + sin(needleRad) * needleLength).toFloat()
+//            )
+//
+//            val baseLeft = Offset(
+//                x = (center.x + cos(needleRad - Math.PI / 2) * needleBaseWidth).toFloat(),
+//                y = (center.y + sin(needleRad - Math.PI / 2) * needleBaseWidth).toFloat()
+//            )
+//
+//            val baseRight = Offset(
+//                x = (center.x + cos(needleRad + Math.PI / 2) * needleBaseWidth).toFloat(),
+//                y = (center.y + sin(needleRad + Math.PI / 2) * needleBaseWidth).toFloat()
+//            )
+//
+//            val needlePath = Path().apply {
+//                moveTo(needleEnd.x, needleEnd.y)
+//                lineTo(baseLeft.x, baseLeft.y)
+//                lineTo(baseRight.x, baseRight.y)
+//                close()
+//            }
+//
+//            drawPath(
+//                color = Color.White,
+//                path = needlePath
+//            )
+//            drawCircle(Color.White, 32f, center)
+//            drawCircle(Color.Black, 24f, center)
+//
+//        }
+//
+//
+//        val animatedSpeed by animateFloatAsState(
+//            targetValue = speed,
+//            animationSpec = tween(durationMillis = 100)
+//        )
+//
+//        Text(
+//            text = "${animatedSpeed.roundToInt()}",
+//            fontSize = fixedSp(sizeDp.value / 7),
+//            fontWeight = FontWeight.Bold,
+//            color = ReDriveColors.MainText,
+//            modifier = Modifier.offset(y = -38.dp)
+//        )
+//
+//    }
+//}

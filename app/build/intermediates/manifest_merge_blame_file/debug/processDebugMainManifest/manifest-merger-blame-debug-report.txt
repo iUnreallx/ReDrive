@@ -1,0 +1,242 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.unreallx.redrive"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="35" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:5:5-66
+11-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:5:22-64
+12    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+12-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:6:5-75
+12-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:6:22-73
+13    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+13-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:7:5-75
+13-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:7:22-73
+14    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+14-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:8:5-78
+14-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:8:22-76
+15    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+15-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:9:5-81
+15-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:9:22-78
+16    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+16-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:10:5-80
+16-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:10:22-77
+17    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+17-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:8:5-78
+17-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:8:22-76
+18    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+18-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:12:5-80
+18-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:12:22-78
+19    <uses-permission android:name="android.permission.BLUETOOTH" />
+19-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:13:5-68
+19-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:13:22-65
+20    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+20-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:14:5-74
+20-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:14:22-71
+21    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+21-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:15:5-76
+21-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:15:22-73
+22    <uses-permission android:name="android.permission.VIBRATE" />
+22-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:16:5-66
+22-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:16:22-63
+23    <uses-permission
+23-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:17:5-18:57
+24        android:name="android.permission.BLUETOOTH_SCAN"
+24-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:17:22-70
+25        android:usesPermissionFlags="neverForLocation" />
+25-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:18:9-55
+26
+27    <!-- Include required permissions for Google Maps API to run. -->
+28    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+28-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:23:5-79
+28-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:23:22-76
+29
+30    <uses-feature
+30-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:26:5-28:35
+31        android:glEsVersion="0x00020000"
+31-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:27:9-41
+32        android:required="true" />
+32-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:28:9-32
+33
+34    <queries>
+34-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:30:5-34:15
+35
+36        <!-- Needs to be explicitly declared on Android R+ -->
+37        <package android:name="com.google.android.apps.maps" />
+37-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:33:9-64
+37-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:33:18-61
+38    </queries>
+39
+40    <permission
+40-->[androidx.core:core:1.16.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\a369448c31173a3dfb7992361e83f822\transformed\core-1.16.0\AndroidManifest.xml:22:5-24:47
+41        android:name="com.unreallx.redrive.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+41-->[androidx.core:core:1.16.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\a369448c31173a3dfb7992361e83f822\transformed\core-1.16.0\AndroidManifest.xml:23:9-81
+42        android:protectionLevel="signature" />
+42-->[androidx.core:core:1.16.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\a369448c31173a3dfb7992361e83f822\transformed\core-1.16.0\AndroidManifest.xml:24:9-44
+43
+44    <uses-permission android:name="com.unreallx.redrive.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+44-->[androidx.core:core:1.16.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\a369448c31173a3dfb7992361e83f822\transformed\core-1.16.0\AndroidManifest.xml:26:5-97
+44-->[androidx.core:core:1.16.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\a369448c31173a3dfb7992361e83f822\transformed\core-1.16.0\AndroidManifest.xml:26:22-94
+45
+46    <application
+46-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:21:5-47:19
+47        android:allowBackup="true"
+47-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:22:9-35
+48        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+48-->[androidx.core:core:1.16.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\a369448c31173a3dfb7992361e83f822\transformed\core-1.16.0\AndroidManifest.xml:28:18-86
+49        android:dataExtractionRules="@xml/data_extraction_rules"
+49-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:23:9-65
+50        android:debuggable="true"
+51        android:extractNativeLibs="false"
+52        android:fullBackupContent="@xml/backup_rules"
+52-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:24:9-54
+53        android:icon="@mipmap/ic_launcher"
+53-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:25:9-43
+54        android:label="@string/app_name"
+54-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:26:9-41
+55        android:roundIcon="@mipmap/ic_launcher_round"
+55-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:27:9-54
+56        android:supportsRtl="true"
+56-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:28:9-35
+57        android:testOnly="true"
+58        android:theme="@style/Theme.ReDrive" >
+58-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:29:9-45
+59        <meta-data
+59-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:32:9-34:71
+60            android:name="com.google.android.geo.API_KEY"
+60-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:33:13-58
+61            android:value="AIzaSyAzKfTxr2r3FOGNUfF-4XCIyV8PbxzT7vw" />
+61-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:34:13-68
+62
+63        <activity
+63-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:36:9-46:20
+64            android:name="com.unreallx.redrive.MainActivity"
+64-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:37:13-41
+65            android:exported="true"
+65-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:38:13-36
+66            android:label="@string/app_name"
+66-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:39:13-45
+67            android:theme="@style/Theme.ReDrive" >
+67-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:40:13-49
+68            <intent-filter>
+68-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:41:13-45:29
+69                <action android:name="android.intent.action.MAIN" />
+69-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:42:17-69
+69-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:42:25-66
+70
+71                <category android:name="android.intent.category.LAUNCHER" />
+71-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:44:17-77
+71-->D:\AndStudioKotlin\ReDrive\app\src\main\AndroidManifest.xml:44:27-74
+72            </intent-filter>
+73        </activity>
+74        <!-- Needs to be explicitly declared on P+ -->
+75        <uses-library
+75-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:39:9-41:40
+76            android:name="org.apache.http.legacy"
+76-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:40:13-50
+77            android:required="false" />
+77-->[com.google.android.gms:play-services-maps:18.2.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\3d49069c5671ae8464af1e00a37e2f9c\transformed\play-services-maps-18.2.0\AndroidManifest.xml:41:13-37
+78
+79        <activity
+79-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\reallx\.gradle\caches\8.11.1\transforms\9ef3e71f593a0641cf5363e6a29d9c17\transformed\play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+80            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+80-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\reallx\.gradle\caches\8.11.1\transforms\9ef3e71f593a0641cf5363e6a29d9c17\transformed\play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+81            android:exported="false"
+81-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\reallx\.gradle\caches\8.11.1\transforms\9ef3e71f593a0641cf5363e6a29d9c17\transformed\play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+82            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+82-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\reallx\.gradle\caches\8.11.1\transforms\9ef3e71f593a0641cf5363e6a29d9c17\transformed\play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+83
+84        <meta-data
+84-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\0016870bdec3d8f97db3810ce570acc5\transformed\play-services-basement-18.0.0\AndroidManifest.xml:21:9-23:69
+85            android:name="com.google.android.gms.version"
+85-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\0016870bdec3d8f97db3810ce570acc5\transformed\play-services-basement-18.0.0\AndroidManifest.xml:22:13-58
+86            android:value="@integer/google_play_services_version" />
+86-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\0016870bdec3d8f97db3810ce570acc5\transformed\play-services-basement-18.0.0\AndroidManifest.xml:23:13-66
+87
+88        <activity
+88-->[androidx.compose.ui:ui-tooling-android:1.7.8] C:\Users\reallx\.gradle\caches\8.11.1\transforms\fe6d20b6135918275c21bfc99fd37b1b\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
+89            android:name="androidx.compose.ui.tooling.PreviewActivity"
+89-->[androidx.compose.ui:ui-tooling-android:1.7.8] C:\Users\reallx\.gradle\caches\8.11.1\transforms\fe6d20b6135918275c21bfc99fd37b1b\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
+90            android:exported="true" />
+90-->[androidx.compose.ui:ui-tooling-android:1.7.8] C:\Users\reallx\.gradle\caches\8.11.1\transforms\fe6d20b6135918275c21bfc99fd37b1b\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
+91
+92        <provider
+92-->[androidx.emoji2:emoji2:1.3.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\700cb368a1ec47825c9efce9eb1ec7cb\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+93            android:name="androidx.startup.InitializationProvider"
+93-->[androidx.emoji2:emoji2:1.3.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\700cb368a1ec47825c9efce9eb1ec7cb\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+94            android:authorities="com.unreallx.redrive.androidx-startup"
+94-->[androidx.emoji2:emoji2:1.3.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\700cb368a1ec47825c9efce9eb1ec7cb\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+95            android:exported="false" >
+95-->[androidx.emoji2:emoji2:1.3.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\700cb368a1ec47825c9efce9eb1ec7cb\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+96            <meta-data
+96-->[androidx.emoji2:emoji2:1.3.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\700cb368a1ec47825c9efce9eb1ec7cb\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+97                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+97-->[androidx.emoji2:emoji2:1.3.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\700cb368a1ec47825c9efce9eb1ec7cb\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+98                android:value="androidx.startup" />
+98-->[androidx.emoji2:emoji2:1.3.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\700cb368a1ec47825c9efce9eb1ec7cb\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+99            <meta-data
+99-->[androidx.lifecycle:lifecycle-process:2.9.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\a2c43699530df48228b8bcee9426466f\transformed\lifecycle-process-2.9.0\AndroidManifest.xml:29:13-31:52
+100                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+100-->[androidx.lifecycle:lifecycle-process:2.9.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\a2c43699530df48228b8bcee9426466f\transformed\lifecycle-process-2.9.0\AndroidManifest.xml:30:17-78
+101                android:value="androidx.startup" />
+101-->[androidx.lifecycle:lifecycle-process:2.9.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\a2c43699530df48228b8bcee9426466f\transformed\lifecycle-process-2.9.0\AndroidManifest.xml:31:17-49
+102            <meta-data
+102-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
+103                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+103-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
+104                android:value="androidx.startup" />
+104-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
+105        </provider>
+106
+107        <activity
+107-->[androidx.compose.ui:ui-test-manifest:1.7.8] C:\Users\reallx\.gradle\caches\8.11.1\transforms\951d183c7b1a599026dd03745eb8ee1d\transformed\ui-test-manifest-1.7.8\AndroidManifest.xml:23:9-25:39
+108            android:name="androidx.activity.ComponentActivity"
+108-->[androidx.compose.ui:ui-test-manifest:1.7.8] C:\Users\reallx\.gradle\caches\8.11.1\transforms\951d183c7b1a599026dd03745eb8ee1d\transformed\ui-test-manifest-1.7.8\AndroidManifest.xml:24:13-63
+109            android:exported="true" />
+109-->[androidx.compose.ui:ui-test-manifest:1.7.8] C:\Users\reallx\.gradle\caches\8.11.1\transforms\951d183c7b1a599026dd03745eb8ee1d\transformed\ui-test-manifest-1.7.8\AndroidManifest.xml:25:13-36
+110
+111        <receiver
+111-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
+112            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+112-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
+113            android:directBootAware="false"
+113-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
+114            android:enabled="true"
+114-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
+115            android:exported="true"
+115-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
+116            android:permission="android.permission.DUMP" >
+116-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
+117            <intent-filter>
+117-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
+118                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+118-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
+118-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
+119            </intent-filter>
+120            <intent-filter>
+120-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
+121                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+121-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
+121-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
+122            </intent-filter>
+123            <intent-filter>
+123-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
+124                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+124-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
+124-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
+125            </intent-filter>
+126            <intent-filter>
+126-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
+127                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+127-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
+127-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\reallx\.gradle\caches\8.11.1\transforms\405407af10585f3dd115eff1151303f9\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
+128            </intent-filter>
+129        </receiver>
+130    </application>
+131
+132</manifest>
