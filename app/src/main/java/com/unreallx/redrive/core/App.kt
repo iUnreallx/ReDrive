@@ -1,4 +1,4 @@
-package com.unreallx.redrive
+package com.unreallx.redrive.core
 
 import android.app.Application
 import com.unreallx.redrive.di.dataModule
