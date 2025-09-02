@@ -1,4 +1,4 @@
-package com.unreallx.redrive.Utils
+package com.unreallx.redrive.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity

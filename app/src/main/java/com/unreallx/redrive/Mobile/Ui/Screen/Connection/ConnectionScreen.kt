@@ -67,15 +67,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
-import com.unreallx.redrive.Utils.Permissions.BluetoothPermissionHandler
 import com.unreallx.redrive.R
-import com.unreallx.redrive.Utils.BluetoothViewModel
-import com.unreallx.redrive.Utils.CustomRippleBox
-import com.unreallx.redrive.Utils.DeviceStatus
-import com.unreallx.redrive.Utils.States.SharedState
-import com.unreallx.redrive.Utils.WifiViewModel
-import com.unreallx.redrive.Utils.fixedSp
 import com.unreallx.redrive.ui.theme.ReDriveColors
+import com.unreallx.redrive.utils.BluetoothViewModel
+import com.unreallx.redrive.utils.CustomRippleBox
+import com.unreallx.redrive.utils.DeviceStatus
+import com.unreallx.redrive.utils.Permissions.BluetoothPermissionHandler
+import com.unreallx.redrive.utils.States.SharedState
+import com.unreallx.redrive.utils.WifiViewModel
+import com.unreallx.redrive.utils.fixedSp
 
 
 data class FakeDeviceState(
@@ -100,7 +100,7 @@ fun connectionScreenUI(
     wifiViewModel: WifiViewModel
 ) {
     val context = LocalContext.current
-    val activity = context as? Activity
+    context as? Activity
 
     var permissionsGranted by rememberSaveable { mutableStateOf(false) }
     var isToggledBluetooth by rememberSaveable { mutableStateOf(false) }
@@ -550,7 +550,7 @@ fun connectionScreenUI(
 
                     val fakeConnectedDevice: FakeBluetoothDevice? = null
 
-                    val fakeDeviceData = listOf(
+                    listOf(
                         "00:11:22:33:44:01" to "Fake Device 1" to DeviceStatus.Connected,
                         "00:11:22:33:44:02" to "Fake Device 2" to DeviceStatus.Idle,
                         "00:11:22:33:44:03" to "Fake Device 3" to DeviceStatus.Pairing,
@@ -637,7 +637,10 @@ fun connectionScreenUI(
                                             .clip(RoundedCornerShape(50.dp))
                                             .clickable(
                                                 interactionSource = interactionSource,
-                                                indication = ripple(color = Color.White, bounded = true),
+                                                indication = ripple(
+                                                    color = Color.White,
+                                                    bounded = true
+                                                ),
                                                 enabled = !isFakeDiscovering
                                             ) {
                                                 isFakeDiscovering = true
@@ -651,7 +654,8 @@ fun connectionScreenUI(
                                             modifier = Modifier
                                                 .size(30.dp)
                                                 .graphicsLayer {
-                                                    rotationZ = if (isFakeDiscovering) rotation else 0f
+                                                    rotationZ =
+                                                        if (isFakeDiscovering) rotation else 0f
                                                 }
                                         )
                                     }
@@ -750,7 +754,11 @@ fun connectionScreenUI(
                                                     verticalAlignment = Alignment.CenterVertically,
                                                     modifier = Modifier
                                                         .fillMaxSize()
-                                                        .padding(start = 10.dp, end = 10.dp, bottom = 2.dp)
+                                                        .padding(
+                                                            start = 10.dp,
+                                                            end = 10.dp,
+                                                            bottom = 2.dp
+                                                        )
                                                 ) {
                                                     val displayName = device.name?.let {
                                                         if (it.length > 22) it.take(22) + "..." else it
@@ -793,8 +801,11 @@ fun connectionScreenUI(
                                                             Box(
                                                                 modifier = Modifier
                                                                     .size(10.dp)
-                                                                    .background(Color.Green, shape = CircleShape)
-                                                                    .offset(y=1.dp)
+                                                                    .background(
+                                                                        Color.Green,
+                                                                        shape = CircleShape
+                                                                    )
+                                                                    .offset(y = 1.dp)
                                                             )
                                                         }
                                                         DeviceStatus.Failed -> {
@@ -802,14 +813,20 @@ fun connectionScreenUI(
                                                             Box(
                                                                 modifier = Modifier
                                                                     .size(10.dp)
-                                                                    .background(Color.Red, shape = CircleShape)
+                                                                    .background(
+                                                                        Color.Red,
+                                                                        shape = CircleShape
+                                                                    )
                                                             )
                                                         }
                                                         else -> {
                                                             Box(
                                                                 modifier = Modifier
                                                                     .size(10.dp)
-                                                                    .background(Color.Red, shape = CircleShape)
+                                                                    .background(
+                                                                        Color.Red,
+                                                                        shape = CircleShape
+                                                                    )
                                                             )
                                                         }
                                                     }

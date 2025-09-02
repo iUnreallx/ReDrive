@@ -56,10 +56,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.unreallx.redrive.Mobile.Ui.Screen.Speedometer.SpeedometerMini
 import com.unreallx.redrive.R
-import com.unreallx.redrive.Utils.BluetoothViewModel
-import com.unreallx.redrive.Utils.CustomRippleBox
-import com.unreallx.redrive.Utils.fixedSp
 import com.unreallx.redrive.ui.theme.ReDriveColors
+import com.unreallx.redrive.utils.BluetoothViewModel
+import com.unreallx.redrive.utils.CustomRippleBox
+import com.unreallx.redrive.utils.fixedSp
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
@@ -538,7 +538,8 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                             .padding(
                                 bottom = 20.dp,
                                 start = if (animatedEngineRpm.toInt() > 9999) 15.dp else 25.dp,
-                            ).align(Alignment.BottomStart),
+                            )
+                            .align(Alignment.BottomStart),
                 )
             }
 
@@ -614,7 +615,8 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                             .padding(
                                 bottom = 20.dp,
                                 start = 25.dp,
-                            ).align(Alignment.BottomStart),
+                            )
+                            .align(Alignment.BottomStart),
                 )
             }
         }

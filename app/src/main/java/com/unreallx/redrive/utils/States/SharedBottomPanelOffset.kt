@@ -1,4 +1,4 @@
-package com.unreallx.redrive.Utils.States
+package com.unreallx.redrive.utils.States
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

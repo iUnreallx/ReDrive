@@ -23,10 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.unreallx.redrive.Mobile.Ui.Screen.AppNavigation.mobileMainScreen
-import com.unreallx.redrive.Utils.LoggingReDrive
-import com.unreallx.redrive.Utils.Vibrations
 import com.unreallx.redrive.ui.theme.ReDriveColors
 import com.unreallx.redrive.ui.theme.ReDriveTheme
+import com.unreallx.redrive.utils.LoggingReDrive
+import com.unreallx.redrive.utils.Vibrations
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

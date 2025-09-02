@@ -1,4 +1,4 @@
-package com.unreallx.redrive.Utils
+package com.unreallx.redrive.utils
 
 import android.content.Context
 import android.content.res.Configuration

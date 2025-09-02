@@ -1,4 +1,4 @@
-package com.unreallx.redrive.Utils
+package com.unreallx.redrive.utils
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures

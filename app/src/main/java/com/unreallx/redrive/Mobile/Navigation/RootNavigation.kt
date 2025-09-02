@@ -14,8 +14,8 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.unreallx.redrive.Mobile.Ui.Screen.Connection.connectionScreenUI
 import com.unreallx.redrive.Mobile.Ui.Screen.Home.getMenuUI
-import com.unreallx.redrive.Utils.BluetoothViewModel
-import com.unreallx.redrive.Utils.WifiViewModel
+import com.unreallx.redrive.utils.BluetoothViewModel
+import com.unreallx.redrive.utils.WifiViewModel
 
 sealed class Screen(
     val route: String,

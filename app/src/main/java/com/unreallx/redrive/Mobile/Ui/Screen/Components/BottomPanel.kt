@@ -1,11 +1,5 @@
 package com.unreallx.redrive.Mobile.Ui.Screen.Components
 
-import android.content.Context
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -15,7 +9,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -48,8 +41,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,9 +48,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.unreallx.redrive.R
-import com.unreallx.redrive.Utils.States.SharedState
-import com.unreallx.redrive.Utils.Vibrations
 import com.unreallx.redrive.ui.theme.ReDriveColors
+import com.unreallx.redrive.utils.States.SharedState
+import com.unreallx.redrive.utils.Vibrations
 
 
 @Composable
@@ -203,7 +194,12 @@ fun BottomPanel(
                 onIconSelected(id)
             }
 
-            Box(Modifier.width(75.dp).height(75.dp).offset(x = (-160).dp, y = our_height).zIndex(5f).graphicsLayer(alpha = alpha)) {
+            Box(Modifier
+                .width(75.dp)
+                .height(75.dp)
+                .offset(x = (-160).dp, y = our_height)
+                .zIndex(5f)
+                .graphicsLayer(alpha = alpha)) {
                 IconWithRipple(
                     iconRes = R.drawable.home, iconSize = 50.dp,
                     isSelected = selectedIconId == R.drawable.home,
@@ -212,7 +208,12 @@ fun BottomPanel(
                 )
             }
 
-            Box(Modifier.width(75.dp).height(75.dp).offset(x = (-103.67).dp, y = our_height).zIndex(5f).graphicsLayer(alpha = alpha)) {
+            Box(Modifier
+                .width(75.dp)
+                .height(75.dp)
+                .offset(x = (-103.67).dp, y = our_height)
+                .zIndex(5f)
+                .graphicsLayer(alpha = alpha)) {
                 IconWithRipple(
                     iconRes = R.drawable.car, iconSize = 47.dp,
                     isSelected = selectedIconId == R.drawable.car,
@@ -221,7 +222,12 @@ fun BottomPanel(
                 )
             }
 
-            Box(Modifier.width(75.dp).height(75.dp).offset(x = (-48.33).dp, y = our_height).zIndex(5f).graphicsLayer(alpha = alpha)) {
+            Box(Modifier
+                .width(75.dp)
+                .height(75.dp)
+                .offset(x = (-48.33).dp, y = our_height)
+                .zIndex(5f)
+                .graphicsLayer(alpha = alpha)) {
                 IconWithRipple(
                     iconRes = R.drawable.ai, iconSize = 50.dp,
                     isSelected = selectedIconId == R.drawable.ai,
@@ -230,7 +236,12 @@ fun BottomPanel(
                 )
             }
 
-            Box(Modifier.width(60.dp).height(60.dp).offset(x = (0).dp, y = our_height).zIndex(5f).graphicsLayer(alpha = alpha)) {
+            Box(Modifier
+                .width(60.dp)
+                .height(60.dp)
+                .offset(x = (0).dp, y = our_height)
+                .zIndex(5f)
+                .graphicsLayer(alpha = alpha)) {
                 IconWithRipple(
                     iconRes = R.drawable.connect, iconSize = 45.dp, rotation = 5f,
                     isSelected = selectedIconId == R.drawable.connect,
@@ -275,7 +286,7 @@ fun BottomPanel(
                 Modifier
                     .width(75.dp)
                     .height(75.dp)
-                    .offset(x = (160).dp, y = our_height -3.dp)
+                    .offset(x = (160).dp, y = our_height - 3.dp)
                     .zIndex(5f)
                     .graphicsLayer(alpha = alpha)
             ) {
@@ -344,7 +355,8 @@ fun BottomPanel(
                             },
                             onVerticalDrag = { change, dragAmount ->
                                 val delta = with(density) { dragAmount.toDp() }
-                                SharedState.offsetY = (SharedState.offsetY + delta).coerceIn(0.dp, maxOffset)
+                                SharedState.offsetY =
+                                    (SharedState.offsetY + delta).coerceIn(0.dp, maxOffset)
                                 if ((SharedState.offsetY.value >= 25) && (SharedState.offsetY.value < 26)) {
                                     Vibrations.vibrate(30)
                                 }

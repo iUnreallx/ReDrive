@@ -10,8 +10,8 @@ import com.unreallx.redrive.Mobile.Navigation.RootNavigation
 import com.unreallx.redrive.Mobile.Navigation.Screen
 import com.unreallx.redrive.Mobile.Ui.Screen.Components.BottomPanel
 import com.unreallx.redrive.R
-import com.unreallx.redrive.Utils.BluetoothViewModel
-import com.unreallx.redrive.Utils.WifiViewModel
+import com.unreallx.redrive.utils.BluetoothViewModel
+import com.unreallx.redrive.utils.WifiViewModel
 
 @Composable
 fun mobileMainScreen() {
