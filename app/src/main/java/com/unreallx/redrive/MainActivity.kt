@@ -28,7 +28,6 @@ import com.unreallx.redrive.Utils.Vibrations
 import com.unreallx.redrive.ui.theme.ReDriveColors
 import com.unreallx.redrive.ui.theme.ReDriveTheme
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +36,15 @@ class MainActivity : ComponentActivity() {
         Vibrations.initialize(applicationContext)
         setContent {
             ReDriveTheme(darkTheme = true) {
-                Surface (
+                Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = ReDriveColors.Background
+                    color = ReDriveColors.Background,
 //                    color = Color.Gray
                 ) {
                     val bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED
+                    ) {
                         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 100)
                     }
 
@@ -55,15 +56,10 @@ class MainActivity : ComponentActivity() {
                                 .background(ReDriveColors.BackgroundToMain)
                                 .align(Alignment.BottomCenter),
 //                                .zIndex(3f),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                         }
-
-
                     }
-
-
-
 
                     Box(
                         Modifier
@@ -74,7 +70,7 @@ class MainActivity : ComponentActivity() {
 //                        if (DeviceUtils.isTablet(this@MainActivity)) {
 //                            tabletMainScreen()
 //                        } else {
-                            mobileMainScreen()
+                        mobileMainScreen()
 //                        }
                     }
                 }
@@ -87,7 +83,4 @@ class MainActivity : ComponentActivity() {
         val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         bluetoothAdapter?.cancelDiscovery()
     }
-
 }
-
-

@@ -17,30 +17,38 @@ import com.unreallx.redrive.Mobile.Ui.Screen.Home.getMenuUI
 import com.unreallx.redrive.Utils.BluetoothViewModel
 import com.unreallx.redrive.Utils.WifiViewModel
 
-
-sealed class Screen(val route: String) {
+sealed class Screen(
+    val route: String,
+) {
     object Menu : Screen("menu")
+
     object Car : Screen("car")
+
     object AI : Screen("ai")
+
     object Connection : Screen("connection")
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun RootNavigation(navController: NavHostController,
-                   bluetoothViewModel: BluetoothViewModel,
-                   wifiViewModel: WifiViewModel) {
+fun RootNavigation(
+    navController: NavHostController,
+    bluetoothViewModel: BluetoothViewModel,
+    wifiViewModel: WifiViewModel,
+) {
     AnimatedNavHost(
         navController = navController,
         startDestination = Screen.Menu.route,
         enterTransition = { scaleInAnimation() },
         exitTransition = { scaleOutAnimation() },
         popEnterTransition = { scaleInAnimation() },
-        popExitTransition = { scaleOutAnimation() }
+        popExitTransition = { scaleOutAnimation() },
     ) {
-        composable(Screen.Menu.route) { getMenuUI(
-            bluetoothViewModel
-        ) }
+        composable(Screen.Menu.route) {
+            getMenuUI(
+                bluetoothViewModel,
+            )
+        }
         composable(Screen.Car.route) { /* TODO */ }
         composable(Screen.AI.route) { /* TODO */ }
         composable(Screen.Connection.route) {
@@ -50,17 +58,15 @@ fun RootNavigation(navController: NavHostController,
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-fun scaleInAnimation(): EnterTransition {
-    return scaleIn(
+fun scaleInAnimation(): EnterTransition =
+    scaleIn(
         initialScale = 0.9f,
-        animationSpec = tween(durationMillis = 250)
+        animationSpec = tween(durationMillis = 250),
     ) + fadeIn(animationSpec = tween(250))
-}
 
 @OptIn(ExperimentalAnimationApi::class)
-fun scaleOutAnimation(): ExitTransition {
-    return scaleOut(
+fun scaleOutAnimation(): ExitTransition =
+    scaleOut(
         targetScale = 1.1f,
-        animationSpec = tween(durationMillis = 250)
+        animationSpec = tween(durationMillis = 250),
     ) + fadeOut(animationSpec = tween(250))
-}

@@ -63,7 +63,6 @@ import com.unreallx.redrive.ui.theme.ReDriveColors
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
-
 @Composable
 fun getMenuUI(viewModel: BluetoothViewModel) {
     val context = LocalContext.current
@@ -71,48 +70,51 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
     val scrollState = rememberScrollState()
     var isToggled by rememberSaveable { mutableStateOf(false) }
     val connectedDevice by viewModel.connectedDevice.collectAsState()
-    val isRealObdConnected = remember(connectedDevice) {
-        connectedDevice?.name?.lowercase()?.contains("obd") == true ||
+    val isRealObdConnected =
+        remember(connectedDevice) {
+            connectedDevice?.name?.lowercase()?.contains("obd") == true ||
                 connectedDevice?.name?.lowercase()?.contains("elm") == true ||
                 connectedDevice?.name?.lowercase()?.contains("unreallx") == true
-    }
+        }
 
     val circlePositionX by animateDpAsState(
         targetValue = if (isToggled) 34.dp else 6.dp,
-        animationSpec = tween(durationMillis = 300)
+        animationSpec = tween(durationMillis = 300),
     )
 
     val textPositionX by animateDpAsState(
         targetValue = if (isToggled) 10.dp else 30.dp,
-        animationSpec = tween(durationMillis = 300)
+        animationSpec = tween(durationMillis = 300),
     )
 
     val circleColor by animateColorAsState(
         targetValue = if (isToggled) ReDriveColors.AccentAppColor else Color.White,
-        animationSpec = tween(durationMillis = 300)
+        animationSpec = tween(durationMillis = 300),
     )
 
     val textColor by animateColorAsState(
         targetValue = ReDriveColors.AccentAppColor,
-        animationSpec = tween(durationMillis = 300)
+        animationSpec = tween(durationMillis = 300),
     )
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(bottom = 70.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(bottom = 70.dp),
     ) {
         Row {
             // button connection
             CustomRippleBox(
-                modifier = Modifier
-                    .width(70.dp)
-                    .padding(start = 10.dp)
-                    .height(30.dp)
-                    .border(2.dp, Color(0xFF4178F6), RoundedCornerShape(50.dp))
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(ReDriveColors.BackgroundToMain),
+                modifier =
+                    Modifier
+                        .width(70.dp)
+                        .padding(start = 10.dp)
+                        .height(30.dp)
+                        .border(2.dp, Color(0xFF4178F6), RoundedCornerShape(50.dp))
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(ReDriveColors.BackgroundToMain),
                 onClick = {
                     Log.d("obd2conn", "$isRealObdConnected")
                     if (!isRealObdConnected) {
@@ -121,19 +123,18 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                     } else {
                         Toast.makeText(context, "OBD2 уже подключено", Toast.LENGTH_SHORT).show()
                     }
-                }
-
+                },
             ) {
-
                 Box(modifier = Modifier.fillMaxSize()) {
                     Box(
-                        modifier = Modifier
-                            .padding(start = circlePositionX)
-                            .align(Alignment.CenterStart)
-                            .size(20.dp)
-                            .background(circleColor, CircleShape)
-                            .clip(CircleShape)
-                            .zIndex(1f)
+                        modifier =
+                            Modifier
+                                .padding(start = circlePositionX)
+                                .align(Alignment.CenterStart)
+                                .size(20.dp)
+                                .background(circleColor, CircleShape)
+                                .clip(CircleShape)
+                                .zIndex(1f),
                     )
 
                     // Текст
@@ -143,31 +144,34 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                         lineHeight = 10.sp,
                         fontWeight = FontWeight.Bold,
                         color = textColor,
-                        modifier = Modifier
-                            .padding(start = textPositionX)
-                            .align(Alignment.CenterStart)
+                        modifier =
+                            Modifier
+                                .padding(start = textPositionX)
+                                .align(Alignment.CenterStart),
                     )
                 }
             }
 
-                Row(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
             ) {
                 Box(
-                    modifier = Modifier
-                        .width(40.dp)
-                        .height(30.dp)
-                        .padding(end = 10.dp)
-                    ) {
+                    modifier =
+                        Modifier
+                            .width(40.dp)
+                            .height(30.dp)
+                            .padding(end = 10.dp),
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.settings_accent),
                         contentDescription = null,
                         contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .size(35.dp)
-                            .align(Alignment.Center)
-                            .zIndex(1f)
+                        modifier =
+                            Modifier
+                                .size(35.dp)
+                                .align(Alignment.Center)
+                                .zIndex(1f),
                     )
                 }
             }
@@ -175,20 +179,22 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
 
         // Main box
         BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .padding(start = 10.dp, end = 10.dp, top = 5.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(ReDriveColors.BackgroundToMain)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .padding(start = 10.dp, end = 10.dp, top = 5.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(ReDriveColors.BackgroundToMain),
         ) {
             val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 // car name
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -197,35 +203,38 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                         fontSize = fixedSp(26),
                         letterSpacing = 2.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Color.White,
                     )
                 }
 
                 // Car
                 BoxWithConstraints(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp)
-                        .offset(y = 40.dp),
-                    Alignment.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(150.dp)
+                            .offset(y = 40.dp),
+                    Alignment.Center,
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.car_background),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .width(screenWidth * 0.95f)
-                            .widthIn(max = 100.dp)
-                            .offset(y = (-20).dp)
-                            .zIndex(1f)
+                        modifier =
+                            Modifier
+                                .width(screenWidth * 0.95f)
+                                .widthIn(max = 100.dp)
+                                .offset(y = (-20).dp)
+                                .zIndex(1f),
                     )
 
                     Canvas(
-                        modifier = Modifier
-                            .width(350.dp)
-                            .height(60.dp)
-                            .align(Alignment.BottomCenter)
-                            .offset(y = (-15.dp))
+                        modifier =
+                            Modifier
+                                .width(350.dp)
+                                .height(60.dp)
+                                .align(Alignment.BottomCenter)
+                                .offset(y = (-15.dp)),
                     ) {
                         val center = Offset(size.width / 2, size.height / 2)
                         val radius = size.width / 2
@@ -234,13 +243,14 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                             scale(1f, scaleY, pivot = center)
                         }) {
                             drawCircle(
-                                brush = Brush.radialGradient(
-                                    colors = listOf(Color(0xFF000000), ReDriveColors.BackgroundToMain),
-                                    center = center,
-                                    radius = radius
-                                ),
+                                brush =
+                                    Brush.radialGradient(
+                                        colors = listOf(Color(0xFF000000), ReDriveColors.BackgroundToMain),
+                                        center = center,
+                                        radius = radius,
+                                    ),
                                 center = center,
-                                radius = radius
+                                radius = radius,
                             )
                         }
                     }
@@ -251,35 +261,37 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
         // button connection
 
         val connectedDevice by viewModel.connectedDevice.collectAsState()
-        val isRealObdConnected = remember(connectedDevice) {
-            connectedDevice?.name?.lowercase()?.contains("obd") == true ||
+        val isRealObdConnected =
+            remember(connectedDevice) {
+                connectedDevice?.name?.lowercase()?.contains("obd") == true ||
                     connectedDevice?.name?.lowercase()?.contains("elm") == true ||
                     connectedDevice?.name?.lowercase()?.contains("unreallx") == true
-        }
+            }
 
         val animatedPadding by animateDpAsState(
             targetValue = if (isToggled) 8.dp else 30.dp,
-            animationSpec = tween(durationMillis = 340, easing = FastOutSlowInEasing)
+            animationSpec = tween(durationMillis = 340, easing = FastOutSlowInEasing),
         )
 
         val backgroundColor by animateColorAsState(
             targetValue = if (isToggled) ReDriveColors.AccentAppColor else Color.White,
-            animationSpec = tween(durationMillis = 340)
+            animationSpec = tween(durationMillis = 340),
         )
 
         val circleSizeAnimation by animateDpAsState(
             targetValue = if (isToggled) 28.dp else 25.dp,
-            animationSpec = tween(durationMillis = 340)
+            animationSpec = tween(durationMillis = 340),
         )
         val context = LocalContext.current
         CustomRippleBox(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp, top = 10.dp)
-                .height(60.dp)
-                .border(2.dp, Color(0xFF4178F6), RoundedCornerShape(50.dp))
-                .clip(RoundedCornerShape(20.dp))
-                .background(ReDriveColors.BackgroundToMain),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp, end = 10.dp, top = 10.dp)
+                    .height(60.dp)
+                    .border(2.dp, Color(0xFF4178F6), RoundedCornerShape(50.dp))
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(ReDriveColors.BackgroundToMain),
             onClick = {
                 Log.d("obd2conn", "$isRealObdConnected")
                 if (!isRealObdConnected) {
@@ -288,86 +300,92 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                 } else {
                     Toast.makeText(context, "OBD2 уже подключено", Toast.LENGTH_SHORT).show()
                 }
-            }
-
+            },
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Image(
                     painter = painterResource(id = R.drawable.connect_accent),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .padding(start = 17.dp)
-                        .size(40.dp)
-                        .align(Alignment.CenterStart)
-                        .zIndex(1f)
+                    modifier =
+                        Modifier
+                            .padding(start = 17.dp)
+                            .size(40.dp)
+                            .align(Alignment.CenterStart)
+                            .zIndex(1f),
                 )
                 Text(
                     text = "Подключено",
                     fontSize = fixedSp(24),
                     fontWeight = FontWeight.Bold,
                     color = ReDriveColors.AccentAppColor,
-                    modifier = Modifier
-                        .padding(start = 60.dp)
-                        .align(Alignment.CenterStart)
+                    modifier =
+                        Modifier
+                            .padding(start = 60.dp)
+                            .align(Alignment.CenterStart),
                 )
                 Box(
-                    modifier = Modifier
-                        .padding(end = 15.dp)
-                        .align(Alignment.CenterEnd)
-                        .border(2.dp, ReDriveColors.AccentAppColor, RoundedCornerShape(30.dp))
-                        .width(65.dp)
-                        .clip(RoundedCornerShape(30.dp))
-                        .height(40.dp)
+                    modifier =
+                        Modifier
+                            .padding(end = 15.dp)
+                            .align(Alignment.CenterEnd)
+                            .border(2.dp, ReDriveColors.AccentAppColor, RoundedCornerShape(30.dp))
+                            .width(65.dp)
+                            .clip(RoundedCornerShape(30.dp))
+                            .height(40.dp),
                 ) {
                     Box(
-                        modifier = Modifier
-                            .padding(end = animatedPadding)
-                            .align(Alignment.CenterEnd)
-                            .size(circleSizeAnimation)
-                            .background(backgroundColor, CircleShape)
-                            .clip(CircleShape)
+                        modifier =
+                            Modifier
+                                .padding(end = animatedPadding)
+                                .align(Alignment.CenterEnd)
+                                .size(circleSizeAnimation)
+                                .background(backgroundColor, CircleShape)
+                                .clip(CircleShape),
                     )
                 }
             }
         }
 
-
-        //row 1
+        // row 1
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(start = 10.dp, end = 10.dp, top = 10.dp)
-                .clip(RoundedCornerShape(30.dp)),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(start = 10.dp, end = 10.dp, top = 10.dp)
+                    .clip(RoundedCornerShape(30.dp)),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(ReDriveColors.BackgroundToMain)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(30.dp))
+                        .background(ReDriveColors.BackgroundToMain),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(60.dp)
-                            .padding(start = 20.dp, top = 20.dp)
-                            .clip(RoundedCornerShape(50.dp))
-                            .background(ReDriveColors.RoundedCorner262A32),
+                        modifier =
+                            Modifier
+                                .width(60.dp)
+                                .height(60.dp)
+                                .padding(start = 20.dp, top = 20.dp)
+                                .clip(RoundedCornerShape(50.dp))
+                                .background(ReDriveColors.RoundedCorner262A32),
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.fuel),
                             contentDescription = null,
                             contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .size(28.dp)
-                                .align(Alignment.Center)
-                                .zIndex(1f)
+                            modifier =
+                                Modifier
+                                    .size(28.dp)
+                                    .align(Alignment.Center)
+                                    .zIndex(1f),
                         )
                     }
 
@@ -377,13 +395,10 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         lineHeight = 20.sp,
-                        modifier = Modifier
-                            .padding(start = 13.dp, top = 15.dp)
-
+                        modifier =
+                            Modifier
+                                .padding(start = 13.dp, top = 15.dp),
                     )
-
-
-
                 }
 
                 var fuelLevel by remember { mutableStateOf(0) }
@@ -398,7 +413,7 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                 val animatedFuel by animateFloatAsState(
                     targetValue = fuelLevel.toFloat(),
                     animationSpec = tween(durationMillis = 300, easing = LinearEasing),
-                    label = "fuelLevelAnimation"
+                    label = "fuelLevelAnimation",
                 )
 
                 Text(
@@ -407,76 +422,81 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                     fontWeight = FontWeight.Bold,
                     color = ReDriveColors.AccentAppColor,
                     lineHeight = 20.sp,
-                    modifier = Modifier
-                        .padding(bottom = 20.dp, start = 25.dp)
-                        .align(Alignment.BottomStart)
+                    modifier =
+                        Modifier
+                            .padding(bottom = 20.dp, start = 25.dp)
+                            .align(Alignment.BottomStart),
                 )
             }
 
             Spacer(modifier = Modifier.width(10.dp))
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(ReDriveColors.BackgroundToMain)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(30.dp))
+                        .background(ReDriveColors.BackgroundToMain),
             ) {
                 // Speedometer
                 val obd2Data by viewModel.obd2Data.collectAsState()
                 var speed = obd2Data.speed
 
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .offset(x = -2.5.dp, y = 10.dp)
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .offset(x = -2.5.dp, y = 10.dp),
                 ) {
                     SpeedometerMini(
                         speed = speed.toFloat(),
                         sizeDp = 130.dp,
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.Center),
                     )
                 }
-
-
-
             }
         }
 
-        //row 2
+        // row 2
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(start = 10.dp, end = 10.dp, top = 10.dp)
-                .clip(RoundedCornerShape(30.dp)),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(start = 10.dp, end = 10.dp, top = 10.dp)
+                    .clip(RoundedCornerShape(30.dp)),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(ReDriveColors.BackgroundToMain)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(30.dp))
+                        .background(ReDriveColors.BackgroundToMain),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(60.dp)
-                            .padding(start = 20.dp, top = 20.dp)
-                            .clip(RoundedCornerShape(50.dp))
-                            .background(ReDriveColors.RoundedCorner262A32),
+                        modifier =
+                            Modifier
+                                .width(60.dp)
+                                .height(60.dp)
+                                .padding(start = 20.dp, top = 20.dp)
+                                .clip(RoundedCornerShape(50.dp))
+                                .background(ReDriveColors.RoundedCorner262A32),
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.engine),
                             contentDescription = null,
                             contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .size(30.dp)
-                                .align(Alignment.Center)
-                                .zIndex(1f)
+                            modifier =
+                                Modifier
+                                    .size(30.dp)
+                                    .align(Alignment.Center)
+                                    .zIndex(1f),
                         )
                     }
 
@@ -486,10 +506,10 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         lineHeight = 20.sp,
-                        modifier = Modifier
-                            .padding(start = 13.dp, top = 15.dp)
+                        modifier =
+                            Modifier
+                                .padding(start = 13.dp, top = 15.dp),
                     )
-
                 }
 
                 var engineRPM by remember { mutableStateOf(0) }
@@ -504,7 +524,7 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                 val animatedEngineRpm by animateFloatAsState(
                     targetValue = engineRPM.toFloat(),
                     animationSpec = tween(durationMillis = 300, easing = LinearEasing),
-                    label = "fuelLevelAnimation"
+                    label = "fuelLevelAnimation",
                 )
 
                 Text(
@@ -513,43 +533,46 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                     fontWeight = FontWeight.Bold,
                     color = ReDriveColors.AccentAppColor,
                     lineHeight = 20.sp,
-                    modifier = Modifier
-                        .padding(
-                            bottom = 20.dp,
-                            start = if (animatedEngineRpm.toInt() > 9999) 15.dp else 25.dp
-                        )
-                        .align(Alignment.BottomStart)
+                    modifier =
+                        Modifier
+                            .padding(
+                                bottom = 20.dp,
+                                start = if (animatedEngineRpm.toInt() > 9999) 15.dp else 25.dp,
+                            ).align(Alignment.BottomStart),
                 )
             }
 
             Spacer(modifier = Modifier.width(10.dp))
 
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(ReDriveColors.BackgroundToMain)
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(30.dp))
+                        .background(ReDriveColors.BackgroundToMain),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(60.dp)
-                            .padding(start = 20.dp, top = 20.dp)
-                            .clip(RoundedCornerShape(50.dp))
-                            .background(ReDriveColors.RoundedCorner262A32),
+                        modifier =
+                            Modifier
+                                .width(60.dp)
+                                .height(60.dp)
+                                .padding(start = 20.dp, top = 20.dp)
+                                .clip(RoundedCornerShape(50.dp))
+                                .background(ReDriveColors.RoundedCorner262A32),
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.temp),
                             contentDescription = null,
                             contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .size(35.dp)
-                                .align(Alignment.Center)
-                                .zIndex(1f)
+                            modifier =
+                                Modifier
+                                    .size(35.dp)
+                                    .align(Alignment.Center)
+                                    .zIndex(1f),
                         )
                     }
 
@@ -559,10 +582,10 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         lineHeight = 20.sp,
-                        modifier = Modifier
-                            .padding(start = 5.dp, top = 15.dp)
+                        modifier =
+                            Modifier
+                                .padding(start = 5.dp, top = 15.dp),
                     )
-
                 }
 
                 var engineTemp by remember { mutableStateOf(0) }
@@ -577,9 +600,8 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                 val animatedEngineTemp by animateFloatAsState(
                     targetValue = engineTemp.toFloat(),
                     animationSpec = tween(durationMillis = 300, easing = LinearEasing),
-                    label = "fuelLevelAnimation"
+                    label = "fuelLevelAnimation",
                 )
-
 
                 Text(
                     text = "${animatedEngineTemp.toInt()}°C",
@@ -587,18 +609,14 @@ fun getMenuUI(viewModel: BluetoothViewModel) {
                     fontWeight = FontWeight.Bold,
                     color = ReDriveColors.AccentAppColor,
                     lineHeight = 20.sp,
-                    modifier = Modifier
-                        .padding(
-                            bottom = 20.dp,
-                            start = 25.dp
-                        )
-                        .align(Alignment.BottomStart)
+                    modifier =
+                        Modifier
+                            .padding(
+                                bottom = 20.dp,
+                                start = 25.dp,
+                            ).align(Alignment.BottomStart),
                 )
             }
         }
     }
 }
-
-
-
-

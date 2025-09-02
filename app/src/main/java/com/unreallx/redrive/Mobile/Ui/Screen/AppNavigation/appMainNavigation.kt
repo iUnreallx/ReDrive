@@ -22,13 +22,14 @@ fun mobileMainScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         RootNavigation(navController, bluetoothViewModel, wifiViewModel)
         BottomPanel(onIconSelected = { iconId ->
-            val route = when (iconId) {
-                R.drawable.home -> Screen.Menu.route
-                R.drawable.car -> Screen.Car.route
-                R.drawable.ai -> Screen.AI.route
-                R.drawable.connect -> Screen.Connection.route
-                else -> Screen.Menu.route
-            }
+            val route =
+                when (iconId) {
+                    R.drawable.home -> Screen.Menu.route
+                    R.drawable.car -> Screen.Car.route
+                    R.drawable.ai -> Screen.AI.route
+                    R.drawable.connect -> Screen.Connection.route
+                    else -> Screen.Menu.route
+                }
 
             navController.navigate(route) {
                 popUpTo(navController.graph.startDestinationId) { saveState = true }

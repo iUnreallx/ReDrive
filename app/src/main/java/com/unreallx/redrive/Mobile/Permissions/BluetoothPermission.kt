@@ -1,6 +1,5 @@
 package com.unreallx.redrive.Mobile.Permissions
 
-
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -32,7 +31,7 @@ import com.unreallx.redrive.ui.theme.ReDriveColors
 @Composable
 fun BluetoothPermissionHandler(
     onPermissionsGranted: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -40,31 +39,34 @@ fun BluetoothPermissionHandler(
     var hasLaunched by remember { mutableStateOf(false) }
     var permissionDenied by remember { mutableStateOf(false) }
 
-    val permissions = listOf(
-        Manifest.permission.BLUETOOTH_CONNECT,
-        Manifest.permission.BLUETOOTH_SCAN
-    )
+    val permissions =
+        listOf(
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+        )
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions()
-    ) { result ->
-        val allGranted = result.values.all { it }
-        if (allGranted) {
-            hasLaunched = true
-            permissionDenied = false
-            onPermissionsGranted()
-        } else {
-            permissionDenied = true
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestMultiplePermissions(),
+        ) { result ->
+            val allGranted = result.values.all { it }
+            if (allGranted) {
+                hasLaunched = true
+                permissionDenied = false
+                onPermissionsGranted()
+            } else {
+                permissionDenied = true
+            }
         }
-    }
 
     LaunchedEffect(Unit) {
         hasLaunched = false
         permissionDenied = false
 
-        val notGranted = permissions.filter {
-            ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
-        }
+        val notGranted =
+            permissions.filter {
+                ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
+            }
 
         if (notGranted.isNotEmpty()) {
             permissionLauncher.launch(notGranted.toTypedArray())
@@ -75,21 +77,23 @@ fun BluetoothPermissionHandler(
     }
 
     DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                val notGranted = permissions.filter {
-                    ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
-                }
+        val observer =
+            LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    val notGranted =
+                        permissions.filter {
+                            ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
+                        }
 
-                if (notGranted.isEmpty()) {
-                    hasLaunched = true
-                    permissionDenied = false
-                    onPermissionsGranted()
-                } else {
-                    permissionDenied = true
+                    if (notGranted.isEmpty()) {
+                        hasLaunched = true
+                        permissionDenied = false
+                        onPermissionsGranted()
+                    } else {
+                        permissionDenied = true
+                    }
                 }
             }
-        }
         lifecycleOwner.lifecycle.addObserver(observer)
 
         onDispose {
@@ -101,12 +105,13 @@ fun BluetoothPermissionHandler(
         PermissionOverlay(
             message = "Выдайте разрешения на использование Bluetooth (устройства поблизости) в настройках",
             onSettingsClick = {
-                val intent = Intent(
-                    android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.fromParts("package", context.packageName, null)
-                )
+                val intent =
+                    Intent(
+                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", context.packageName, null),
+                    )
                 context.startActivity(intent)
-            }
+            },
         )
     }
     content()
@@ -115,50 +120,54 @@ fun BluetoothPermissionHandler(
 @Composable
 private fun PermissionOverlay(
     message: String,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f))
-            .zIndex(10f)
-            .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        awaitPointerEvent()
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .zIndex(10f)
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            awaitPointerEvent()
+                        }
                     }
-                }
-            },
-        contentAlignment = Alignment.Center
+                },
+        contentAlignment = Alignment.Center,
     ) {
         Box(
-            modifier = Modifier
-                .width(250.dp)
-                .height(175.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(ReDriveColors.PermissionColorBackground)
-                .zIndex(10f),
+            modifier =
+                Modifier
+                    .width(250.dp)
+                    .height(175.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(ReDriveColors.PermissionColorBackground)
+                    .zIndex(10f),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(12.dp),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(12.dp),
                 verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = message,
                     color = Color.White,
                     fontSize = fixedSp(20),
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Button(
                     onClick = onSettingsClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 4.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 4.dp),
                 ) {
                     Text("Открыть настройки", fontSize = fixedSp(18))
                 }
