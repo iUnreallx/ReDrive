@@ -1,5 +1,6 @@
 [versions]
 agp = "8.10.0"
+koinAndroid = "4.1.0"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -28,6 +29,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version = "4.4.1" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version = "18.2.0" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation_compose" }
