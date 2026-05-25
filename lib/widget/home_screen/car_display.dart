@@ -103,7 +103,7 @@ class _CarCarousel extends StatelessWidget {
                   
                   Icon(Icons.car_crash_outlined , color: Colors.redAccent,),
                   SizedBox(width: 10,),
-                  Text("Error while loading Image." ,
+                  Text("Image not available" ,
                     style: TextStyle(
                        fontFamily: 'Inter',
                     ),
