@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:redrive/screens/settings_screen.dart';
 
 class HeaderBar extends StatelessWidget {
   const HeaderBar({super.key});
@@ -94,9 +95,7 @@ class _SettingsButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {
-              /* TODO */
-            },
+            onTap: () => showSettingsSheet(context),
             borderRadius: BorderRadius.circular(100),
             child: Center(
               child: SvgPicture.asset(

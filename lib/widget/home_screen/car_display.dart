@@ -95,6 +95,22 @@ class _CarCarousel extends StatelessWidget {
           return Image.asset(
             'assets/images/png/car${index + 1}.png',
             fit: BoxFit.contain,
+             errorBuilder: (context, error, stackTrace) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  
+                  Icon(Icons.car_crash_outlined , color: Colors.redAccent,),
+                  SizedBox(width: 10,),
+                  Text("Image not available" ,
+                    style: TextStyle(
+                       fontFamily: 'Inter',
+                    ),
+                  )
+                ],
+              ); // fallback widget
+            },
           );
         },
       ),
