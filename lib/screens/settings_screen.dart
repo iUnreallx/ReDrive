@@ -4,34 +4,59 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+
+class _DismissibleCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
+  _DismissibleCupertinoSheetRoute({
+    required super.builder,
+    super.enableDrag,
+    Color barrierColor = const Color(0x73000000), // ~45% black
+  }) : _barrierColor = barrierColor;
+ 
+  final Color _barrierColor;
+ 
+  @override
+  Color? get barrierColor => _barrierColor;
+ 
+
+  @override
+  bool get barrierDismissible => true;
+ 
+
+  @override
+  String get barrierLabel => 'Dismiss';
+}
+
 void showSettingsSheet(BuildContext context) {
   HapticFeedback.mediumImpact();
-  showCupertinoSheet(
-  context: context,
-  enableDrag: true,
-  builder: (context) {
-    return NotificationListener<DraggableScrollableNotification>(
-      onNotification: (notification) {
-        if (notification.extent <= 0.41) {
-          Navigator.pop(context);
-          return true;
-        }
-        return false;
+ 
+  Navigator.of(context, rootNavigator: true).push(
+    _DismissibleCupertinoSheetRoute(
+      barrierColor: Colors.black.withOpacity(0.45),
+      builder: (sheetContext) {
+        return NotificationListener<DraggableScrollableNotification>(
+          onNotification: (notification) {
+            if (notification.extent <= notification.minExtent + 0.01) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (Navigator.canPop(sheetContext)) {
+                  Navigator.pop(sheetContext);
+                }
+              });
+            }
+            return false;
+          },
+          child: DraggableScrollableSheet(
+            initialChildSize: 0.50,
+            minChildSize: 0.40,
+            maxChildSize: 0.95,
+            expand: false,
+            builder: (context, scrollController) {
+              return SettingsSheet(scrollController: scrollController);
+            },
+          ),
+        );
       },
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.50,
-        minChildSize: 0.40,
-        maxChildSize: 0.95,
-        expand: false,
-        builder: (context, scrollController) {
-          return SettingsSheet(
-            scrollController: scrollController,
-          );
-        },
-      ),
-    );
-  },
-);
+    ),
+  );
 }
 
 class SettingsSheet extends StatelessWidget {
@@ -58,7 +83,7 @@ class SettingsSheet extends StatelessWidget {
             child: SingleChildScrollView(
               controller: scrollController,
               child: Column(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top: 12, bottom: 4),
@@ -113,10 +138,10 @@ class SettingsSheet extends StatelessWidget {
                     child: Column(
                       children: [
                         _SettingsTile(
-                      icon: Icons.settings_outlined,
-                      label: 'Place Holder..',
-                      colorScheme: colorScheme,
-                    ),
+                          icon: Icons.settings_outlined,
+                          label: 'Place Holder..',
+                          colorScheme: colorScheme,
+                        ),
                       ],
                     ),
                   ),
