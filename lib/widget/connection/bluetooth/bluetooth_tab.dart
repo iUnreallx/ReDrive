@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:redrive/models/bluetooth_enums.dart';
 import 'package:redrive/models/obd_device.dart';
 import 'package:redrive/providers/bluetooth_provider.dart';
 
@@ -23,19 +25,77 @@ class _BluetoothTabState extends State<BluetoothTab> {
       if (!provider.isScanning && !provider.isConnected) {
         Future.delayed(const Duration(milliseconds: 50), () {
           if (!mounted) return;
-          context.read<BluetoothProvider>().startScan();
+          _handleScan(context);
         });
       }
     });
   }
 
+  Future<void> _handleScan(BuildContext context) async {
+    final result = await context.read<BluetoothProvider>().startScan();
+    if (!mounted) return;
+
+    if (result == BluetoothScanResult.permanentlyDenied) {
+      _showPermissionDialog(context);
+    }
+    // started aur notStarted ke liye kuch nahi karna
+  }
+
+  void _showPermissionDialog(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF131315),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text(
+          'Bluetooth access required',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Bluetooth permission was permanently denied. '
+          'Please enable it from app settings.',
+          style: TextStyle(color: Colors.white54),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white54),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              openAppSettings(); // permission_handler se aata hai
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFC4FF47),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
+            child: const Text(
+              'Open settings',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        BluetoothScanStatusCard(),
+        BluetoothScanStatusCard(onRefresh: () => _handleScan(context)),
         SizedBox(height: 20),
-        Expanded(child: BluetoothDevicePanel()),
+        Expanded(child: BluetoothDevicePanel(onScan: () => _handleScan(context))),
       ],
     );
   }
@@ -44,7 +104,8 @@ class _BluetoothTabState extends State<BluetoothTab> {
 /// Карточка статуса сканирования.
 /// Слушает только isScanning и количество найденных устройств.
 class BluetoothScanStatusCard extends StatelessWidget {
-  const BluetoothScanStatusCard({super.key});
+  final VoidCallback onRefresh;
+  const BluetoothScanStatusCard({super.key, required this.onRefresh});
 
   @override
   Widget build(BuildContext context) {
@@ -65,14 +126,12 @@ class BluetoothScanStatusCard extends StatelessWidget {
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: () async {
-            if (!isScanning) {
-              Future.delayed(const Duration(milliseconds: 150), () {
-                if (!context.mounted) return;
-                context.read<BluetoothProvider>().startScan();
-              });
-            }
-          },
+          onTap: isScanning
+              ? null
+              : () => Future.delayed(
+                  const Duration(milliseconds: 150),
+                  onRefresh, // _handleScan pass hoga
+                ),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -151,7 +210,8 @@ class BluetoothScanStatusCard extends StatelessWidget {
 
 /// Основная панель со списком Bluetooth-устройств.
 class BluetoothDevicePanel extends StatelessWidget {
-  const BluetoothDevicePanel({super.key});
+   final VoidCallback onScan;
+  const BluetoothDevicePanel({super.key, required this.onScan});
 
   @override
   Widget build(BuildContext context) {
@@ -160,10 +220,10 @@ class BluetoothDevicePanel extends StatelessWidget {
         color: const Color(0xFF131315),
         borderRadius: BorderRadius.circular(24),
       ),
-      child: const Column(
+      child: Column(
         children: [
           BluetoothModeSwitcher(),
-          Expanded(child: BluetoothDeviceList()),
+          Expanded(child: BluetoothDeviceList(onScan: onScan)),
         ],
       ),
     );
@@ -222,7 +282,8 @@ class BluetoothModeSwitcher extends StatelessWidget {
 /// - количество устройств;
 /// - имя или адрес устройства.
 class BluetoothDeviceList extends StatelessWidget {
-  const BluetoothDeviceList({super.key});
+  final VoidCallback onScan;
+  const BluetoothDeviceList({super.key, required this.onScan});
 
   @override
   Widget build(BuildContext context) {
@@ -279,8 +340,7 @@ class BluetoothDeviceList extends StatelessWidget {
                   width: 200,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () =>
-                        context.read<BluetoothProvider>().startScan(),
+                    onPressed: onScan,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFC4FF47),
                       shape: RoundedRectangleBorder(
