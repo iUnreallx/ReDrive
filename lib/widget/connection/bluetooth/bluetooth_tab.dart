@@ -25,7 +25,7 @@ class _BluetoothTabState extends State<BluetoothTab> {
       if (!provider.isScanning && !provider.isConnected) {
         Future.delayed(const Duration(milliseconds: 50), () {
           if (!mounted) return;
-          context.read<BluetoothProvider>().startScan();
+          _handleScan(context);
         });
       }
     });
@@ -56,6 +56,7 @@ class _BluetoothTabState extends State<BluetoothTab> {
           'Please enable it from app settings.',
           style: TextStyle(color: Colors.white54),
         ),
+        actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -92,7 +93,7 @@ class _BluetoothTabState extends State<BluetoothTab> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        BluetoothScanStatusCard(onRefresh: () => _handleScan),
+        BluetoothScanStatusCard(onRefresh: () => _handleScan(context)),
         SizedBox(height: 20),
         Expanded(child: BluetoothDevicePanel(onScan: () => _handleScan)),
       ],
