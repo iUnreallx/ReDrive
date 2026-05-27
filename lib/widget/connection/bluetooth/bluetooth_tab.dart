@@ -95,7 +95,7 @@ class _BluetoothTabState extends State<BluetoothTab> {
       children: [
         BluetoothScanStatusCard(onRefresh: () => _handleScan(context)),
         SizedBox(height: 20),
-        Expanded(child: BluetoothDevicePanel(onScan: () => _handleScan)),
+        Expanded(child: BluetoothDevicePanel(onScan: () => _handleScan(context))),
       ],
     );
   }
