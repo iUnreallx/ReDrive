@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:redrive/models/bluetooth_enums.dart';
 
-Future<bool> requestBluetoothPermissions() async {
-  if (!Platform.isAndroid) return true;
+Future<BluetoothPermissionStatus> requestBluetoothPermissions() async {
+
+
+  if (!Platform.isAndroid) return BluetoothPermissionStatus.granted;
 
   final deviceInfo = DeviceInfoPlugin();
   final androidInfo = await deviceInfo.androidInfo;
@@ -26,6 +29,12 @@ Future<bool> requestBluetoothPermissions() async {
     statuses = await [Permission.location].request();
   }
 
-  final granted = statuses.values.every((s) => s.isGranted);
-  return granted;
+  final isPermanentlyDenied =
+      statuses.values.any((s) => s.isPermanentlyDenied);
+  if (isPermanentlyDenied) return BluetoothPermissionStatus.permanentlyDenied;
+
+  final isGranted = statuses.values.every((s) => s.isGranted);
+  return isGranted
+      ? BluetoothPermissionStatus.granted
+      : BluetoothPermissionStatus.denied;
 }
