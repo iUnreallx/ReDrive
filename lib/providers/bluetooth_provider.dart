@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_blue_classic/flutter_blue_classic.dart';
+import 'package:redrive/models/bluetooth_enums.dart';
 import 'package:redrive/services/bluetooth_permission_service.dart';
 import '../models/obd_device.dart';
 
@@ -111,104 +112,101 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   /// Сканирование блютуз в округе
-  Future<bool> startScan() async {
-    if (_isScanning) return true;
 
-    developer.log("Запрашиваем доступ к разрешениям", name: 'reBlue');
-    final permissionsGranted = await requestBluetoothPermissions();
+  Future<BluetoothScanResult> startScan() async {
+  if (_isScanning) return BluetoothScanResult.started;
 
-    if (!permissionsGranted) {
-      _isScanning = false;
-      notifyListeners();
-      return false;
+  developer.log("Запрашиваем доступ к разрешениям", name: 'reBlue');
+  final permissionStatus = await requestBluetoothPermissions();
+
+  if (permissionStatus == BluetoothPermissionStatus.permanentlyDenied) {
+    return BluetoothScanResult.permanentlyDenied;
+  }
+
+  if (permissionStatus != BluetoothPermissionStatus.granted) {
+    _isScanning = false;
+    notifyListeners();
+    return BluetoothScanResult.notStarted;
+  }
+
+  if (!_isHardwareOn) {
+    _pendingScan = true;
+    try {
+      _bluetooth.turnOn();
+    } catch (e) {
+      developer.log("Ошибка вызова turnOn: $e", name: 'reBlue', error: e);
     }
+    return BluetoothScanResult.notStarted;
+  }
 
-    if (!_isHardwareOn) {
-      _pendingScan = true;
-      try {
-        _bluetooth.turnOn();
-      } catch (e) {
-        developer.log("Ошибка вызова turnOn: $e", name: 'reBlue', error: e);
+  _isToggleOn = true;
+  _isScanning = true;
+  _pendingScan = false;
+
+  final activePhysicalDevice = (_isConnected && _connectedDevice != null)
+      ? _deviceMap[_connectedDevice!.address]
+      : null;
+
+  _discoveredDevices.clear();
+  _deviceMap.clear();
+
+  if (activePhysicalDevice != null && _connectedDevice != null) {
+    _deviceMap[activePhysicalDevice.address] = activePhysicalDevice;
+    _discoveredDevices.add(_connectedDevice!);
+  }
+
+  notifyListeners();
+
+  try {
+    try {
+      final bonded = await _bluetooth.bondedDevices;
+      if (bonded != null) {
+        for (final device in bonded) {
+          _addDeviceToList(device);
+        }
       }
-      return false;
-    }
-
-    _isToggleOn = true;
-    _isScanning = true;
-    _pendingScan = false;
-
-    final activePhysicalDevice = (_isConnected && _connectedDevice != null)
-        ? _deviceMap[_connectedDevice!.address]
-        : null;
-
-    _discoveredDevices.clear();
-    _deviceMap.clear();
-
-    if (activePhysicalDevice != null && _connectedDevice != null) {
-      _deviceMap[activePhysicalDevice.address] = activePhysicalDevice;
-      _discoveredDevices.add(_connectedDevice!);
+    } catch (e) {
+      developer.log("Ошибка получения bonded devices", name: 'reBlue', error: e);
     }
 
     notifyListeners();
 
-    try {
-      try {
-        final bonded = await _bluetooth.bondedDevices;
-        if (bonded != null) {
-          for (final device in bonded) {
-            _addDeviceToList(device);
-          }
-        }
-      } catch (e) {
-        developer.log(
-          "Ошибка получения bonded devices",
-          name: 'reBlue',
-          error: e,
-        );
-      }
+    _bluetooth.startScan();
+    developer.log("Сканирование запущено", name: 'reBlue');
 
-      notifyListeners();
-
-      _bluetooth.startScan();
-      developer.log("Сканирование запущено", name: 'reBlue');
-
-      await _scanSubscription?.cancel();
-      _scanSubscription = _bluetooth.scanResults.listen(
-        (BluetoothDevice device) {
-          if (!_deviceMap.containsKey(device.address)) {
-            _addDeviceToList(
-              device,
-              connected: _connectedDevice?.address == device.address,
-            );
-            notifyListeners();
-          }
-        },
-        onError: (err) {
-          developer.log(
-            "Ошибка в стриме сканирования",
-            name: 'reBlue',
-            error: err,
+    await _scanSubscription?.cancel();
+    _scanSubscription = _bluetooth.scanResults.listen(
+      (BluetoothDevice device) {
+        if (!_deviceMap.containsKey(device.address)) {
+          _addDeviceToList(
+            device,
+            connected: _connectedDevice?.address == device.address,
           );
-          _stopScan();
-        },
-      );
-
-      _scanTimer?.cancel();
-      _scanTimer = Timer(const Duration(seconds: 15), () {
-        if (_isScanning) {
-          developer.log("Таймер: 15 секунд прошло, авто-стоп", name: 'reBlue');
-          _stopScan();
+          notifyListeners();
         }
-      });
-    } catch (e) {
-      developer.log("Scan error: $e", name: 'reBlue', error: e);
-      _isScanning = false;
-      notifyListeners();
-      return false;
-    }
+      },
+      onError: (err) {
+        developer.log("Ошибка в стриме сканирования", name: 'reBlue', error: err);
+        _stopScan();
+      },
+    );
 
-    return true;
+    _scanTimer?.cancel();
+    _scanTimer = Timer(const Duration(seconds: 15), () {
+      if (_isScanning) {
+        developer.log("Таймер: 15 секунд прошло, авто-стоп", name: 'reBlue');
+        _stopScan();
+      }
+    });
+  } catch (e) {
+    developer.log("Scan error: $e", name: 'reBlue', error: e);
+    _isScanning = false;
+    notifyListeners();
+    return BluetoothScanResult.notStarted;
   }
+
+  return BluetoothScanResult.started;
+}
 
   /// Останавливает сканирование и сбрасывает связанные таймеры и подписки
   Future<void> _stopScan() async {
