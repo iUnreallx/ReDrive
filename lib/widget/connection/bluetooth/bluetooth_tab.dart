@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:redrive/models/obd_device.dart';
 import 'package:redrive/providers/bluetooth_provider.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class BluetoothTab extends StatefulWidget {
   const BluetoothTab({super.key});
@@ -248,6 +249,20 @@ class BluetoothDeviceList extends StatelessWidget {
         return false;
       },
       builder: (context, state, child) {
+
+        if (state.devices.isEmpty && state.isScanning) {
+          return ListView.separated(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          itemCount: 3,
+          separatorBuilder: (context, index) {
+            return Divider(color: Colors.white.withAlpha(10), height: 1);
+          },
+          itemBuilder: (context, index) {
+            return const BluetoothDeviceSkeletonTile();
+          },
+        );
+        }
+
         if (state.devices.isEmpty && !state.isScanning) {
           return Center(
             child: Column(
@@ -317,6 +332,78 @@ class BluetoothDeviceList extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class BluetoothDeviceSkeletonTile extends StatelessWidget {
+  const BluetoothDeviceSkeletonTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+      child: Shimmer(
+        duration: const Duration(seconds: 2),
+        interval: const Duration(milliseconds: 150),
+        color: Color(0xFFC4FF47).withOpacity(0.8),
+        enabled: true,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.08),
+                  shape: BoxShape.circle,
+                ),
+              ),
+          
+              const SizedBox(width: 16),
+          
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 14,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+          
+                    const SizedBox(height: 10),
+          
+                    Container(
+                      height: 10,
+                      width: 180,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          
+              const SizedBox(width: 16),
+          
+              Container(
+                width: 70,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
