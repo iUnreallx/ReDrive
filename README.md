@@ -177,10 +177,6 @@ ReDrive/
 
 ## Roadmap 
 
-### Right now, the entire focus is on developing the elm327 `emulator`. The project hasn't been abandoned! The emulator is essential for proper vehicle testing. 
-```https://github.com/iUnreallx/ELM327-Emulator```
-### The estimated completion date for the emulator is ~June 30, 2026.
-
 A detailed development plan, current tasks, and future features are described in a separate document:
 * [View Roadmap](docs/roadmap/roadmap.md)
 
