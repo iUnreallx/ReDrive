@@ -17,6 +17,16 @@ void main() {
     expect(response.wasSearching, isTrue);
   });
 
+  test('parses OBD data response', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse('41 0D 2A\r>');
+
+    expect(response.type, ElmResponseType.data);
+    expect(response.lines, ['41 0D 2A']);
+    expect(response.wasSearching, isFalse);
+  });
+
   test('parses OK response', () {
     const parser = ElmResponseParser();
 
@@ -40,19 +50,79 @@ void main() {
     const parser = ElmResponseParser();
 
     const Map<String, ElmResponseType> cases = {
-      'OK\r>': ElmResponseType.ok,
-      'NO DATA\r>': ElmResponseType.noData,
-      'STOPPED\r>': ElmResponseType.stopped,
-      'UNABLE TO CONNECT\r>': ElmResponseType.unableToConnect,
-      'BUS INIT: ERROR\r>': ElmResponseType.busError,
-      'CAN ERROR\r>': ElmResponseType.busError,
-      '?\r>': ElmResponseType.unknownCommand,
+      'OK': ElmResponseType.ok,
+      'NO DATA': ElmResponseType.noData,
+      'STOPPED': ElmResponseType.stopped,
+      'UNABLE TO CONNECT': ElmResponseType.unableToConnect,
+
+      'BUS INIT: ERROR': ElmResponseType.busError,
+      'BUS ERROR': ElmResponseType.busError,
+      'BUS BUSY': ElmResponseType.busError,
+      'CAN ERROR': ElmResponseType.busError,
+
+      'BUFFER FULL': ElmResponseType.adapterError,
+      'DATA ERROR': ElmResponseType.adapterError,
+      '<DATA ERROR': ElmResponseType.adapterError,
+      'RX ERROR': ElmResponseType.adapterError,
+      'FB ERROR': ElmResponseType.adapterError,
+      'LV RESET': ElmResponseType.adapterError,
+
+      '?': ElmResponseType.unknownCommand,
     };
 
-    for (final values in cases.entries) {
-      final response = parser.parse(values.key);
+    for (final entries in cases.entries) {
+      final response = parser.parse(entries.key);
 
-      expect(response.type, values.value);
+      expect(response.type, entries.value);
     }
+  });
+
+  test('parses ELM adapter error codes', () {
+    const parser = ElmResponseParser();
+
+    const errorCodes = ['ERR94\r>', 'ERR56\r>', 'ERR0F\r>'];
+
+    for (final errorCode in errorCodes) {
+      final response = parser.parse(errorCode);
+
+      expect(response.type, ElmResponseType.adapterError);
+    }
+  });
+
+  test('parses ELM adapter info', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse('ATZ\rELM327 v1.5\r>');
+
+    expect(response.type, ElmResponseType.adapterInfo);
+    expect(response.lines, ['ATZ', 'ELM327 v1.5']);
+  });
+
+  test('parses OBD data response after searching', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse('SEARCHING...\r41 0D 2A\r>');
+
+    expect(response.type, ElmResponseType.data);
+    expect(response.lines, ['41 0D 2A']);
+    expect(response.wasSearching, isTrue);
+  });
+
+  test('returns malformed for unknown response', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse('SOMETHING STRANGE\r>');
+
+    expect(response.type, ElmResponseType.malformed);
+    expect(response.lines, ['SOMETHING STRANGE']);
+  });
+
+  test('returns malformed for empty response', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse('\r>');
+
+    expect(response.type, ElmResponseType.malformed);
+    expect(response.lines, isEmpty);
   });
 }
