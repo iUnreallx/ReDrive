@@ -1,6 +1,7 @@
 enum ElmResponseType {
   ok,
   data,
+  adapterInfo,
   noData,
   stopped,
   unableToConnect,
