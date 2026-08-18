@@ -23,4 +23,17 @@ void main() {
       await fakeConnection.dispose();
     });
   });
+
+  test('throws StateError when another command is already active', () async {
+    final FakeObdConnection fakeConnection = FakeObdConnection();
+    final ElmClient client = ElmClient(connection: fakeConnection);
+
+    final firstFuture = client.execute('010D');
+
+    expect(() => client.execute('010C'), throwsA(isA<StateError>()));
+
+    fakeConnection.emit('41 0D 2A\r>');
+
+    await firstFuture;
+  });
 }
