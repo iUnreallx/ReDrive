@@ -1,5 +1,4 @@
 import 'package:redrive/obd/elm/elm_command.dart';
-import 'package:redrive/obd/elm/elm_response.dart';
 
 class ElmCommandQueue {
   int _nextGenerationId = 0;
