@@ -9,7 +9,11 @@ import 'dart:async';
 class ElmClient {
   final ObdConnection _connection;
   late final StreamSubscription<String> _subscription;
+  Timer? _commandWatchdogTimer;
+
   String _receiveBuffer = "";
+  bool _isDesynchronized = false;
+
   final ElmResponseParser _parser = const ElmResponseParser();
   final ElmCommandQueue _queue = ElmCommandQueue();
 
@@ -32,6 +36,7 @@ class ElmClient {
 
     ElmResponse response = _parser.parse(_receiveBuffer);
 
+    _commandWatchdogTimer?.cancel();
     current.completer.complete(response);
 
     _receiveBuffer = "";
@@ -42,11 +47,15 @@ class ElmClient {
     }
   }
 
-  Future<ElmResponse> execute(String command) {
-    final elmCommand = _queue.incomingQueue(
-      command,
-      const Duration(seconds: 2),
-    );
+  Future<ElmResponse> execute(
+    String command, {
+    Duration timeout = const Duration(seconds: 2),
+  }) {
+    if (_isDesynchronized) {
+      throw StateError('ELM session requires recovery');
+    }
+
+    final elmCommand = _queue.incomingQueue(command, timeout);
 
     if (elmCommand == _queue.currentElmCommand) {
       _startCommand(elmCommand);
@@ -57,10 +66,34 @@ class ElmClient {
 
   void _startCommand(ElmCommand command) {
     _receiveBuffer = "";
+
+    _commandWatchdogTimer?.cancel();
+
+    _commandWatchdogTimer = Timer(command.timeout, () {
+      if (command != _queue.currentElmCommand) return;
+
+      final error = TimeoutException(
+        'ELM command ${command.command} timed out',
+        command.timeout,
+      );
+
+      _isDesynchronized = true;
+      _receiveBuffer = "";
+
+      final abortedCommands = _queue.abortAll();
+
+      for (final abortedCommand in abortedCommands) {
+        if (!abortedCommand.completer.isCompleted) {
+          abortedCommand.completer.completeError(error);
+        }
+      }
+    });
+
     _connection.send("${command.command}\r");
   }
 
   Future<void> dispose() async {
+    _commandWatchdogTimer?.cancel();
     await _subscription.cancel();
   }
 }
