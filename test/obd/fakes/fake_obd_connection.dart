@@ -33,15 +33,23 @@ class FakeObdConnection implements ObdConnection {
 
   @override
   Future<void> send(String command) async {
+    sentCommands.add(command);
+
     if (sendError != null) {
       throw sendError!;
     }
-
-    sentCommands.add(command);
   }
 
   void emit(String chunk) {
     _incomingController.add(chunk);
+  }
+
+  void emitError(Object error) {
+    _incomingController.addError(error);
+  }
+
+  Future<void> closeIncoming() {
+    return _incomingController.close();
   }
 
   Future<void> dispose() {
