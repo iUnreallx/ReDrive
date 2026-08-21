@@ -80,7 +80,17 @@ class ElmClient {
       _failExchange(error);
     });
 
-    _connection.send("${command.command}\r");
+    unawaited(_sendCommand(command));
+  }
+
+  Future<void> _sendCommand(ElmCommand command) async {
+    try {
+      await _connection.send('${command.command}\r');
+    } catch (error) {
+      if (command != _queue.currentElmCommand) return;
+
+      _failExchange(error);
+    }
   }
 
   void _failExchange(Object error) {
