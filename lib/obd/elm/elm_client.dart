@@ -13,6 +13,7 @@ class ElmClient {
 
   String _receiveBuffer = "";
   bool _isDesynchronized = false;
+  bool _isDisposed = false;
 
   final ElmResponseParser _parser = const ElmResponseParser();
   final ElmCommandQueue _queue = ElmCommandQueue();
@@ -20,8 +21,11 @@ class ElmClient {
   ElmClient({required ObdConnection connection}) : _connection = connection {
     _subscription = _connection.incoming.listen(
       _handleIncomingData,
-      onError: (error) {
-        print('Stream error: $error');
+      onError: (Object error) {
+        _failExchange(error);
+      },
+      onDone: () {
+        _failExchange(StateError('ELM incoming stream closed'));
       },
     );
   }
@@ -51,6 +55,10 @@ class ElmClient {
     String command, {
     Duration timeout = const Duration(seconds: 2),
   }) {
+    if (_isDisposed) {
+      throw StateError('ElmClient is disposed');
+    }
+
     if (_isDesynchronized) {
       throw StateError('ELM session requires recovery');
     }
@@ -107,7 +115,11 @@ class ElmClient {
   }
 
   Future<void> dispose() async {
-    _commandWatchdogTimer?.cancel();
+    if (_isDisposed) return;
+
+    _isDisposed = true;
+    _failExchange(StateError('ElmClient is disposed'));
+
     await _subscription.cancel();
   }
 }
