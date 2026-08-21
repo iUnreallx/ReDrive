@@ -34,4 +34,19 @@ class ElmCommandQueue {
     currentElmCommand = nextResponseCommand;
     return nextResponseCommand;
   }
+
+  List<ElmCommand> abortAll() {
+    final commands = <ElmCommand>[];
+
+    if (currentElmCommand != null) {
+      commands.add(currentElmCommand!);
+    }
+
+    commands.addAll(waitingCommands);
+
+    currentElmCommand = null;
+    waitingCommands.clear();
+
+    return commands;
+  }
 }
