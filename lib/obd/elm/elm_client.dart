@@ -77,19 +77,23 @@ class ElmClient {
         command.timeout,
       );
 
-      _isDesynchronized = true;
-      _receiveBuffer = "";
-
-      final abortedCommands = _queue.abortAll();
-
-      for (final abortedCommand in abortedCommands) {
-        if (!abortedCommand.completer.isCompleted) {
-          abortedCommand.completer.completeError(error);
-        }
-      }
+      _failExchange(error);
     });
 
     _connection.send("${command.command}\r");
+  }
+
+  void _failExchange(Object error) {
+    _commandWatchdogTimer?.cancel();
+    _isDesynchronized = true;
+    _receiveBuffer = "";
+    final abortedCommands = _queue.abortAll();
+
+    for (final abortedCommand in abortedCommands) {
+      if (!abortedCommand.completer.isCompleted) {
+        abortedCommand.completer.completeError(error);
+      }
+    }
   }
 
   Future<void> dispose() async {
