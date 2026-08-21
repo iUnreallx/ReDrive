@@ -10,6 +10,8 @@ class FakeObdConnection implements ObdConnection {
 
   bool _isConnected = false;
 
+  Object? sendError;
+
   @override
   Stream<String> get incoming => _incomingController.stream;
 
@@ -31,6 +33,10 @@ class FakeObdConnection implements ObdConnection {
 
   @override
   Future<void> send(String command) async {
+    if (sendError != null) {
+      throw sendError!;
+    }
+
     sentCommands.add(command);
   }
 
