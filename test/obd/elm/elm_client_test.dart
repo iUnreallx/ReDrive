@@ -110,6 +110,90 @@ void main() {
     expect(() => client.execute('0105'), throwsA(isA<StateError>()));
   });
 
+  test('send error aborts queue and blocks new commands', () async {
+    final fakeConnection = FakeObdConnection();
+    final client = ElmClient(connection: fakeConnection);
+    final sendError = Exception('send failed');
+
+    addTearDown(() async {
+      await client.dispose();
+      await fakeConnection.dispose();
+    });
+
+    fakeConnection.sendError = sendError;
+
+    final firstFuture = client.execute('010D');
+    final secondFuture = client.execute('010C');
+
+    final firstExpectation = expectLater(firstFuture, throwsA(same(sendError)));
+    final secondExpectation = expectLater(
+      secondFuture,
+      throwsA(same(sendError)),
+    );
+
+    await Future.wait([firstExpectation, secondExpectation]);
+
+    expect(fakeConnection.sentCommands, ['010D\r']);
+    expect(() => client.execute('0105'), throwsA(isA<StateError>()));
+  });
+
+  test('stream error aborts queue and blocks new commands', () async {
+    final fakeConnection = FakeObdConnection();
+    final client = ElmClient(connection: fakeConnection);
+    final streamError = Exception('stream failed');
+
+    addTearDown(() async {
+      await client.dispose();
+      await fakeConnection.dispose();
+    });
+
+    final firstFuture = client.execute('010D');
+    final secondFuture = client.execute('010C');
+
+    final firstExpectation = expectLater(
+      firstFuture,
+      throwsA(same(streamError)),
+    );
+    final secondExpectation = expectLater(
+      secondFuture,
+      throwsA(same(streamError)),
+    );
+
+    fakeConnection.emitError(streamError);
+
+    await Future.wait([firstExpectation, secondExpectation]);
+
+    expect(fakeConnection.sentCommands, ['010D\r']);
+    expect(() => client.execute('0105'), throwsA(isA<StateError>()));
+  });
+
+  test('closed stream fails current command and blocks new commands', () async {
+    final fakeConnection = FakeObdConnection();
+    final client = ElmClient(connection: fakeConnection);
+
+    addTearDown(() async {
+      await client.dispose();
+      await fakeConnection.dispose();
+    });
+
+    final future = client.execute('010D');
+    final expectation = expectLater(
+      future,
+      throwsA(
+        isA<StateError>().having(
+          (error) => error.message,
+          'message',
+          'ELM incoming stream closed',
+        ),
+      ),
+    );
+
+    await fakeConnection.closeIncoming();
+    await expectation;
+
+    expect(() => client.execute('0105'), throwsA(isA<StateError>()));
+  });
+
   test('abortAll returns all commands and clears queue', () {
     final queue = ElmCommandQueue();
 
@@ -121,5 +205,35 @@ void main() {
     expect(aborted, [first, second]);
     expect(queue.currentElmCommand, isNull);
     expect(queue.waitingCommands, isEmpty);
+  });
+
+  test('dispose fails pending commands and blocks new commands', () async {
+    final fakeConnection = FakeObdConnection();
+    final client = ElmClient(connection: fakeConnection);
+
+    addTearDown(() async {
+      await client.dispose();
+      await fakeConnection.dispose();
+    });
+
+    final firstFuture = client.execute('010D');
+    final secondFuture = client.execute('010C');
+
+    final disposedError = isA<StateError>().having(
+      (error) => error.message,
+      'message',
+      'ElmClient is disposed',
+    );
+
+    final firstExpectation = expectLater(firstFuture, throwsA(disposedError));
+    final secondExpectation = expectLater(secondFuture, throwsA(disposedError));
+
+    await client.dispose();
+    await Future.wait([firstExpectation, secondExpectation]);
+
+    expect(fakeConnection.sentCommands, ['010D\r']);
+    expect(() => client.execute('0105'), throwsA(disposedError));
+
+    await client.dispose();
   });
 }
