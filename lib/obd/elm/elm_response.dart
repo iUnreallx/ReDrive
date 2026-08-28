@@ -2,6 +2,7 @@ enum ElmResponseType {
   ok,
   data,
   adapterInfo,
+  adapterVoltage,
   noData,
   stopped,
   unableToConnect,

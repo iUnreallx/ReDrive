@@ -25,6 +25,10 @@ class ElmResponseParser {
   };
 
   static final RegExp _adapterErrorCodePattern = RegExp(r'^ERR[0-9A-F]{2}$');
+  static final RegExp _adapterVoltagePattern = RegExp(
+    r'^\d+(?:\.\d+)?\s*V$',
+    caseSensitive: false,
+  );
 
   static bool _isObdDataLine(String line) {
     final bytes = line.split(RegExp(r'\s+'));
@@ -84,6 +88,15 @@ class ElmResponseParser {
       if (_isAdapterInfoLine(responseLines.last)) {
         return ElmResponse(
           type: ElmResponseType.adapterInfo,
+          raw: raw,
+          lines: responseLines,
+          wasSearching: wasSearching,
+        );
+      }
+
+      if (_adapterVoltagePattern.hasMatch(responseLines.last)) {
+        return ElmResponse(
+          type: ElmResponseType.adapterVoltage,
           raw: raw,
           lines: responseLines,
           wasSearching: wasSearching,
