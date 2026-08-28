@@ -98,6 +98,15 @@ void main() {
     expect(response.lines, ['ATZ', 'ELM327 v1.5']);
   });
 
+  test('parses ELM adapter voltage', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse('ATRV\r12.6V\r>');
+
+    expect(response.type, ElmResponseType.adapterVoltage);
+    expect(response.lines, ['ATRV', '12.6V']);
+  });
+
   test('parses OBD data response after searching', () {
     const parser = ElmResponseParser();
 
