@@ -12,6 +12,13 @@ jobs:
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          git clone --mirror "https://github.com/${GITHUB_REPOSITORY}.git" repo.git
+          git clone --bare "https://github.com/${GITHUB_REPOSITORY}.git" repo.git
           cd repo.git
-          git push --mirror "https://oauth2:${GITLAB_TOKEN}@gitlab.com/redrive-group/ReDrive.git"
+
+          git push --prune \
+            "https://oauth2:${GITLAB_TOKEN}@gitlab.com/redrive-group/ReDrive.git" \
+            "refs/heads/*:refs/heads/*"
+
+          git push \
+            "https://oauth2:${GITLAB_TOKEN}@gitlab.com/redrive-group/ReDrive.git" \
+            --tags
