@@ -32,4 +32,50 @@ void main() {
     expect(definition?.command, 'ATRV');
     expect(definition?.source, PidSource.adapter);
   });
+
+  group('PidRegistry.findSupportedEcuKeys', () {
+    test('returns matching ECU PID keys', () {
+      final registry = PidRegistry();
+
+      final result = registry.findSupportedEcuKeys({0x05, 0x0C, 0x0D});
+
+      expect(result, {
+        PidKey.coolantTemperature,
+        PidKey.engineRpm,
+        PidKey.vehicleSpeed,
+      });
+    });
+
+    test('returns only supported ECU PID keys', () {
+      final registry = PidRegistry();
+
+      final result = registry.findSupportedEcuKeys({0x0C});
+
+      expect(result, {PidKey.engineRpm});
+    });
+
+    test('does not include adapter parameters', () {
+      final registry = PidRegistry();
+
+      final result = registry.findSupportedEcuKeys({0x05, 0x0C, 0x0D});
+
+      expect(result.contains(PidKey.adapterVoltage), isFalse);
+    });
+
+    test('returns empty set when supported PID set is empty', () {
+      final registry = PidRegistry();
+
+      final result = registry.findSupportedEcuKeys({});
+
+      expect(result, isEmpty);
+    });
+
+    test('ignores supported PIDs that are not registered', () {
+      final registry = PidRegistry();
+
+      final result = registry.findSupportedEcuKeys({0x01, 0x02, 0x03});
+
+      expect(result, isEmpty);
+    });
+  });
 }
