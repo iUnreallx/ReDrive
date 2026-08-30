@@ -10,11 +10,13 @@ class PidDefinition<T> {
   final String command;
   final PidDecoder<T> decoder;
   final PidSource source;
+  final int? pid;
 
   const PidDefinition({
     required this.key,
     required this.command,
     required this.decoder,
     this.source = PidSource.ecu,
+    this.pid,
   });
 }
