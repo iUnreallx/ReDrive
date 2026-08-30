@@ -6,5 +6,6 @@ final adapterVoltageDefinition = PidDefinition<double>(
   key: PidKey.adapterVoltage,
   command: 'ATRV',
   decoder: decodeAdapterVoltage,
+  pid: null,
   source: PidSource.adapter,
 );
