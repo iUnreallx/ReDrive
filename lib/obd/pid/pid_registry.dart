@@ -16,4 +16,18 @@ class PidRegistry {
   PidDefinition<num>? find(PidKey key) {
     return _definitions[key];
   }
+
+  Set<PidKey> findSupportedEcuKeys(Set<int> supportedPids) {
+    final supportedPidKeySet = <PidKey>{};
+
+    for (final definition in _definitions.values) {
+      if (definition.source == PidSource.ecu &&
+          definition.pid != null &&
+          supportedPids.contains(definition.pid)) {
+        supportedPidKeySet.add(definition.key);
+      }
+    }
+
+    return supportedPidKeySet;
+  }
 }
