@@ -5,5 +5,6 @@ import '../pid_key.dart';
 final PidDefinition<double> engineRpmDefinition = PidDefinition<double>(
   key: PidKey.engineRpm,
   command: "010C",
+  pid: 0x0C,
   decoder: decodeEngineRpm,
 );
