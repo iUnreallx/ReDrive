@@ -5,5 +5,6 @@ import '../pid_key.dart';
 final vehicleSpeedDefinition = PidDefinition<int>(
   key: PidKey.vehicleSpeed,
   command: '010D',
+  pid: 0x0D,
   decoder: decodeVehicleSpeed,
 );

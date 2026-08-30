@@ -1,0 +1,24 @@
+name: Mirror to GitLab
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror repository to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          git clone --bare "https://github.com/${GITHUB_REPOSITORY}.git" repo.git
+          cd repo.git
+
+          git push --force --prune \
+            "https://oauth2:${GITLAB_TOKEN}@gitlab.com/redrive-group/ReDrive.git" \
+            "refs/heads/*:refs/heads/*"
+
+          git push \
+            "https://oauth2:${GITLAB_TOKEN}@gitlab.com/redrive-group/ReDrive.git" \
+            --tags
