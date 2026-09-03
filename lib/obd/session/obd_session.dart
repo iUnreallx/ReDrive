@@ -1,4 +1,5 @@
 import 'package:redrive/obd/elm/elm_response.dart';
+import 'package:redrive/obd/pid/decoders/supported_pids_decoder.dart';
 
 import '../elm/elm_client.dart';
 
@@ -15,7 +16,7 @@ class ObdSession {
   ObdSessionState get state => _state;
   Object? get lastError => _lastError;
 
-  Future<void> initialize() async {
+  Future<Set<int>> initialize() async {
     _state = ObdSessionState.initializing;
     _lastError = null;
 
@@ -24,9 +25,15 @@ class ObdSession {
       await _executeAndExpect('ATE0', ElmResponseType.ok);
       await _executeAndExpect('ATL0', ElmResponseType.ok);
       await _executeAndExpect('ATSP0', ElmResponseType.ok);
-      await _executeAndExpect('0100', ElmResponseType.data);
+      final supportedPidsResponse = await _executeAndExpect(
+        '0100',
+        ElmResponseType.data,
+      );
+
+      final supportedPids = decodeSupportedPids(supportedPidsResponse);
 
       _state = ObdSessionState.ready;
+      return supportedPids;
     } catch (e) {
       _lastError = e;
       _state = ObdSessionState.error;

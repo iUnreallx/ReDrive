@@ -42,11 +42,40 @@ void main() {
       '0100\r',
     ]);
 
-    connection.emit('41 00 BE 3E B8 13\r>');
-    await initialization;
+    connection.emit('41 00 08 18 00 00\r>');
+    final supportedPids = await initialization;
 
+    expect(supportedPids, {5, 12, 13});
     expect(session.state, ObdSessionState.ready);
     expect(session.lastError, isNull);
+  });
+
+  test('moves to error when supported PID response is malformed', () async {
+    final connection = FakeObdConnection();
+    final client = ElmClient(connection: connection);
+    final session = ObdSession(elmClient: client);
+
+    addTearDown(() async {
+      await client.dispose();
+      await connection.dispose();
+    });
+
+    final initialization = session.initialize();
+
+    connection.emit('ELM327 v1.5\r>');
+    await pumpEventQueue();
+    connection.emit('OK\r>');
+    await pumpEventQueue();
+    connection.emit('OK\r>');
+    await pumpEventQueue();
+    connection.emit('OK\r>');
+    await pumpEventQueue();
+    connection.emit('41 0C 08 18 00 00\r>');
+
+    await expectLater(initialization, throwsA(isA<FormatException>()));
+
+    expect(session.state, ObdSessionState.error);
+    expect(session.lastError, isA<FormatException>());
   });
 
   test('stops handshake when command returns unexpected response', () async {
