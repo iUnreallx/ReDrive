@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../pid/pid_definition.dart';
 import '../pid/pid_key.dart';
 import '../pid/pid_registry.dart';
@@ -14,12 +16,22 @@ class PollingController {
   final Set<PidKey> _supportedEcuKeys;
 
   final Map<PollingDemandSource, Set<PidKey>> _demands = {};
+  final Map<PidKey, num> _latestValues = {};
+
+  final _updatesController =
+      StreamController<({PidKey key, num value})>.broadcast();
+
+  bool _isPolling = false;
 
   PollingController({
     required PidRegistry registry,
     required Set<PidKey> supportedEcuKeys,
   }) : _registry = registry,
        _supportedEcuKeys = supportedEcuKeys;
+
+  bool get isPolling => _isPolling;
+  Map<PidKey, num> get latestValues => Map.unmodifiable(_latestValues);
+  Stream<({PidKey key, num value})> get updates => _updatesController.stream;
 
   void updateDemand(PollingDemandSource source, Set<PidKey> keys) {
     if (keys.isEmpty) {
