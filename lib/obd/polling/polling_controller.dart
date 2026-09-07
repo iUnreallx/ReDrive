@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import '../elm/elm_client.dart';
+import '../elm/elm_response.dart';
 import '../pid/pid_definition.dart';
 import '../pid/pid_key.dart';
 import '../pid/pid_registry.dart';
@@ -12,6 +13,7 @@ enum PollingDemandSource {
 }
 
 class PollingController {
+  final ElmClient _elmClient;
   final PidRegistry _registry;
   final Set<PidKey> _supportedEcuKeys;
 
@@ -24,9 +26,11 @@ class PollingController {
   bool _isPolling = false;
 
   PollingController({
+    required ElmClient elmClient,
     required PidRegistry registry,
     required Set<PidKey> supportedEcuKeys,
-  }) : _registry = registry,
+  }) : _elmClient = elmClient,
+       _registry = registry,
        _supportedEcuKeys = supportedEcuKeys;
 
   bool get isPolling => _isPolling;
@@ -59,5 +63,60 @@ class PollingController {
     }
 
     return effective;
+  }
+
+  void start() {
+    if (!_isPolling) {
+      _isPolling = true;
+
+      unawaited(_runPollingLoop());
+    }
+  }
+
+  void stop() {
+    _isPolling = false;
+  }
+
+  Future<void> _runPollingLoop() async {
+    while (_isPolling) {
+      final keys = computeEffectiveKeys();
+
+      if (keys.isEmpty) {
+        await Future.delayed(const Duration(milliseconds: 100));
+
+        continue;
+      }
+
+      for (final key in keys) {
+        if (!_isPolling) break;
+
+        final definition = _registry.find(key);
+        if (definition == null) continue;
+
+        try {
+          final response = await _elmClient.execute(definition.command);
+
+          if (response.type == ElmResponseType.data ||
+              response.type == ElmResponseType.adapterVoltage) {
+            final value = definition.decoder(response);
+
+            _latestValues[key] = value;
+
+            if (!_updatesController.isClosed) {
+              _updatesController.add((key: key, value: value));
+            }
+          }
+        } catch (_) {
+          _isPolling = false;
+
+          return;
+        }
+      }
+    }
+  }
+
+  Future<void> dispose() async {
+    stop();
+    await _updatesController.close();
   }
 }
