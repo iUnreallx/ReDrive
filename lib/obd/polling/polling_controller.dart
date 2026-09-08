@@ -106,8 +106,12 @@ class PollingController {
               _updatesController.add((key: key, value: value));
             }
           }
-        } catch (_) {
+        } catch (error, stackTrace) {
           _isPolling = false;
+
+          if (!_updatesController.isClosed) {
+            _updatesController.addError(error, stackTrace);
+          }
 
           return;
         }
