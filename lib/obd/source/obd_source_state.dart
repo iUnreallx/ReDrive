@@ -1,7 +1,7 @@
 enum ObdSourceState {
   disconnected,
   connecting,
-  initializingSession,
+  initializing,
   polling,
   recovering,
   error,
