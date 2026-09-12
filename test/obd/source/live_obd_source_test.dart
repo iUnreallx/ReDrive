@@ -35,7 +35,7 @@ void main() {
       source.stateStream,
       emitsInOrder([
         ObdSourceState.connecting,
-        ObdSourceState.initializingSession,
+        ObdSourceState.initializing,
         ObdSourceState.polling,
       ]),
     );
