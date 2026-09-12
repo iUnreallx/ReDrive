@@ -87,7 +87,7 @@ class LiveObdSource {
       final client = ElmClient(connection: _connection);
       _elmClient = client;
 
-      _setState(ObdSourceState.initializingSession);
+      _setState(ObdSourceState.initializing);
 
       final session = ObdSession(elmClient: client);
       _session = session;
