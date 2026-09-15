@@ -190,7 +190,7 @@ class ObdProvider extends ChangeNotifier {
         /// температура
       } else if (parts.length >= 3 && parts[0] == "41" && parts[1] == "05") {
         return currentBatchData.copyWith(
-          engineTemp: int.parse(parts[2], radix: 16) - 40,
+          coolantTemp: int.parse(parts[2], radix: 16) - 40,
         );
 
         /// напряжение сети
