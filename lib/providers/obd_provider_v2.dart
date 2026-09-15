@@ -25,7 +25,24 @@ class ObdProviderV2 extends ChangeNotifier {
     _updatesSubscription = _liveSource.updates.listen(_onUpdate);
   }
 
-  void _onUpdate(({PidKey key, num value}) update) {}
+  void _onUpdate(({PidKey key, num value}) update) {
+    switch (update.key) {
+      case PidKey.engineRpm:
+        _data = _data.copyWith(rpm: update.value.toInt());
+
+      case PidKey.vehicleSpeed:
+        _data = _data.copyWith(speed: update.value.toInt());
+
+      case PidKey.coolantTemperature:
+        _data = _data.copyWith(coolantTemp: update.value.toInt());
+
+      case PidKey.adapterVoltage:
+        _data = _data.copyWith(voltage: update.value.toDouble());
+    }
+
+    notifyListeners();
+  }
+
   StreamSubscription<({PidKey key, num value})>? _updatesSubscription;
 
   bool get isDeviceConnected => _connection.isConnected;
@@ -42,4 +59,12 @@ class ObdProviderV2 extends ChangeNotifier {
   ObdSourceState get state => _liveSource.state;
 
   StreamSubscription<ObdSourceState>? _stateSubscription;
+
+  @override
+  void dispose() {
+    _stateSubscription?.cancel();
+    _updatesSubscription?.cancel();
+
+    super.dispose();
+  }
 }
