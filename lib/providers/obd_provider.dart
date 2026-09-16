@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
-import '../models/obd_data.dart';
-import '../services/obd_connection.dart';
-import '../services/demo_data_generator.dart';
+import '../obd/models/obd_data.dart';
+import '../obd/connection/obd_connection.dart';
+import '../services/demo/demo_data_generator.dart';
 
 enum ObdConnectionState { disconnected, initializing, ready, error }
 
