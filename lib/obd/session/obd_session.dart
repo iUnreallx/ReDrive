@@ -5,6 +5,11 @@ import '../elm/elm_client.dart';
 
 enum ObdSessionState { disconnected, initializing, ready, error }
 
+/// Initializes and manages an OBD-II communication session.
+///
+/// Configures the ELM327 adapter and discovers ECU capabilities
+/// required before live polling can begin.
+/// returns supportedEcuPids to registry.
 class ObdSession {
   final ElmClient _elmClient;
 

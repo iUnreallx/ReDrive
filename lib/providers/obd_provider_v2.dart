@@ -11,6 +11,12 @@ import '../obd/source/obd_source_state.dart';
 
 enum ObdMode { idle, demo, real }
 
+/// Coordinates OBD data sources and exposes vehicle data to the UI.
+///
+/// Manages Real/Demo modes, active watchlists, connection lifecycle,
+/// and the latest decoded OBD data.
+///
+/// Low-level OBD communication is delegated to [LiveObdSource].
 class ObdProviderV2 extends ChangeNotifier {
   ObdConnection? _connection;
   LiveObdSource? _liveSource;

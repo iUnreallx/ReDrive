@@ -7,6 +7,11 @@ import '../pid/pid_registry.dart';
 
 enum WatchSource { visibleScreen, backgroundMonitoring, logging, session }
 
+/// Controls periodic polling of requested OBD-II PIDs.
+///
+/// Combines watchlists from multiple consumers such as
+/// (screen, logs, session and other), schedules PID requests,
+/// stores the latest values, and emits decoded updates.
 class PollingController {
   final ElmClient _elmClient;
   final PidRegistry _registry;
