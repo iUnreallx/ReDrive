@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../../services/obd_connection.dart';
+import '../connection/obd_connection.dart';
 import '../elm/elm_client.dart';
 import '../pid/pid_key.dart';
 import '../pid/pid_registry.dart';
