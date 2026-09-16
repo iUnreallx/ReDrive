@@ -9,20 +9,84 @@ import '../obd/pid/pid_registry.dart';
 import '../obd/source/live_obd_source.dart';
 import '../obd/source/obd_source_state.dart';
 
-class ObdProviderV2 extends ChangeNotifier {
-  final ObdConnection _connection;
-  final LiveObdSource _liveSource;
+enum ObdMode { idle, demo, real }
 
-  ObdProviderV2(ObdConnection connection)
-    : _connection = connection,
-      _liveSource = LiveObdSource(
-        connection: connection,
-        registry: PidRegistry(),
-      ) {
-    _stateSubscription = _liveSource.stateStream.listen((_) {
+class ObdProviderV2 extends ChangeNotifier {
+  ObdConnection? _connection;
+  LiveObdSource? _liveSource;
+  final PidRegistry _registry;
+
+  ObdProviderV2({PidRegistry? registry})
+    : _registry = registry ?? PidRegistry();
+
+  void attachConnection(ObdConnection connection) {
+    _connection = connection;
+    notifyListeners();
+  }
+
+  void detachConnection() {
+    _connection = null;
+    notifyListeners();
+  }
+
+  StreamSubscription<({PidKey key, num value})>? _updatesSubscription;
+  StreamSubscription<ObdSourceState>? _stateSubscription;
+
+  bool get isDeviceConnected => _connection?.isConnected ?? false;
+  ObdSourceState get state => _liveSource?.state ?? ObdSourceState.disconnected;
+
+  ObdData _data = const ObdData();
+  ObdData get data => _data;
+
+  ObdMode _mode = ObdMode.idle;
+  ObdMode get mode => _mode;
+
+  Future<void> startRealMode() async {
+    if (_connection == null || _mode == ObdMode.real) return;
+
+    await _stopLive();
+
+    final source = LiveObdSource(connection: _connection!, registry: _registry);
+    _liveSource = source;
+
+    _stateSubscription = source.stateStream.listen((_) {
       notifyListeners();
     });
-    _updatesSubscription = _liveSource.updates.listen(_onUpdate);
+
+    _updatesSubscription = source.updates.listen(_onUpdate);
+
+    _mode = ObdMode.real;
+    notifyListeners();
+
+    try {
+      await source.start();
+    } catch (_) {
+      await _stopLive();
+      _mode = ObdMode.idle;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _stopLive() async {
+    await _stateSubscription?.cancel();
+    _stateSubscription = null;
+
+    await _updatesSubscription?.cancel();
+    _updatesSubscription = null;
+
+    if (_liveSource != null) {
+      await _liveSource?.stop();
+      await _liveSource?.dispose();
+      _liveSource = null;
+    }
+  }
+
+  Future<void> stop() async {
+    await _stopLive();
+
+    _mode = ObdMode.idle;
+    _data = const ObdData();
+    notifyListeners();
   }
 
   void _onUpdate(({PidKey key, num value}) update) {
@@ -42,23 +106,6 @@ class ObdProviderV2 extends ChangeNotifier {
 
     notifyListeners();
   }
-
-  StreamSubscription<({PidKey key, num value})>? _updatesSubscription;
-
-  bool get isDeviceConnected => _connection.isConnected;
-
-  ObdData _data = const ObdData();
-  ObdData get data => _data;
-
-  bool _isRealMode = false;
-  bool get isRealMode => _isRealMode;
-
-  bool _isDemoMode = false;
-  bool get isDemoMode => _isDemoMode;
-
-  ObdSourceState get state => _liveSource.state;
-
-  StreamSubscription<ObdSourceState>? _stateSubscription;
 
   @override
   void dispose() {
