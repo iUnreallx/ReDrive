@@ -7,6 +7,12 @@ import '../polling/polling_controller.dart';
 import '../session/obd_session.dart';
 import 'obd_source_state.dart';
 
+/// Manages a live OBD - II data source.
+///
+/// Initializes the ELM327 session, discovers supported PID's,
+/// manages polling, and forwards live PID updates.
+///
+/// OBD-level recovery is handled here.
 class LiveObdSource {
   final ObdConnection _connection;
   final PidRegistry _registry;
