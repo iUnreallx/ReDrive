@@ -6,6 +6,10 @@ import 'elm_response.dart';
 import 'elm_response_parser.dart';
 import 'dart:async';
 
+/// Provides command-level communication with an ELM327 adapter.
+///
+/// Sends adapter and OBD-II commands through [ObdConnection]
+/// and returns normalized responses to higher level components.
 class ElmClient {
   final ObdConnection _connection;
   late final StreamSubscription<String> _subscription;
