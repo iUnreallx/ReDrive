@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:redrive/models/bluetooth_enums.dart';
-import 'package:redrive/models/obd_device.dart';
+import 'package:redrive/services/bluetooth/models/bluetooth_status.dart';
+import 'package:redrive/services/bluetooth/models/bluetooth_obd_device.dart';
 import 'package:redrive/providers/bluetooth_provider.dart';
 
 class BluetoothTab extends StatefulWidget {
@@ -95,7 +95,9 @@ class _BluetoothTabState extends State<BluetoothTab> {
       children: [
         BluetoothScanStatusCard(onRefresh: () => _handleScan(context)),
         SizedBox(height: 20),
-        Expanded(child: BluetoothDevicePanel(onScan: () => _handleScan(context))),
+        Expanded(
+          child: BluetoothDevicePanel(onScan: () => _handleScan(context)),
+        ),
       ],
     );
   }
@@ -210,7 +212,7 @@ class BluetoothScanStatusCard extends StatelessWidget {
 
 /// Основная панель со списком Bluetooth-устройств.
 class BluetoothDevicePanel extends StatelessWidget {
-   final VoidCallback onScan;
+  final VoidCallback onScan;
   const BluetoothDevicePanel({super.key, required this.onScan});
 
   @override
@@ -291,7 +293,7 @@ class BluetoothDeviceList extends StatelessWidget {
       selector: (_, provider) {
         return _BluetoothDeviceListState(
           isScanning: provider.isScanning,
-          devices: List<ObdDevice>.of(provider.discoveredDevices),
+          devices: List<BluetoothObdDevice>.of(provider.discoveredDevices),
         );
       },
       shouldRebuild: (previous, next) {
@@ -382,7 +384,7 @@ class BluetoothDeviceList extends StatelessWidget {
 }
 
 class BluetoothDeviceTile extends StatelessWidget {
-  final ObdDevice device;
+  final BluetoothObdDevice device;
 
   const BluetoothDeviceTile({super.key, required this.device});
 
@@ -463,7 +465,7 @@ class BluetoothDeviceTile extends StatelessWidget {
 Future<void> _connectToAdapter(
   BuildContext context,
   BluetoothProvider provider,
-  ObdDevice device,
+  BluetoothObdDevice device,
 ) async {
   bool isCanceled = false;
 
@@ -578,7 +580,7 @@ Future<void> _connectToAdapter(
 
 class _BluetoothDeviceListState {
   final bool isScanning;
-  final List<ObdDevice> devices;
+  final List<BluetoothObdDevice> devices;
 
   const _BluetoothDeviceListState({
     required this.isScanning,

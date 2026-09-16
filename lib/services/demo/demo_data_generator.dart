@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import '../models/obd_data.dart';
+import '../../obd/models/obd_data.dart';
 
 class DemoDataGenerator {
   Timer? _timer;

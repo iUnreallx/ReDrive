@@ -1,9 +1,9 @@
-class ObdDevice {
+class BluetoothObdDevice {
   final String name;
   final String address;
   final bool isBle;
 
-  const ObdDevice({
+  const BluetoothObdDevice({
     required this.name,
     required this.address,
     this.isBle = false,

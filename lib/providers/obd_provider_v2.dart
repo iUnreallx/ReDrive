@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:redrive/obd/pid/pid_key.dart';
 
-import '../models/obd_data.dart';
-import '../services/obd_connection.dart';
+import '../obd/models/obd_data.dart';
+import '../obd/connection/obd_connection.dart';
 import '../obd/pid/pid_registry.dart';
 import '../obd/source/live_obd_source.dart';
 import '../obd/source/obd_source_state.dart';

@@ -1,7 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:redrive/services/bluetooth_obd_connection.dart';
+import 'package:redrive/services/bluetooth/connection/bluetooth_obd_connection.dart';
 import 'providers/obd_provider.dart';
 import 'providers/bluetooth_provider.dart';
 import 'core/app_themes.dart';

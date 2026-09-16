@@ -1,7 +1,7 @@
 import 'package:redrive/obd/elm/elm_command.dart';
 import 'package:redrive/obd/elm/elm_command_queue.dart';
 
-import '../../services/obd_connection.dart';
+import '../connection/obd_connection.dart';
 import 'elm_response.dart';
 import 'elm_response_parser.dart';
 import 'dart:async';

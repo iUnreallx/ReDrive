@@ -4,23 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 class _DismissibleCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
   _DismissibleCupertinoSheetRoute({
     required super.builder,
     super.enableDrag,
     Color barrierColor = const Color(0x73000000), // ~45% black
   }) : _barrierColor = barrierColor;
- 
+
   final Color _barrierColor;
- 
+
   @override
   Color? get barrierColor => _barrierColor;
- 
 
   @override
   bool get barrierDismissible => true;
- 
 
   @override
   String get barrierLabel => 'Dismiss';
@@ -28,10 +25,10 @@ class _DismissibleCupertinoSheetRoute<T> extends CupertinoSheetRoute<T> {
 
 void showSettingsSheet(BuildContext context) {
   HapticFeedback.mediumImpact();
- 
+
   Navigator.of(context, rootNavigator: true).push(
     _DismissibleCupertinoSheetRoute(
-      barrierColor: Colors.black.withOpacity(0.45),
+      barrierColor: Colors.black.withValues(alpha: 0.45),
       builder: (sheetContext) {
         return NotificationListener<DraggableScrollableNotification>(
           onNotification: (notification) {
@@ -77,7 +74,7 @@ class SettingsSheet extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
           child: Container(
             decoration: BoxDecoration(
-              color: colorScheme.surface.withOpacity(0.95),
+              color: colorScheme.surface.withValues(alpha: 0.95),
               borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             ),
             child: SingleChildScrollView(
@@ -91,7 +88,7 @@ class SettingsSheet extends StatelessWidget {
                       width: 36,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: colorScheme.onSurface.withOpacity(0.2),
+                        color: colorScheme.onSurface.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(100),
                       ),
                     ),
@@ -117,7 +114,9 @@ class SettingsSheet extends StatelessWidget {
                             height: 32,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: colorScheme.onSurface.withOpacity(0.1),
+                              color: colorScheme.onSurface.withValues(
+                                alpha: 0.1,
+                              ),
                             ),
                             child: Icon(
                               Icons.close_rounded,
@@ -170,7 +169,7 @@ class _SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: colorScheme.onSurface.withOpacity(0.05),
+        color: colorScheme.onSurface.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Material(
@@ -186,7 +185,7 @@ class _SettingsTile extends StatelessWidget {
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    color: colorScheme.primary.withOpacity(0.35),
+                    color: colorScheme.primary.withValues(alpha: 0.35),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Icon(icon, size: 20, color: colorScheme.primary),
@@ -197,14 +196,14 @@ class _SettingsTile extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
-                    color: colorScheme.onSurface.withOpacity(0.85),
+                    color: colorScheme.onSurface.withValues(alpha: 0.85),
                   ),
                 ),
                 Spacer(),
                 Icon(
                   Icons.chevron_right_rounded,
                   size: 20,
-                  color: colorScheme.onSurface.withOpacity(0.25),
+                  color: colorScheme.onSurface.withValues(alpha: 0.25),
                 ),
               ],
             ),

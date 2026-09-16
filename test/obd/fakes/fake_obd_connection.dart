@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:redrive/services/obd_connection.dart';
+import 'package:redrive/obd/connection/obd_connection.dart';
 
 class FakeObdConnection implements ObdConnection {
   final StreamController<String> _incomingController =
