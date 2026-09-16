@@ -5,6 +5,10 @@ import 'definitions/vehicle_speed_definition.dart';
 import 'pid_definition.dart';
 import 'pid_key.dart';
 
+/// Registry of supported OBD-II PID definitions.
+///
+/// Maps PID keys to commands, decoders, and metadata,
+/// and resolves which PIDs are supported by the connected ECU.
 class PidRegistry {
   final Map<PidKey, PidDefinition<num>> _definitions = {
     PidKey.engineRpm: engineRpmDefinition,
