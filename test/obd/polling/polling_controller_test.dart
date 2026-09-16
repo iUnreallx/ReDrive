@@ -32,17 +32,15 @@ void main() {
       },
     );
 
-    controller.updateDemand(PollingDemandSource.visibleScreen, {
+    controller.setWatchlist(WatchSource.visibleScreen, {
       PidKey.vehicleSpeed,
       PidKey.engineRpm,
     });
-    controller.updateDemand(PollingDemandSource.backgroundMonitoring, {
+    controller.setWatchlist(WatchSource.backgroundMonitoring, {
       PidKey.vehicleSpeed,
       PidKey.coolantTemperature,
     });
-    controller.updateDemand(PollingDemandSource.session, {
-      PidKey.adapterVoltage,
-    });
+    controller.setWatchlist(WatchSource.session, {PidKey.adapterVoltage});
 
     final effective = controller.computeEffectiveKeys();
 
@@ -54,21 +52,19 @@ void main() {
     });
   });
 
-  test('removes keys when source demand is cleared or empty', () {
+  test('removes keys when source watchlists is cleared or empty', () {
     final controller = PollingController(
       elmClient: elmClient,
       registry: registry,
       supportedEcuKeys: {PidKey.vehicleSpeed, PidKey.engineRpm},
     );
 
-    controller.updateDemand(PollingDemandSource.visibleScreen, {
-      PidKey.engineRpm,
-    });
-    controller.updateDemand(PollingDemandSource.backgroundMonitoring, {
+    controller.setWatchlist(WatchSource.visibleScreen, {PidKey.engineRpm});
+    controller.setWatchlist(WatchSource.backgroundMonitoring, {
       PidKey.vehicleSpeed,
     });
 
-    controller.updateDemand(PollingDemandSource.visibleScreen, {});
+    controller.setWatchlist(WatchSource.visibleScreen, {});
 
     final effective = controller.computeEffectiveKeys();
 
@@ -82,7 +78,7 @@ void main() {
       supportedEcuKeys: {PidKey.engineRpm},
     );
 
-    controller.updateDemand(PollingDemandSource.visibleScreen, {
+    controller.setWatchlist(WatchSource.visibleScreen, {
       PidKey.vehicleSpeed,
       PidKey.engineRpm,
     });
@@ -100,7 +96,7 @@ void main() {
       supportedEcuKeys: {},
     );
 
-    controller.updateDemand(PollingDemandSource.visibleScreen, {
+    controller.setWatchlist(WatchSource.visibleScreen, {
       PidKey.adapterVoltage,
       PidKey.vehicleSpeed,
     });
@@ -121,9 +117,7 @@ void main() {
 
       addTearDown(controller.dispose);
 
-      controller.updateDemand(PollingDemandSource.visibleScreen, {
-        PidKey.vehicleSpeed,
-      });
+      controller.setWatchlist(WatchSource.visibleScreen, {PidKey.vehicleSpeed});
 
       final emittedValues = <({PidKey key, num value})>[];
       final subscription = controller.updates.listen(emittedValues.add);
@@ -155,9 +149,7 @@ void main() {
 
     addTearDown(controller.dispose);
 
-    controller.updateDemand(PollingDemandSource.visibleScreen, {
-      PidKey.vehicleSpeed,
-    });
+    controller.setWatchlist(WatchSource.visibleScreen, {PidKey.vehicleSpeed});
 
     controller.start();
     await pumpEventQueue();
@@ -184,9 +176,7 @@ void main() {
 
     addTearDown(controller.dispose);
 
-    controller.updateDemand(PollingDemandSource.visibleScreen, {
-      PidKey.vehicleSpeed,
-    });
+    controller.setWatchlist(WatchSource.visibleScreen, {PidKey.vehicleSpeed});
 
     final pollingError = Exception('polling failed');
 

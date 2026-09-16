@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:redrive/obd/pid/pid_key.dart';
 import 'package:redrive/obd/pid/pid_registry.dart';
+import 'package:redrive/obd/polling/polling_controller.dart';
 import 'package:redrive/obd/source/live_obd_source.dart';
 import 'package:redrive/obd/source/obd_source_state.dart';
 
@@ -97,7 +98,7 @@ void main() {
     await connection.dispose();
   });
 
-  test('screen demand starts polling requested PID', () async {
+  test('screen watchlists starts polling requested PID', () async {
     final connection = FakeObdConnection();
 
     final source = LiveObdSource(
@@ -105,7 +106,7 @@ void main() {
       registry: PidRegistry(),
     );
 
-    source.setScreenDemand({PidKey.engineRpm});
+    source.setWatchlist(WatchSource.visibleScreen, {PidKey.engineRpm});
 
     final startFuture = source.start();
 
@@ -171,7 +172,7 @@ void main() {
       registry: PidRegistry(),
     );
 
-    source.setScreenDemand({PidKey.vehicleSpeed});
+    source.setWatchlist(WatchSource.visibleScreen, {PidKey.vehicleSpeed});
 
     final startFuture = source.start();
 
@@ -359,7 +360,7 @@ void main() {
       emits(ObdSourceState.error),
     );
 
-    source.setScreenDemand({PidKey.vehicleSpeed});
+    source.setWatchlist(WatchSource.visibleScreen, {PidKey.vehicleSpeed});
 
     await errorExpectation;
     await stateExpectation;

@@ -23,7 +23,7 @@ class LiveObdSource {
   StreamSubscription<({PidKey key, num value})>? _pollingSubscription;
 
   Set<PidKey> _supportedKeys = const {};
-  Set<PidKey> _pendingScreenDemand = const {};
+  final Map<WatchSource, Set<PidKey>> _pendingWatchlists = {};
 
   LiveObdSource({
     required ObdConnection connection,
@@ -32,20 +32,25 @@ class LiveObdSource {
        _registry = registry;
 
   ObdSourceState get state => _state;
+  ObdSession? get session => _session;
   Stream<ObdSourceState> get stateStream => _stateController.stream;
   Set<PidKey> get supportedKeys => _supportedKeys;
   Stream<({PidKey key, num value})> get updates => _updatesController.stream;
-
   Map<PidKey, num> get latestValues =>
       _pollingController?.latestValues ?? const {};
 
-  void setScreenDemand(Set<PidKey> keys) {
-    _pendingScreenDemand = Set.unmodifiable(keys);
+  void setWatchlist(WatchSource source, Set<PidKey> keys) {
+    if (keys.isEmpty) {
+      _pendingWatchlists.remove(source);
+    } else {
+      _pendingWatchlists[source] = Set.unmodifiable(keys);
+    }
 
-    _pollingController?.updateDemand(
-      PollingDemandSource.visibleScreen,
-      _pendingScreenDemand,
-    );
+    _pollingController?.setWatchlist(source, keys);
+  }
+
+  void clearWatchlist(WatchSource source) {
+    setWatchlist(source, const {});
   }
 
   void _setState(ObdSourceState newState) {
@@ -102,11 +107,8 @@ class LiveObdSource {
       );
       _pollingController = controller;
 
-      if (_pendingScreenDemand.isNotEmpty) {
-        controller.updateDemand(
-          PollingDemandSource.visibleScreen,
-          _pendingScreenDemand,
-        );
+      for (final entry in _pendingWatchlists.entries) {
+        controller.setWatchlist(entry.key, entry.value);
       }
 
       _pollingSubscription = controller.updates.listen(
