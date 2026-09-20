@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:math';
-import '../../obd/models/obd_data.dart';
+import '../models/obd_data.dart';
 
 class DemoDataGenerator {
   Timer? _timer;
   final _random = Random();
 
-  void start(Function(ObdData) onData) {
+  void start(void Function(ObdData) onData) {
     stop();
 
     onData(_generateData());
@@ -16,11 +16,6 @@ class DemoDataGenerator {
     });
   }
 
-  void stop() {
-    _timer?.cancel();
-    _timer = null;
-  }
-
   ObdData _generateData() {
     return ObdData(
       speed: 30 + _random.nextInt(270), // от 0 до 300 км/ч
@@ -28,5 +23,10 @@ class DemoDataGenerator {
       coolantTemp: 30 + _random.nextInt(80), // от 30 до 109 °C
       voltage: 13.0 + (_random.nextDouble() * 2.5), // от 13.0 до 15.5 V
     );
+  }
+
+  void stop() {
+    _timer?.cancel();
+    _timer = null;
   }
 }
