@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:redrive/obd/pid/pid_key.dart';
+import 'package:redrive/obd/polling/polling_controller.dart';
 
 import '../obd/demo/demo_data_generator.dart';
 import '../obd/models/obd_data.dart';
@@ -28,9 +29,15 @@ class ObdProvider extends ChangeNotifier {
 
   StreamSubscription<({PidKey key, num value})>? _updatesSubscription;
   StreamSubscription<ObdSourceState>? _stateSubscription;
+  StreamSubscription<bool>? _connectionStateSubscription;
+  StreamSubscription<bool>? _reconnectingStateSubscription;
+
+  final Map<WatchSource, Set<PidKey>> _watchlists = {};
 
   bool get isDeviceConnected => _connection?.isConnected ?? false;
   ObdSourceState get state => _liveSource?.state ?? ObdSourceState.disconnected;
+
+  bool get isReconnecting => _connection?.isReconnecting ?? false;
 
   ObdData _data = const ObdData();
   ObdData get data => _data;
@@ -39,11 +46,42 @@ class ObdProvider extends ChangeNotifier {
   ObdMode get mode => _mode;
 
   void attachConnection(ObdConnection connection) {
+    _connectionStateSubscription?.cancel();
+    _reconnectingStateSubscription?.cancel();
+
     _connection = connection;
+
+    _connectionStateSubscription = connection.connectionState.listen((
+      isConnected,
+    ) {
+      if (!isConnected) {
+        unawaited(_handleTransportDisconnected());
+      } else {
+        notifyListeners();
+      }
+    });
+
+    _reconnectingStateSubscription = connection.reconnectingState.listen((
+      isReconnecting,
+    ) {
+      if (isReconnecting) {
+        unawaited(_handleReconnectStarted());
+      } else {
+        if (_connection?.isConnected == true && _mode == ObdMode.real) {
+          _startLiveSource();
+        }
+      }
+    });
+
     notifyListeners();
   }
 
   void detachConnection() {
+    _connectionStateSubscription?.cancel();
+    _connectionStateSubscription = null;
+    _reconnectingStateSubscription?.cancel();
+    _reconnectingStateSubscription = null;
+
     _connection = null;
     notifyListeners();
   }
@@ -83,22 +121,12 @@ class ObdProvider extends ChangeNotifier {
       _demoGenerator = null;
       _data = const ObdData();
     }
-    await _stopLive();
-
-    final source = LiveObdSource(connection: _connection!, registry: _registry);
-    _liveSource = source;
-
-    _stateSubscription = source.stateStream.listen((_) {
-      notifyListeners();
-    });
-
-    _updatesSubscription = source.updates.listen(_onUpdate);
 
     _mode = ObdMode.real;
     notifyListeners();
 
     try {
-      await source.start();
+      await _startLiveSource();
     } catch (_) {
       await _stopLive();
       _mode = ObdMode.idle;
@@ -116,6 +144,26 @@ class ObdProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> _startLiveSource() async {
+    await _stopLive();
+
+    final source = LiveObdSource(connection: _connection!, registry: _registry);
+
+    for (final entry in _watchlists.entries) {
+      source.setWatchlist(entry.key, entry.value);
+    }
+
+    _liveSource = source;
+
+    _stateSubscription = source.stateStream.listen((_) {
+      notifyListeners();
+    });
+
+    _updatesSubscription = source.updates.listen(_onUpdate);
+
+    await source.start();
+  }
+
   Future<void> _stopLive() async {
     await _stateSubscription?.cancel();
     _stateSubscription = null;
@@ -128,6 +176,40 @@ class ObdProvider extends ChangeNotifier {
       await _liveSource?.dispose();
       _liveSource = null;
     }
+  }
+
+  Future<void> _handleReconnectStarted() async {
+    if (_mode != ObdMode.real) {
+      notifyListeners();
+      return;
+    }
+
+    await _stopLive();
+
+    notifyListeners();
+  }
+
+  Future<void> _handleTransportDisconnected() async {
+    await _stopLive();
+
+    _mode = ObdMode.idle;
+    _data = const ObdData();
+
+    notifyListeners();
+  }
+
+  void setWatchlist(WatchSource source, Set<PidKey> keys) {
+    if (keys.isEmpty) {
+      _watchlists.remove(source);
+    } else {
+      _watchlists[source] = Set.unmodifiable(keys);
+    }
+
+    _liveSource?.setWatchlist(source, keys);
+  }
+
+  void clearWatchlist(WatchSource source) {
+    setWatchlist(source, const {});
   }
 
   void _onUpdate(({PidKey key, num value}) update) {
@@ -153,6 +235,8 @@ class ObdProvider extends ChangeNotifier {
     _demoGenerator?.stop();
     _stateSubscription?.cancel();
     _updatesSubscription?.cancel();
+    _connectionStateSubscription?.cancel();
+    _reconnectingStateSubscription?.cancel();
 
     super.dispose();
   }
