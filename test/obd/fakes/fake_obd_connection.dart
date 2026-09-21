@@ -3,12 +3,15 @@ import 'dart:async';
 import 'package:redrive/obd/connection/obd_connection.dart';
 
 class FakeObdConnection implements ObdConnection {
-  final StreamController<String> _incomingController =
-      StreamController<String>();
+  final _incomingController = StreamController<String>();
+
+  final _connectionStateController = StreamController<bool>.broadcast();
+  final _reconnectingStateController = StreamController<bool>.broadcast();
 
   final List<String> sentCommands = [];
 
   bool _isConnected = false;
+  bool _isReconnecting = false;
 
   Object? sendError;
 
@@ -16,19 +19,39 @@ class FakeObdConnection implements ObdConnection {
   Stream<String> get incoming => _incomingController.stream;
 
   @override
+  Stream<bool> get connectionState => _connectionStateController.stream;
+
+  @override
+  Stream<bool> get reconnectingState => _reconnectingStateController.stream;
+
+  @override
   bool get isConnected => _isConnected;
 
   @override
-  bool get isReconnecting => false;
+  bool get isReconnecting => _isReconnecting;
+
+  void _setConnected(bool state) {
+    if (_isConnected == state) return;
+
+    _isConnected = state;
+    _connectionStateController.add(state);
+  }
+
+  void setReconnecting(bool state) {
+    if (_isReconnecting == state) return;
+
+    _isReconnecting = state;
+    _reconnectingStateController.add(state);
+  }
 
   @override
   Future<void> connect() async {
-    _isConnected = true;
+    _setConnected(true);
   }
 
   @override
   Future<void> disconnect() async {
-    _isConnected = false;
+    _setConnected(false);
   }
 
   @override
@@ -52,7 +75,9 @@ class FakeObdConnection implements ObdConnection {
     return _incomingController.close();
   }
 
-  Future<void> dispose() {
-    return _incomingController.close();
+  Future<void> dispose() async {
+    await _incomingController.close();
+    await _connectionStateController.close();
+    await _reconnectingStateController.close();
   }
 }
