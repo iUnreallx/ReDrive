@@ -7,6 +7,12 @@ class BluetoothObdConnection implements ObdConnection {
   BluetoothObdConnection(this.provider);
 
   @override
+  Stream<bool> get reconnectingState => provider.reconnectingState;
+
+  @override
+  Stream<bool> get connectionState => provider.connectionState;
+
+  @override
   Stream<String> get incoming => provider.rxStream;
 
   @override

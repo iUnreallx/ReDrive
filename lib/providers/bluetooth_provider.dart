@@ -36,6 +36,12 @@ class BluetoothProvider extends ChangeNotifier {
   StreamSubscription<Uint8List>? _inputSubscription;
   StreamSubscription<BluetoothDevice>? _scanSubscription;
 
+  final _connectionStateController = StreamController<bool>.broadcast();
+  Stream<bool> get connectionState => _connectionStateController.stream;
+
+  final _reconnectingStateController = StreamController<bool>.broadcast();
+  Stream<bool> get reconnectingState => _reconnectingStateController.stream;
+
   // === ТРУБА ДЛЯ ДАННЫХ ===
   // Через этот стрим ObdProvider будет получать ответы
   final _rxController = StreamController<String>.broadcast();
@@ -68,6 +74,20 @@ class BluetoothProvider extends ChangeNotifier {
   bool get isToggleOn => _isToggleOn;
 
   bool _pendingScan = false;
+
+  void _setConnected(bool state) {
+    if (_isConnected == state) return;
+
+    _isConnected = state;
+    _connectionStateController.add(state);
+  }
+
+  void _setReconnecting(bool state) {
+    if (_isReconnectingBackground == state) return;
+
+    _isReconnectingBackground = state;
+    _reconnectingStateController.add(state);
+  }
 
   /// =подписка на состояние Bluetooth адаптера системы
   BluetoothProvider() {
@@ -237,7 +257,7 @@ class BluetoothProvider extends ChangeNotifier {
     _connectionId++;
     final int currentId = _connectionId;
 
-    _isReconnectingBackground = false;
+    _setReconnecting(false);
 
     _isConnecting = true;
     _connectionMessage = "Подключение к ${device.name}...";
@@ -291,7 +311,7 @@ class BluetoothProvider extends ChangeNotifier {
 
         _connection = newSocket;
         _connectedDevice = device;
-        _isConnected = true;
+        _setConnected(true);
         _setupListen();
 
         _discoveredDevices.removeWhere((d) => d.address == device.address);
@@ -314,7 +334,7 @@ class BluetoothProvider extends ChangeNotifier {
         if (i < 3) {
           await Future.delayed(const Duration(milliseconds: 2000));
         } else {
-          _isConnected = false;
+          _setConnected(false);
           _connectedDevice = null;
           _isConnecting = false;
           notifyListeners();
@@ -373,7 +393,7 @@ class BluetoothProvider extends ChangeNotifier {
     }
 
     if (isIntentional) {
-      _isConnected = false;
+      _setConnected(false);
       _connectedDevice = null;
       _isConnecting = false;
       notifyListeners();
@@ -388,13 +408,13 @@ class BluetoothProvider extends ChangeNotifier {
     _connectionId++;
     final int currentId = _connectionId;
 
-    _isReconnectingBackground = true;
+    _setReconnecting(true);
     _backgroundMessage = "переподключение...";
     notifyListeners();
 
     final physicalDevice = _deviceMap[_connectedDevice!.address];
     if (physicalDevice == null) {
-      _isReconnectingBackground = false;
+      _setReconnecting(false);
       disconnect(isIntentional: true);
       return;
     }
@@ -404,7 +424,7 @@ class BluetoothProvider extends ChangeNotifier {
         await Future.delayed(Duration(milliseconds: 4000));
 
         if (currentId != _connectionId) {
-          _isReconnectingBackground = false;
+          _setReconnecting(false);
           notifyListeners();
           return;
         }
@@ -417,27 +437,28 @@ class BluetoothProvider extends ChangeNotifier {
 
         if (currentId != _connectionId) {
           await oldSocket?.finish();
-          _isReconnectingBackground = false;
+          _setReconnecting(false);
           notifyListeners();
           return;
         }
 
         _connection = oldSocket;
-        _isConnected = true;
-        _isReconnectingBackground = false;
+        _setConnected(true);
+        _setReconnecting(false);
         _setupListen();
         notifyListeners();
         return;
       } catch (e) {
         developer.log("переподключение аварийное №$i", name: "reBlue");
         if (currentId != _connectionId) {
-          _isReconnectingBackground = false;
+          _setReconnecting(false);
           notifyListeners();
           return;
         }
         if (i == 3) {
-          _isReconnectingBackground = false;
           await disconnect();
+          _setReconnecting(false);
+          notifyListeners();
         }
       }
     }
@@ -447,7 +468,7 @@ class BluetoothProvider extends ChangeNotifier {
   void cancelConnection() {
     _connectionId++;
     _isConnecting = false;
-    _isReconnectingBackground = false;
+    _setReconnecting(false);
     disconnect();
     notifyListeners();
     developer.log("Подключение отменено пользователем", name: 'reBlue');
