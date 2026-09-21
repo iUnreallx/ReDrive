@@ -4,6 +4,8 @@
 /// keeping the OBD layer independent from transport details.
 abstract class ObdConnection {
   Stream<String> get incoming;
+  Stream<bool> get connectionState;
+  Stream<bool> get reconnectingState;
 
   Future<void> send(String command);
 
