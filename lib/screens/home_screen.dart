@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:redrive/obd/pid/pid_key.dart';
+import 'package:redrive/obd/polling/polling_controller.dart';
+import 'package:redrive/obd/source/obd_source_state.dart';
 import 'package:redrive/widget/home_screen/car_display.dart';
 import 'package:redrive/widget/home_screen/connections_buttons.dart';
 import 'package:redrive/widget/home_screen/header_bar.dart';
@@ -13,26 +16,37 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+String _connectionMessage(ObdSourceState state) {
+  switch (state) {
+    case ObdSourceState.disconnected:
+      return 'Подготовка подключения...';
+    case ObdSourceState.connecting:
+      return 'Подключение к ЭБУ...';
+    case ObdSourceState.initializing:
+      return 'Инициализация ELM327...';
+    case ObdSourceState.polling:
+      return 'Подключено';
+    case ObdSourceState.recovering:
+      return 'Восстановление соединения...';
+    case ObdSourceState.error:
+      return 'Ошибка подключения';
+  }
+}
+
 class _HomeScreenState extends State<HomeScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     final provider = context.read<ObdProviderOld>();
-  //     _errorSubscription = provider.errorEvents.listen((errorMessage) {
-  //       if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
 
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text(errorMessage),
-  //           backgroundColor: Theme.of(context).colorScheme.error,
-  //           duration: const Duration(seconds: 3),
-  //         ),
-  //       );
-  //     });
-  //   });
-  // }
+      context.read<ObdProvider>().setWatchlist(WatchSource.visibleScreen, {
+        PidKey.vehicleSpeed,
+        PidKey.engineRpm,
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final obdData = obdProvider.data;
     final bool isReal = obdProvider.mode == ObdMode.real;
     final bool isDemo = obdProvider.mode == ObdMode.demo;
-    final bool isConnected = obdProvider.isDeviceConnected;
+    final bool isDeviceConnected = obdProvider.isDeviceConnected;
+    final bool isObdConnected =
+        isReal &&
+        (obdProvider.state == ObdSourceState.polling ||
+            obdProvider.state == ObdSourceState.recovering ||
+            obdProvider.isReconnecting);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -101,11 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 /// кнопки для подключения к эбу
                 /// либо для подключения демо режима
                 ConnectionButtons(
-                  isConnected: isReal,
+                  isConnected: isObdConnected,
                   isDemoMode: isDemo,
 
                   onConnect: () async {
-                    if (!isConnected) {
+                    if (!isDeviceConnected) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Сначала подключитесь к Ble/Wifi/USB"),
@@ -119,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return;
                     }
 
-                    await obdProvider.startRealMode();
+                    await _connectWithDialog(obdProvider);
 
                     if (obdProvider.mode != ObdMode.real && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -155,5 +174,55 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _connectWithDialog(ObdProvider obdProvider) async {
+    bool isCancelled = false;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return PopScope(
+          canPop: false,
+          child: Consumer<ObdProvider>(
+            builder: (context, obd, child) {
+              return AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 24),
+                    Text(
+                      _connectionMessage(obd.state),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      isCancelled = true;
+                      await obd.stopRealMode();
+
+                      if (dialogContext.mounted) {
+                        Navigator.pop(dialogContext);
+                      }
+                    },
+                    child: const Text('Отмена'),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+
+    await obdProvider.startRealMode();
+
+    if (!mounted || isCancelled) return;
+
+    Navigator.of(context, rootNavigator: true).pop();
   }
 }
