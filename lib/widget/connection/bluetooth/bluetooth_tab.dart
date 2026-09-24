@@ -1,3 +1,4 @@
+import 'package:redrive/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -42,28 +43,19 @@ class _BluetoothTabState extends State<BluetoothTab> {
   }
 
   void _showPermissionDialog(BuildContext context) {
+    final l = AppLocalizations.of(context);
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF131315),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text(
-          'Bluetooth access required',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        content: const Text(
-          'Bluetooth permission was permanently denied. '
-          'Please enable it from app settings.',
-          style: TextStyle(color: Colors.white54),
-        ),
+        title: Text(l.permissionTitle, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        content: Text(l.permissionDescription, style: const TextStyle(color: Colors.white54)),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.white54),
-            ),
+            child: Text(l.cancel, style: const TextStyle(color: Colors.white54)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -76,13 +68,7 @@ class _BluetoothTabState extends State<BluetoothTab> {
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
-            child: const Text(
-              'Open settings',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            child: Text(l.openSettings, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -111,6 +97,7 @@ class BluetoothScanStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final isScanning = context.select<BluetoothProvider, bool>(
       (provider) => provider.isScanning,
     );
@@ -165,7 +152,7 @@ class BluetoothScanStatusCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        isScanning ? "Scanning..." : "Scanning complete",
+                        isScanning ? l.scanning : l.scanningComplete,
                         textScaler: TextScaler.noScaling,
                         style: const TextStyle(
                           color: Colors.white,
@@ -175,9 +162,7 @@ class BluetoothScanStatusCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        isScanning
-                            ? "Searching for your adapter..."
-                            : "Found $devicesCount devices",
+                        isScanning ? l.searchingAdapter : l.devicesFound(devicesCount),
                         textScaler: TextScaler.noScaling,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.5),
@@ -350,7 +335,7 @@ class BluetoothDeviceList extends StatelessWidget {
                       ),
                     ),
                     child: const Text(
-                      "Start Scanning",
+                      l.startScanning,
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -540,7 +525,7 @@ Future<void> _connectToAdapter(
                           ),
                         ),
                         child: const Text(
-                          "Отмена",
+                          l.cancel,
                           textScaler: TextScaler.noScaling,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,

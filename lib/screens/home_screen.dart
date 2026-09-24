@@ -1,3 +1,4 @@
+import 'package:redrive/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:redrive/obd/pid/pid_key.dart';
@@ -16,20 +17,15 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-String _connectionMessage(ObdSourceState state) {
+String _connectionMessage(BuildContext context, ObdSourceState state) {
+  final l = AppLocalizations.of(context);
   switch (state) {
-    case ObdSourceState.disconnected:
-      return 'Подготовка подключения...';
-    case ObdSourceState.connecting:
-      return 'Подключение к ЭБУ...';
-    case ObdSourceState.initializing:
-      return 'Инициализация ELM327...';
-    case ObdSourceState.polling:
-      return 'Подключено';
-    case ObdSourceState.recovering:
-      return 'Восстановление соединения...';
-    case ObdSourceState.error:
-      return 'Ошибка подключения';
+    case ObdSourceState.disconnected: return l.preparing;
+    case ObdSourceState.connecting: return l.connectingEcu;
+    case ObdSourceState.initializing: return l.initializing;
+    case ObdSourceState.polling: return l.connected;
+    case ObdSourceState.recovering: return l.recovering;
+    case ObdSourceState.error: return l.connectionError;
   }
 }
 
@@ -50,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final obdProvider = context.watch<ObdProvider>();
 
     final obdData = obdProvider.data;
@@ -88,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: SizedBox(
                         height: 190,
                         child: TelemetryCard(
-                          title: "Speed",
+                          title: l.speed,
                           value: obdData.speed.toDouble(),
                           fractionDigits: 0,
                           valueSuffix: "",
@@ -103,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: SizedBox(
                         height: 190,
                         child: TelemetryCard(
-                          title: "RPM",
+                          title: l.rpm,
                           value: obdData.rpm / 1000,
                           fractionDigits: 1,
                           valueSuffix: "K",
@@ -127,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (!isDeviceConnected) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Сначала подключитесь к Ble/Wifi/USB"),
+                          content: Text(l.connectAdapterFirst),
                         ),
                       );
                       return;
@@ -143,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (obdProvider.mode != ObdMode.real && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Не удалось связаться с ЭБУ"),
+                          content: Text(l.ecuFailed),
                         ),
                       );
                     }
@@ -153,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (isReal) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Сначала отключитесь от ЭБУ"),
+                          content: Text(l.disconnectEcuFirst),
                         ),
                       );
                       return;
@@ -194,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const CircularProgressIndicator(),
                     const SizedBox(height: 24),
                     Text(
-                      _connectionMessage(obd.state),
+                      _connectionMessage(context, obd.state),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -209,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.pop(dialogContext);
                       }
                     },
-                    child: const Text('Отмена'),
+                    child: Text(l.cancel),
                   ),
                 ],
               );
