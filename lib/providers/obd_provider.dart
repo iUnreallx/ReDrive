@@ -32,6 +32,9 @@ class ObdProvider extends ChangeNotifier {
   StreamSubscription<bool>? _connectionStateSubscription;
   StreamSubscription<bool>? _reconnectingStateSubscription;
 
+  final _errorsController = StreamController<Object>.broadcast();
+  Stream<Object> get errors => _errorsController.stream;
+
   final Map<WatchSource, Set<PidKey>> _watchlists = {};
 
   bool get isDeviceConnected => _connection?.isConnected ?? false;
@@ -159,9 +162,18 @@ class ObdProvider extends ChangeNotifier {
       notifyListeners();
     });
 
-    _updatesSubscription = source.updates.listen(_onUpdate);
+    _updatesSubscription = source.updates.listen(
+      _onUpdate,
+      onError: _onLiveError,
+    );
 
     await source.start();
+  }
+
+  void _onLiveError(Object error, StackTrace _) {
+    if (!_errorsController.isClosed) {
+      _errorsController.add(error);
+    }
   }
 
   Future<void> _stopLive() async {
@@ -237,6 +249,7 @@ class ObdProvider extends ChangeNotifier {
     _updatesSubscription?.cancel();
     _connectionStateSubscription?.cancel();
     _reconnectingStateSubscription?.cancel();
+    _errorsController.close();
 
     super.dispose();
   }
