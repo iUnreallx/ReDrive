@@ -42,8 +42,14 @@ class RedriveApp extends StatelessWidget {
       localizationsDelegates: const [AppLocalizations.delegate],
       supportedLocales: AppLocalizations.supportedLocales,
       localeResolutionCallback: (locale, supported) {
-        // Treat zh-CN, zh-SG, zh-HK, zh-TW, and all other zh-* locales as Chinese.
-        if (locale?.languageCode.toLowerCase() == 'zh') return const Locale('zh');
+        if (locale?.languageCode.toLowerCase() == 'zh') {
+          final region = (locale?.countryCode ?? '').toUpperCase();
+          final script = (locale?.scriptCode ?? '').toLowerCase();
+          if (script == 'hant' || region == 'HK' || region == 'MO' || region == 'TW') {
+            return Locale('zh', region.isEmpty ? 'TW' : region);
+          }
+          return const Locale('zh', 'CN');
+        }
         return const Locale('en');
       },
       theme: AppThemes.darkTheme,
