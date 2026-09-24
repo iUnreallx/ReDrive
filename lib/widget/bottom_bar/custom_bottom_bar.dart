@@ -16,23 +16,23 @@ class CustomBottomBar extends StatelessWidget {
   static const List<BottomBarItemData> _navItems = [
     BottomBarItemData(
       iconPath: 'assets/images/svg/bottomBar/home.svg',
-      label: 'Home',
+      label: '主页',
     ),
     BottomBarItemData(
       iconPath: 'assets/images/svg/bottomBar/dashboard.svg',
-      label: 'Dashboard',
+      label: '仪表盘',
     ),
     BottomBarItemData(
       iconPath: 'assets/images/svg/bottomBar/connection.svg',
-      label: 'Connection',
+      label: '连接',
     ),
     BottomBarItemData(
       iconPath: 'assets/images/svg/bottomBar/garage.svg',
-      label: 'Garage',
+      label: '车库',
     ),
     BottomBarItemData(
       iconPath: 'assets/images/svg/bottomBar/dtc.svg',
-      label: 'DTC',
+      label: '故障码',
     ),
   ];
 

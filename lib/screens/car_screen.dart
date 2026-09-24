@@ -35,7 +35,7 @@ class _GarageHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Мой гараж",
+                "我的车库",
             textScaler: TextScaler.noScaling,
             style: TextStyle(
               fontSize: 32,
@@ -44,7 +44,7 @@ class _GarageHeader extends StatelessWidget {
             ),
           ),
           Text(
-            "Здесь будут ваши автомобили",
+            "这里将显示你的车辆",
             textScaler: TextScaler.noScaling,
             style: TextStyle(
               fontSize: 12,
@@ -88,7 +88,7 @@ class _EmptyGarageCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Нет машин",
+                    "暂无车辆",
                     textScaler: TextScaler.noScaling,
                     style: TextStyle(
                       fontSize: 34,
@@ -98,7 +98,7 @@ class _EmptyGarageCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    "Добавьте первый\nавтомобиль",
+                    "添加你的第一辆\n汽车",
                     textAlign: TextAlign.center,
                     textScaler: TextScaler.noScaling,
                     style: TextStyle(
@@ -119,7 +119,7 @@ class _EmptyGarageCard extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     child: Text(
-                      "Добавить авто",
+                      "添加车辆",
                       textScaler: TextScaler.noScaling,
                       style: TextStyle(
                         fontSize: 17,

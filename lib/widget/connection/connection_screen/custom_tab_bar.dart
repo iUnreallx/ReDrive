@@ -48,14 +48,14 @@ class CustomTabBar extends StatelessWidget {
               _TabItem(
                 tab: ConnectionTab.bluetooth,
                 icon: Icons.bluetooth,
-                label: "Bluetooth",
+                label: "蓝牙",
                 currentTab: selectedTab,
                 onTap: onTabSelected,
               ),
               _TabItem(
                 tab: ConnectionTab.wifi,
                 icon: Icons.wifi,
-                label: "Wi-Fi",
+                label: "无线网络",
                 currentTab: selectedTab,
                 onTap: onTabSelected,
               ),

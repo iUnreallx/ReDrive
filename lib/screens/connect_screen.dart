@@ -32,8 +32,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Connection",
+              Text("连接",
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(
                   fontFamily: 'Inter',
@@ -74,14 +73,14 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
 
         const Center(
           child: Text(
-            "Wi-Fi подключение в разработке",
+            "Wi‑Fi 连接功能正在开发中",
             style: TextStyle(color: Colors.white54),
           ),
         ),
 
         const Center(
           child: Text(
-            "USB подключение в разработке",
+            "USB 连接功能正在开发中",
             style: TextStyle(color: Colors.white54),
           ),
         ),

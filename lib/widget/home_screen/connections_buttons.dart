@@ -93,7 +93,7 @@ class _AnimatedConnectButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
               Text(
-                "CONNECTED",
+                "已连接",
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(
                   color: Colors.black,
@@ -104,7 +104,7 @@ class _AnimatedConnectButton extends StatelessWidget {
                 ),
               ),
               Text(
-                "Vehicle is connected",
+                "车辆已连接",
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(
                   color: Colors.black87,
@@ -138,7 +138,7 @@ class _AnimatedConnectButton extends StatelessWidget {
         Icon(Icons.tune_rounded, color: Colors.black, size: 24),
         SizedBox(width: 10),
         Text(
-          "CONNECT",
+          "连接",
           textScaler: TextScaler.noScaling,
           style: TextStyle(
             color: Colors.black,
@@ -195,7 +195,7 @@ class _AnimatedDemoButton extends StatelessWidget {
           child: _buildStateRow(
             key: ValueKey(isDemoMode),
             icon: isDemoMode ? Icons.stop_rounded : Icons.play_arrow_rounded,
-            text: isDemoMode ? "DISCONNECT" : "VIEW DEMO",
+            text: isDemoMode ? "断开演示" : "查看演示",
           ),
         ),
       ),

@@ -100,7 +100,7 @@ class SettingsSheet extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Settings',
+                          '设置',
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w500,
@@ -138,7 +138,7 @@ class SettingsSheet extends StatelessWidget {
                       children: [
                         _SettingsTile(
                           icon: Icons.settings_outlined,
-                          label: 'Place Holder..',
+                          label: '设置',
                           colorScheme: colorScheme,
                         ),
                       ],

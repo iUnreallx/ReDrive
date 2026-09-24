@@ -21,7 +21,7 @@ class BluetoothWaitingWidget extends StatelessWidget {
 
           const SizedBox(height: 24),
           Text(
-            "Bluetooth Connection",
+            "蓝牙连接",
             style: TextStyle(
               color: colorScheme.onSurface,
               fontSize: 20,
@@ -32,7 +32,7 @@ class BluetoothWaitingWidget extends StatelessWidget {
           const SizedBox(height: 12),
 
           Text(
-            "Connect your OBD2 adapter to see\nreal-time vehicle data.",
+            "连接 OBD2 适配器后，\n即可查看车辆实时数据。",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: colorScheme.onSurface.withValues(alpha: 0.7),
@@ -54,7 +54,7 @@ class BluetoothWaitingWidget extends StatelessWidget {
                 ),
               ),
               child: Text(
-                "Start Scanning",
+                "开始扫描",
                 style: TextStyle(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,

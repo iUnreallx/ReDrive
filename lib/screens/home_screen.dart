@@ -19,17 +19,17 @@ class HomeScreen extends StatefulWidget {
 String _connectionMessage(ObdSourceState state) {
   switch (state) {
     case ObdSourceState.disconnected:
-      return 'Подготовка подключения...';
+      return '准备连接...';
     case ObdSourceState.connecting:
-      return 'Подключение к ЭБУ...';
+      return '正在连接车辆 ECU...';
     case ObdSourceState.initializing:
-      return 'Инициализация ELM327...';
+      return '正在初始化 ELM327...';
     case ObdSourceState.polling:
-      return 'Подключено';
+      return '已连接';
     case ObdSourceState.recovering:
-      return 'Восстановление соединения...';
+      return '正在恢复连接...';
     case ObdSourceState.error:
-      return 'Ошибка подключения';
+      return '连接错误';
   }
 }
 
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: SizedBox(
                         height: 190,
                         child: TelemetryCard(
-                          title: "Speed",
+                          title: "车速",
                           value: obdData.speed.toDouble(),
                           fractionDigits: 0,
                           valueSuffix: "",
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: SizedBox(
                         height: 190,
                         child: TelemetryCard(
-                          title: "RPM",
+                          title: "转速",
                           value: obdData.rpm / 1000,
                           fractionDigits: 1,
                           valueSuffix: "K",
@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (!isDeviceConnected) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Сначала подключитесь к Ble/Wifi/USB"),
+                          content: Text("请先连接蓝牙、Wi‑Fi 或 USB 适配器"),
                         ),
                       );
                       return;
@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (obdProvider.mode != ObdMode.real && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Не удалось связаться с ЭБУ"),
+                          content: Text("无法连接到车辆 ECU"),
                         ),
                       );
                     }
@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (isReal) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Сначала отключитесь от ЭБУ"),
+                          content: Text("请先断开车辆 ECU 连接"),
                         ),
                       );
                       return;
@@ -209,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.pop(dialogContext);
                       }
                     },
-                    child: const Text('Отмена'),
+                    child: const Text('取消'),
                   ),
                 ],
               );

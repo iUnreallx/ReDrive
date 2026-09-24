@@ -48,12 +48,11 @@ class _BluetoothTabState extends State<BluetoothTab> {
         backgroundColor: const Color(0xFF131315),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Text(
-          'Bluetooth access required',
+          "蓝牙权限不足",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         content: const Text(
-          'Bluetooth permission was permanently denied. '
-          'Please enable it from app settings.',
+          "蓝牙权限已被永久拒绝，请前往系统设置开启。",
           style: TextStyle(color: Colors.white54),
         ),
         actionsAlignment: MainAxisAlignment.center,
@@ -61,7 +60,7 @@ class _BluetoothTabState extends State<BluetoothTab> {
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: const Text(
-              'Cancel',
+              '取消',
               style: TextStyle(color: Colors.white54),
             ),
           ),
@@ -77,7 +76,7 @@ class _BluetoothTabState extends State<BluetoothTab> {
               ),
             ),
             child: const Text(
-              'Open settings',
+              '打开设置',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -165,7 +164,7 @@ class BluetoothScanStatusCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        isScanning ? "Scanning..." : "Scanning complete",
+                        isScanning ? "扫描中..." : "扫描完成",
                         textScaler: TextScaler.noScaling,
                         style: const TextStyle(
                           color: Colors.white,
@@ -176,8 +175,8 @@ class BluetoothScanStatusCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         isScanning
-                            ? "Searching for your adapter..."
-                            : "Found $devicesCount devices",
+                            ? "正在搜索适配器..."
+                            : "发现 $devicesCount 个设备",
                         textScaler: TextScaler.noScaling,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.5),
