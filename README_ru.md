@@ -109,61 +109,37 @@ flutter run
 
 ```text
 ReDrive/
-  ├── android/                              # Android-платформа
-  ├── ios/                                  # iOS-платформа
-  ├── assets/                               # png, svg, ico 
-  ├── docs/                                 # Документация и скриншоты
-  ├── lib/                                  # Исходный код Flutter
-  │   ├── main.dart                         # Точка входа в приложение
-  │   │
-  │   ├── core/                             # Тема и базовые визуальные настройки
-  │   │   ├── app_colors.dart               # Цветовая палитра приложения
-  │   │   └── app_themes.dart               # Темы приложения
-  │   │
-  │   ├── models/                           # Модели данных
-  │   │   ├── obd_data.dart                 # Модель OBD-данных: скорость, RPM, температура, напряжение
-  │   │   └── obd_device.dart               # Модель OBD/Bluetooth-устройства
-  │   │
-  │   ├── providers/                        # Логика состояния приложения
-  │   │   ├── bluetooth_provider.dart       # Bluetooth: поиск, подключение, reconnect, состояние
-  │   │   └── obd_provider.dart             # OBD-логика: demo mode, polling, данные для UI
-  │   │
-  │   ├── screens/                          # Основные страницы приложения
-  │   │   ├── car_screen.dart               # Экран автомобиля / будущий Garage
-  │   │   ├── connect_screen.dart           # Экран подключения к OBD-адаптеру
-  │   │   ├── home_screen.dart              # Главный экран с телеметрией
-  │   │   └── root_screen.dart              # Корневой экран с нижней навигацией
-  │   │
-  │   ├── services/                         # Сервисы и абстракции
-  │   │   ├── bluetooth_obd_connection.dart # Bluetooth-реализация OBD-подключения
-  │   │   ├── bluetooth_permission_service.dart # Работа с Bluetooth-разрешениями
-  │   │   ├── demo_data_generator.dart      # Генератор demo-данных
-  │   │   └── obd_connection.dart           # Общий интерфейс OBD-подключения
-  │   │
-  │   ├── utils/                            # Утилиты и вспомогательные классы
-  │   │   └── logger.dart                   # Логирование
-  │   │
-  │   └── widget/                           # UI-компоненты приложения
-  │       ├── reconnection_banner.dart      # Баннер переподключения
-  │       │
-  │       ├── bottom_bar/                   # Нижняя навигация
-  │       │   ├── bottom_bar_config.dart    # Конфигурация нижней навигации
-  │       │   ├── bottom_bar_item.dart      # Элемент нижней навигации
-  │       │   └── custom_bottom_bar.dart    # Кастомный bottom bar
-  │       │
-  │       ├── connection/                   # Виджеты страницы подключения
-  │       │   └── bluetooth_panel.dart      # Bluetooth-панель подключения
-  │       │
-  │       └── home_screen/                  # Виджеты главного экрана
-  │           ├── car_display.dart          # Отображение автомобиля
-  │           ├── connections_buttons.dart  # Кнопки подключения
-  │           ├── header_bar.dart           # Верхняя панель главного экрана
-  │           └── telemetry_card.dart       # Карточка телеметрии
-  │
-  ├── test/                                 # Тесты
-  ├── pubspec.yaml                          # Пакеты и зависимости
-  ├── README.md                             # Основное описание проекта
-  └── LICENSE                               # Лицензия проекта
+├── android/                         # Платформа Android
+├── ios/                             # Платформа iOS
+├── assets/                          # Изображения, иконки и шрифты
+├── docs/                            # Сайт, дорожная карта и скриншоты
+├── lib/                             # Исходный код Flutter
+│   ├── main.dart                    # Точка входа и регистрация провайдеров
+│   ├── core/                        # Цвета и темы
+│   ├── obd/                         # OBD-II ядро, независимое от транспорта
+│   │   ├── connection/             # Интерфейс OBD-транспорта
+│   │   ├── demo/                   # Генератор демонстрационных данных
+│   │   ├── elm/                    # Команды, очередь, клиент и парсер ELM327
+│   │   ├── models/                 # Модель телеметрии автомобиля
+│   │   ├── pid/                    # Реестр, определения и декодеры PID
+│   │   ├── polling/                # Списки наблюдения и опрос PID
+│   │   ├── session/                # Инициализация сессии ELM327
+│   │   └── source/                 # Источник данных OBD и его состояния
+│   ├── providers/                   # Состояние Bluetooth и OBD для приложения
+│   ├── screens/                     # Главный экран, подключение, автомобиль, настройки и навигация
+│   ├── services/bluetooth/          # Соединение Bluetooth, устройства и разрешения
+│   └── widget/                      # Переиспользуемые компоненты интерфейса
+│       ├── bottom_bar/              # Нижняя навигация
+│       ├── connection/              # Виджеты экрана подключения
+│       ├── home_screen/             # Виджеты главного экрана
+│       └── reconnection_banner.dart # Баннер состояния переподключения
+├── test/                            # Тесты OBD-слоёв и провайдеров
+│   ├── obd/
+│   └── providers/
+├── pubspec.yaml                     # Зависимости и ресурсы Flutter
+├── README.md                        # Описание проекта на английском
+├── README_ru.md                     # Описание проекта на русском
+└── LICENSE                          # Лицензия проекта
 ```
 
 ## Как использовать?
