@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:redrive/l10n/app_localizations.dart';
 
 class CarScreen extends StatefulWidget {
   const CarScreen({super.key});
@@ -29,13 +30,14 @@ class _GarageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 3, left: 20, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Мой гараж",
+            l.garageTitle,
             textScaler: TextScaler.noScaling,
             style: TextStyle(
               fontSize: 32,
@@ -44,7 +46,7 @@ class _GarageHeader extends StatelessWidget {
             ),
           ),
           Text(
-            "Здесь будут ваши автомобили",
+            l.garageDescription,
             textScaler: TextScaler.noScaling,
             style: TextStyle(
               fontSize: 12,
@@ -63,6 +65,7 @@ class _EmptyGarageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30),
 
@@ -88,7 +91,7 @@ class _EmptyGarageCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Нет машин",
+                    l.noVehicles,
                     textScaler: TextScaler.noScaling,
                     style: TextStyle(
                       fontSize: 34,
@@ -98,15 +101,14 @@ class _EmptyGarageCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    "Добавьте первый\nавтомобиль",
+                    l.addFirstVehicle,
                     textAlign: TextAlign.center,
                     textScaler: TextScaler.noScaling,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.onSurface.withAlpha(180),
+                      color: Theme.of(context).colorScheme.onSurface
+                          .withAlpha(180),
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -119,7 +121,7 @@ class _EmptyGarageCard extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     child: Text(
-                      "Добавить авто",
+                      l.addVehicle,
                       textScaler: TextScaler.noScaling,
                       style: TextStyle(
                         fontSize: 17,

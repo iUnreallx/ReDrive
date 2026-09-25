@@ -1,3 +1,4 @@
+import 'package:redrive/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:redrive/widget/connection/bluetooth/bluetooth_tab.dart';
 import 'package:redrive/widget/connection/bluetooth/bluetooth_waiting_widget.dart';
@@ -22,6 +23,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -33,7 +35,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Connection",
+                l.connection,
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(
                   fontFamily: 'Inter',
@@ -56,7 +58,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
 
               const SizedBox(height: 14),
 
-              Expanded(child: _buildTabContent(colorScheme)),
+              Expanded(child: _buildTabContent(colorScheme, l)),
             ],
           ),
         ),
@@ -64,7 +66,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
     );
   }
 
-  Widget _buildTabContent(ColorScheme colorScheme) {
+  Widget _buildTabContent(ColorScheme colorScheme, AppLocalizations l) {
     return IndexedStack(
       index: _selectedTab.index,
       children: [
@@ -72,17 +74,17 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
             ? const BluetoothTab()
             : BluetoothWaitingWidget(onActivate: _activateBluetooth),
 
-        const Center(
+        Center(
           child: Text(
-            "Wi-Fi подключение в разработке",
-            style: TextStyle(color: Colors.white54),
+            l.wifiDeveloping,
+            style: const TextStyle(color: Colors.white54),
           ),
         ),
 
-        const Center(
+        Center(
           child: Text(
-            "USB подключение в разработке",
-            style: TextStyle(color: Colors.white54),
+            l.usbDeveloping,
+            style: const TextStyle(color: Colors.white54),
           ),
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:redrive/l10n/app_localizations.dart';
 
 class ConnectionButtons extends StatelessWidget {
   final VoidCallback onConnect;
@@ -49,6 +50,7 @@ class _AnimatedConnectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
@@ -72,15 +74,18 @@ class _AnimatedConnectButton extends StatelessWidget {
               );
             },
             child: isConnected
-                ? _buildConnectedState(key: const ValueKey('connected'))
-                : _buildDisconnectedState(key: const ValueKey('disconnected')),
+                ? _buildConnectedState(key: const ValueKey('connected'), l: l)
+                : _buildDisconnectedState(
+                    key: const ValueKey('disconnected'),
+                    l: l,
+                  ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildConnectedState({required Key key}) {
+  Widget _buildConnectedState({required Key key, required AppLocalizations l}) {
     return Row(
       key: key,
       children: [
@@ -91,9 +96,9 @@ class _AnimatedConnectButton extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
-                "CONNECTED",
+                l.connected.toUpperCase(),
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(
                   color: Colors.black,
@@ -104,7 +109,7 @@ class _AnimatedConnectButton extends StatelessWidget {
                 ),
               ),
               Text(
-                "Vehicle is connected",
+                l.vehicleConnected,
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(
                   color: Colors.black87,
@@ -130,15 +135,18 @@ class _AnimatedConnectButton extends StatelessWidget {
     );
   }
 
-  Widget _buildDisconnectedState({required Key key}) {
+  Widget _buildDisconnectedState({
+    required Key key,
+    required AppLocalizations l,
+  }) {
     return Row(
       key: key,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Icon(Icons.tune_rounded, color: Colors.black, size: 24),
         SizedBox(width: 10),
         Text(
-          "CONNECT",
+          l.connect.toUpperCase(),
           textScaler: TextScaler.noScaling,
           style: TextStyle(
             color: Colors.black,
@@ -166,6 +174,7 @@ class _AnimatedDemoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return SizedBox(
       width: double.infinity,
       height: 56,
@@ -195,7 +204,7 @@ class _AnimatedDemoButton extends StatelessWidget {
           child: _buildStateRow(
             key: ValueKey(isDemoMode),
             icon: isDemoMode ? Icons.stop_rounded : Icons.play_arrow_rounded,
-            text: isDemoMode ? "DISCONNECT" : "VIEW DEMO",
+            text: isDemoMode ? l.disconnectDemo : l.viewDemo,
           ),
         ),
       ),

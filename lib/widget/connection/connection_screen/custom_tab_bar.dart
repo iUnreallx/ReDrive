@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:redrive/l10n/app_localizations.dart';
 
 enum ConnectionTab { bluetooth, wifi, usb }
 
@@ -14,6 +15,7 @@ class CustomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -48,21 +50,21 @@ class CustomTabBar extends StatelessWidget {
               _TabItem(
                 tab: ConnectionTab.bluetooth,
                 icon: Icons.bluetooth,
-                label: "Bluetooth",
+                label: l.bluetooth,
                 currentTab: selectedTab,
                 onTap: onTabSelected,
               ),
               _TabItem(
                 tab: ConnectionTab.wifi,
                 icon: Icons.wifi,
-                label: "Wi-Fi",
+                label: l.wifi,
                 currentTab: selectedTab,
                 onTap: onTabSelected,
               ),
               _TabItem(
                 tab: ConnectionTab.usb,
                 icon: Icons.usb,
-                label: "USB",
+                label: l.usb,
                 currentTab: selectedTab,
                 onTap: onTabSelected,
               ),
