@@ -74,17 +74,17 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
             ? const BluetoothTab()
             : BluetoothWaitingWidget(onActivate: _activateBluetooth),
 
-        const Center(
+        Center(
           child: Text(
             l.wifiDeveloping,
-            style: TextStyle(color: Colors.white54),
+            style: const TextStyle(color: Colors.white54),
           ),
         ),
 
-        const Center(
+        Center(
           child: Text(
             l.usbDeveloping,
-            style: TextStyle(color: Colors.white54),
+            style: const TextStyle(color: Colors.white54),
           ),
         ),
       ],

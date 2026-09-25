@@ -8,6 +8,7 @@ import 'package:redrive/widget/home_screen/car_display.dart';
 import 'package:redrive/widget/home_screen/connections_buttons.dart';
 import 'package:redrive/widget/home_screen/header_bar.dart';
 import 'package:redrive/widget/home_screen/telemetry_card.dart';
+
 import '../providers/obd_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,12 +21,18 @@ class HomeScreen extends StatefulWidget {
 String _connectionMessage(BuildContext context, ObdSourceState state) {
   final l = AppLocalizations.of(context);
   switch (state) {
-    case ObdSourceState.disconnected: return l.preparing;
-    case ObdSourceState.connecting: return l.connectingEcu;
-    case ObdSourceState.initializing: return l.initializing;
-    case ObdSourceState.polling: return l.connected;
-    case ObdSourceState.recovering: return l.recovering;
-    case ObdSourceState.error: return l.connectionError;
+    case ObdSourceState.disconnected:
+      return l.preparing;
+    case ObdSourceState.connecting:
+      return l.connectingEcu;
+    case ObdSourceState.initializing:
+      return l.initializing;
+    case ObdSourceState.polling:
+      return l.connected;
+    case ObdSourceState.recovering:
+      return l.recovering;
+    case ObdSourceState.error:
+      return l.connectionError;
   }
 }
 
@@ -123,9 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onConnect: () async {
                     if (!isDeviceConnected) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(l.connectAdapterFirst),
-                        ),
+                        SnackBar(content: Text(l.connectAdapterFirst)),
                       );
                       return;
                     }
@@ -138,20 +143,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     await _connectWithDialog(obdProvider);
 
                     if (obdProvider.mode != ObdMode.real && context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(l.ecuFailed),
-                        ),
-                      );
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(l.ecuFailed)));
                     }
                   },
 
                   onViewDemo: () async {
                     if (isReal) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(l.disconnectEcuFirst),
-                        ),
+                        SnackBar(content: Text(l.disconnectEcuFirst)),
                       );
                       return;
                     }
@@ -174,6 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _connectWithDialog(ObdProvider obdProvider) async {
+    final l = AppLocalizations.of(context);
     bool isCancelled = false;
 
     showDialog<void>(

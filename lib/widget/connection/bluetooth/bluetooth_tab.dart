@@ -49,13 +49,25 @@ class _BluetoothTabState extends State<BluetoothTab> {
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF131315),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: Text(l.permissionTitle, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        content: Text(l.permissionDescription, style: const TextStyle(color: Colors.white54)),
+        title: Text(
+          l.permissionTitle,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          l.permissionDescription,
+          style: const TextStyle(color: Colors.white54),
+        ),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(l.cancel, style: const TextStyle(color: Colors.white54)),
+            child: Text(
+              l.cancel,
+              style: const TextStyle(color: Colors.white54),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -68,7 +80,13 @@ class _BluetoothTabState extends State<BluetoothTab> {
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
-            child: Text(l.openSettings, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            child: Text(
+              l.openSettings,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -162,7 +180,9 @@ class BluetoothScanStatusCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        isScanning ? l.searchingAdapter : l.devicesFound(devicesCount),
+                        isScanning
+                            ? l.searchingAdapter
+                            : l.devicesFound(devicesCount),
                         textScaler: TextScaler.noScaling,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.5),
@@ -274,6 +294,7 @@ class BluetoothDeviceList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Selector<BluetoothProvider, _BluetoothDeviceListState>(
       selector: (_, provider) {
         return _BluetoothDeviceListState(
@@ -334,9 +355,9 @@ class BluetoothDeviceList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(25),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       l.startScanning,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
@@ -452,6 +473,7 @@ Future<void> _connectToAdapter(
   BluetoothProvider provider,
   BluetoothObdDevice device,
 ) async {
+  final l = AppLocalizations.of(context);
   bool isCanceled = false;
 
   showDialog<void>(
@@ -524,10 +546,10 @@ Future<void> _connectToAdapter(
                             borderRadius: BorderRadius.circular(100),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           l.cancel,
                           textScaler: TextScaler.noScaling,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                             fontSize: 16,

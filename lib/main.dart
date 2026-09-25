@@ -1,4 +1,5 @@
 import 'l10n/app_localizations.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:redrive/services/bluetooth/connection/bluetooth_obd_connection.dart';
@@ -45,7 +46,10 @@ class RedriveApp extends StatelessWidget {
         if (locale?.languageCode.toLowerCase() == 'zh') {
           final region = (locale?.countryCode ?? '').toUpperCase();
           final script = (locale?.scriptCode ?? '').toLowerCase();
-          if (script == 'hant' || region == 'HK' || region == 'MO' || region == 'TW') {
+          if (script == 'hant' ||
+              region == 'HK' ||
+              region == 'MO' ||
+              region == 'TW') {
             return Locale('zh', region.isEmpty ? 'TW' : region);
           }
           return const Locale('zh', 'CN');
