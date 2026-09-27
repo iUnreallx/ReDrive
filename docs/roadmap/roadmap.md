@@ -65,33 +65,33 @@ This phase reflects what is already the foundation of the project or is in the c
 
 ## Separation of Concerns
 
-- [ ] Split the current `ObdProvider` into smaller parts
-- [ ] Leave only UI-needed state in `ObdProvider`
-- [ ] Extract ELM command sending/response handling to a separate service
-- [ ] Extract PID response parsing to a separate class
-- [ ] Extract polling logic to a separate controller or service
+- [x] Split the current `ObdProvider` into smaller parts
+- [x] Leave only UI-needed state in `ObdProvider`
+- [x] Extract ELM command sending/response handling to a separate service
+- [x] Extract PID response parsing to a separate class
+- [x] Extract polling logic to a separate controller or service
 - [ ] Extract OBD/ELM error handling into dedicated error types
 - [ ] Remove logic duplication between Bluetooth, demo mode, and future connection types
 
 ## ELM327 Core
 
-- [ ] Create `ElmClient`
-- [ ] Create `ElmCommandQueue`
-- [ ] Ensure only one command executes at a time
-- [ ] Create a single place where `\r` is appended to commands
-- [ ] Add proper prompt `>` waiting
-- [ ] Add command timeout
-- [ ] Handle `NO DATA`, `STOPPED`, `SEARCHING`, `UNABLE TO CONNECT` responses
+- [x] Create `ElmClient`
+- [x] Create `ElmCommandQueue`
+- [x] Ensure only one command executes at a time
+- [x] Create a single place where `\r` is appended to commands
+- [x] Add proper prompt `>` waiting
+- [x] Add command timeout
+- [x] Handle `NO DATA`, `STOPPED`, `SEARCHING`, `UNABLE TO CONNECT` responses
 - [ ] Add raw command/response logging for debugging
 - [ ] Add safe buffer clearing on disconnect/reconnect
 
 ## PID Core
 
-- [ ] Create `PidDefinition` model
-- [ ] Create `PidRegistry`
-- [ ] Create `PidDecoder`
-- [ ] Move standard PIDs to a separate list/registry
-- [ ] Add unit tests for basic PID formulas
+- [x] Create `PidDefinition` model
+- [x] Create `PidRegistry`
+- [x] Create `PidDecoder`
+- [x] Move standard PIDs to a separate list/registry
+- [x] Add unit tests for basic PID formulas
 - [ ] Add support for different units of measurement
 - [ ] Add PID categories: engine, vehicle, fuel, temperature, diagnostic
 
@@ -110,9 +110,9 @@ Bluetooth / Wi-Fi / USB / Mock (demo)
 ```
 
 
-- [ ] Add unit tests for `ElmCommandQueue` (sequencing, timeouts) 
-- [ ] Add unit tests for raw ELM327 response parsing (OK, NO DATA, SEARCHING)
-- [ ] Add unit tests for PID calculation formulas
+- [x] Add unit tests for `ElmCommandQueue` (sequencing, timeouts) 
+- [x] Add unit tests for raw ELM327 response parsing (OK, NO DATA, SEARCHING)
+- [x] Add unit tests for PID calculation formulas
 - [ ] Add tests for proper buffer clearing on reconnection
 
 ---
