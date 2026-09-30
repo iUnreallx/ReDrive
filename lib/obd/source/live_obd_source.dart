@@ -31,6 +31,9 @@ class LiveObdSource {
   Set<PidKey> _supportedKeys = const {};
   final Map<WatchSource, Set<PidKey>> _pendingWatchlists = {};
 
+  bool _stopRequested = false;
+  int _recoveryAttempts = 0;
+
   LiveObdSource({
     required ObdConnection connection,
     required PidRegistry registry,
@@ -67,6 +70,110 @@ class LiveObdSource {
     }
   }
 
+  Future<void> stop() async {
+    _stopRequested = true;
+    _setState(ObdSourceState.disconnected);
+    await _cleanupActiveComponents();
+    _supportedKeys = const {};
+  }
+
+  Future<void> start() async {
+    if (_stopRequested) return;
+
+    if (_state != ObdSourceState.disconnected &&
+        _state != ObdSourceState.error) {
+      return;
+    }
+
+    try {
+      _setState(ObdSourceState.connecting);
+      _setState(ObdSourceState.initializing);
+
+      await _startSession();
+      if (_stopRequested) return;
+
+      _setState(ObdSourceState.polling);
+      _pollingController!.start();
+    } catch (error, stackTrace) {
+      if (_stopRequested) return;
+      await _recoverSession(error, stackTrace);
+    }
+  }
+
+  Future<void> _startSession() async {
+    final client = ElmClient(connection: _connection);
+    _elmClient = client;
+
+    final session = ObdSession(elmClient: client);
+    _session = session;
+
+    final rawSupportedPids = await session.initialize();
+    if (_stopRequested) return;
+
+    _supportedKeys = _registry.findSupportedEcuKeys(rawSupportedPids);
+
+    final controller = PollingController(
+      elmClient: client,
+      registry: _registry,
+      supportedEcuKeys: _supportedKeys,
+    );
+    _pollingController = controller;
+
+    for (final entry in _pendingWatchlists.entries) {
+      controller.setWatchlist(entry.key, entry.value);
+    }
+
+    _pollingSubscription = controller.updates.listen(
+      (data) {
+        if (!_updatesController.isClosed) {
+          _updatesController.add(data);
+        }
+      },
+      onError: (Object error, StackTrace stackTrace) {
+        unawaited(_recoverSession(error, stackTrace));
+      },
+    );
+  }
+
+  Future<void> _recoverSession(Object error, StackTrace stackTrace) async {
+    if (_stopRequested || _state == ObdSourceState.recovering) return;
+
+    var lastError = error;
+    var lastStackTrace = stackTrace;
+
+    _setState(ObdSourceState.recovering);
+
+    while (_recoveryAttempts < 2) {
+      if (_stopRequested) return;
+
+      await _cleanupActiveComponents();
+      if (_stopRequested) return;
+
+      try {
+        await _startSession();
+        if (_stopRequested) return;
+
+        _setState(ObdSourceState.polling);
+        _pollingController!.start();
+        return;
+      } catch (newError, newStackTrace) {
+        if (_stopRequested) return;
+
+        lastError = newError;
+        lastStackTrace = newStackTrace;
+      }
+    }
+
+    await _cleanupActiveComponents();
+    if (_stopRequested) return;
+
+    _setState(ObdSourceState.error);
+
+    if (!_updatesController.isClosed) {
+      _updatesController.addError(lastError, lastStackTrace);
+    }
+  }
+
   Future<void> _cleanupActiveComponents() async {
     await _pollingSubscription?.cancel();
     _pollingSubscription = null;
@@ -78,68 +185,6 @@ class LiveObdSource {
     _elmClient = null;
 
     _session = null;
-  }
-
-  Future<void> stop() async {
-    await _cleanupActiveComponents();
-    _supportedKeys = const {};
-    _setState(ObdSourceState.disconnected);
-  }
-
-  Future<void> start() async {
-    if (_state != ObdSourceState.disconnected &&
-        _state != ObdSourceState.error) {
-      return;
-    }
-
-    try {
-      _setState(ObdSourceState.connecting);
-
-      final client = ElmClient(connection: _connection);
-      _elmClient = client;
-
-      _setState(ObdSourceState.initializing);
-
-      final session = ObdSession(elmClient: client);
-      _session = session;
-
-      final rawSupportedPids = await session.initialize();
-      _supportedKeys = _registry.findSupportedEcuKeys(rawSupportedPids);
-
-      final controller = PollingController(
-        elmClient: client,
-        registry: _registry,
-        supportedEcuKeys: _supportedKeys,
-      );
-      _pollingController = controller;
-
-      for (final entry in _pendingWatchlists.entries) {
-        controller.setWatchlist(entry.key, entry.value);
-      }
-
-      _pollingSubscription = controller.updates.listen(
-        (data) {
-          if (!_updatesController.isClosed) {
-            _updatesController.add(data);
-          }
-        },
-        onError: (Object error, StackTrace stackTrace) {
-          if (!_updatesController.isClosed) {
-            _updatesController.addError(error, stackTrace);
-          }
-
-          _setState(ObdSourceState.error);
-
-          unawaited(_cleanupActiveComponents());
-        },
-      );
-
-      controller.start();
-      _setState(ObdSourceState.polling);
-    } catch (_) {
-      _setState(ObdSourceState.error);
-      await _cleanupActiveComponents();
-    }
   }
 
   Future<void> dispose() async {
