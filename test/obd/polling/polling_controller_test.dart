@@ -195,4 +195,50 @@ void main() {
 
     expect(controller.isPolling, isFalse);
   });
+
+  test('skips NO DATA and emits error after one failed retry', () async {
+    final controller = PollingController(
+      elmClient: elmClient,
+      registry: registry,
+      supportedEcuKeys: {PidKey.vehicleSpeed},
+    );
+    addTearDown(controller.dispose);
+
+    controller.setWatchlist(WatchSource.visibleScreen, {PidKey.vehicleSpeed});
+
+    Future<void> waitForCommandCount(int count) async {
+      final deadline = DateTime.now().add(const Duration(seconds: 2));
+      while (connection.sentCommands.length < count) {
+        if (DateTime.now().isAfter(deadline)) {
+          fail(
+            'Expected $count commands, got ${connection.sentCommands.length}',
+          );
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+    }
+
+    final errorExpectation = expectLater(
+      controller.updates,
+      emitsError(isA<StateError>()),
+    );
+
+    controller.start();
+    await waitForCommandCount(1);
+    connection.emit('NO DATA\r>');
+
+    await waitForCommandCount(2);
+    expect(controller.isPolling, isTrue);
+    expect(controller.latestValues, isEmpty);
+
+    connection.emit('BUS ERROR\r>');
+
+    await waitForCommandCount(3);
+    expect(controller.isPolling, isTrue);
+    connection.emit('BUS ERROR\r>');
+
+    await errorExpectation;
+    expect(connection.sentCommands, ['010D\r', '010D\r', '010D\r']);
+    expect(controller.isPolling, isFalse);
+  });
 }

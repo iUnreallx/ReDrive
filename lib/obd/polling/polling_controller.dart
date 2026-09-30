@@ -94,19 +94,45 @@ class PollingController {
         if (definition == null) continue;
 
         try {
-          final response = await _elmClient.execute(definition.command);
+          var response = await _elmClient.execute(definition.command);
+          if (!_isPolling) return;
 
-          if (response.type == ElmResponseType.data ||
-              response.type == ElmResponseType.adapterVoltage) {
-            final value = definition.decoder(response);
+          const retryableTypes = <ElmResponseType>{
+            ElmResponseType.busError,
+            ElmResponseType.adapterError,
+            ElmResponseType.stopped,
+            ElmResponseType.unableToConnect,
+            ElmResponseType.malformed,
+          };
 
-            _latestValues[key] = value;
+          if (retryableTypes.contains(response.type)) {
+            await Future<void>.delayed(const Duration(milliseconds: 100));
+            if (!_isPolling) return;
 
-            if (!_updatesController.isClosed) {
-              _updatesController.add((key: key, value: value));
-            }
+            response = await _elmClient.execute(definition.command);
+            if (!_isPolling) return;
+          }
+
+          if (response.type == ElmResponseType.noData) {
+            continue;
+          }
+
+          if (response.type != ElmResponseType.data &&
+              response.type != ElmResponseType.adapterVoltage) {
+            throw StateError(
+              'Polling ${definition.command} failed: ${response.type}',
+            );
+          }
+          final value = definition.decoder(response);
+
+          _latestValues[key] = value;
+
+          if (!_updatesController.isClosed) {
+            _updatesController.add((key: key, value: value));
           }
         } catch (error, stackTrace) {
+          if (!_isPolling) return;
+
           _isPolling = false;
 
           if (!_updatesController.isClosed) {
