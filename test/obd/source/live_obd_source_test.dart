@@ -357,7 +357,7 @@ void main() {
 
     final stateExpectation = expectLater(
       source.stateStream,
-      emits(ObdSourceState.error),
+      emitsInOrder([ObdSourceState.recovering, ObdSourceState.error]),
     );
 
     source.setWatchlist(WatchSource.visibleScreen, {PidKey.vehicleSpeed});
