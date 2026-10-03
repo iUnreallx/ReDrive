@@ -126,6 +126,7 @@ class LiveObdSource {
     _pollingSubscription = controller.updates.listen(
       (data) {
         if (!_updatesController.isClosed) {
+          _recoveryAttempts = 0;
           _updatesController.add(data);
         }
       },
@@ -149,6 +150,7 @@ class LiveObdSource {
       await _cleanupActiveComponents();
       if (_stopRequested) return;
 
+      _recoveryAttempts++;
       try {
         await _startSession();
         if (_stopRequested) return;
