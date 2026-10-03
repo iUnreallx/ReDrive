@@ -9,8 +9,7 @@ class ReconnectionBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       elevation: 6,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+      shape: StadiumBorder(
         side: BorderSide(
           color: Theme.of(context).colorScheme.primary.withAlpha(100),
           width: 1.5,
@@ -23,27 +22,27 @@ class ReconnectionBanner extends StatelessWidget {
         0.4,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: 18,
-              height: 18,
+              width: 12,
+              height: 12,
               child: CircularProgressIndicator(
-                strokeWidth: 2.5,
+                strokeWidth: 2,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 10),
             Flexible(
               child: Text(
                 message,
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
                 ),
               ),
             ),
