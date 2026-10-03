@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:redrive/obd/connection/obd_connection.dart';
 
 class FakeObdConnection implements ObdConnection {
-  // A reconnect creates a new ElmClient subscription on the same transport.
   final _incomingController = StreamController<String>.broadcast();
-
   final _connectionStateController = StreamController<bool>.broadcast();
   final _reconnectingStateController = StreamController<bool>.broadcast();
 
@@ -45,10 +43,12 @@ class FakeObdConnection implements ObdConnection {
     _reconnectingStateController.add(state);
   }
 
-  @override
   Future<void> connect() async {
     _setConnected(true);
   }
+
+  @override
+  Future<void> reconnect() async {}
 
   @override
   Future<void> disconnect() async {
