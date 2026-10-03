@@ -13,6 +13,8 @@ import '../obd/source/obd_source_state.dart';
 
 enum ObdMode { idle, demo, real }
 
+enum ObdRecoveryStage { none, session, transport }
+
 /// Coordinates OBD data sources and exposes vehicle data to the UI.
 ///
 /// Manages Real/Demo modes, active watchlists, connection lifecycle,
@@ -38,9 +40,19 @@ class ObdProvider extends ChangeNotifier {
   final Map<WatchSource, Set<PidKey>> _watchlists = {};
 
   bool get isDeviceConnected => _connection?.isConnected ?? false;
+
   ObdSourceState get state => _liveSource?.state ?? ObdSourceState.disconnected;
 
   bool get isReconnecting => _connection?.isReconnecting ?? false;
+
+  ObdRecoveryStage get recoveryStage {
+    if (_mode != ObdMode.real) return ObdRecoveryStage.none;
+    if (isReconnecting) return ObdRecoveryStage.transport;
+    if (state == ObdSourceState.recovering || state == ObdSourceState.error) {
+      return ObdRecoveryStage.session;
+    }
+    return ObdRecoveryStage.none;
+  }
 
   ObdData _data = const ObdData();
   ObdData get data => _data;
