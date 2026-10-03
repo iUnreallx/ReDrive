@@ -403,7 +403,7 @@ class BluetoothProvider extends ChangeNotifier {
   }
 
   Future<void> _startBackgroundReconnect() async {
-    if (_connectedDevice == null) return;
+    if (_connectedDevice == null || _isReconnectingBackground) return;
 
     _connectionId++;
     final int currentId = _connectionId;

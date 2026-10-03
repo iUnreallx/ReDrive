@@ -9,7 +9,8 @@ abstract class ObdConnection {
 
   Future<void> send(String command);
 
-  Future<void> connect();
+  Future<void> reconnect();
+
   Future<void> disconnect();
 
   bool get isConnected;

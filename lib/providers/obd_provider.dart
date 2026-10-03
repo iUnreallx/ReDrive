@@ -13,6 +13,8 @@ import '../obd/source/obd_source_state.dart';
 
 enum ObdMode { idle, demo, real }
 
+enum ObdRecoveryStage { none, session, transport }
+
 /// Coordinates OBD data sources and exposes vehicle data to the UI.
 ///
 /// Manages Real/Demo modes, active watchlists, connection lifecycle,
@@ -38,9 +40,24 @@ class ObdProvider extends ChangeNotifier {
   final Map<WatchSource, Set<PidKey>> _watchlists = {};
 
   bool get isDeviceConnected => _connection?.isConnected ?? false;
+
   ObdSourceState get state => _liveSource?.state ?? ObdSourceState.disconnected;
 
   bool get isReconnecting => _connection?.isReconnecting ?? false;
+
+  bool _isResuming = false;
+
+  ObdRecoveryStage get recoveryStage {
+    if (_mode != ObdMode.real) return ObdRecoveryStage.none;
+    if (isReconnecting) return ObdRecoveryStage.transport;
+    if (state == ObdSourceState.recovering || state == ObdSourceState.error) {
+      return ObdRecoveryStage.session;
+    }
+    if (_isResuming && state != ObdSourceState.polling) {
+      return ObdRecoveryStage.session;
+    }
+    return ObdRecoveryStage.none;
+  }
 
   ObdData _data = const ObdData();
   ObdData get data => _data;
@@ -125,6 +142,7 @@ class ObdProvider extends ChangeNotifier {
       _data = const ObdData();
     }
 
+    _isResuming = false;
     _mode = ObdMode.real;
     notifyListeners();
 
@@ -140,6 +158,7 @@ class ObdProvider extends ChangeNotifier {
   Future<void> stopRealMode() async {
     if (_mode != ObdMode.real) return;
 
+    _isResuming = false;
     await _stopLive();
 
     _mode = ObdMode.idle;
@@ -196,6 +215,7 @@ class ObdProvider extends ChangeNotifier {
       return;
     }
 
+    _isResuming = true;
     await _stopLive();
 
     notifyListeners();
@@ -204,6 +224,7 @@ class ObdProvider extends ChangeNotifier {
   Future<void> _handleTransportDisconnected() async {
     await _stopLive();
 
+    _isResuming = false;
     _mode = ObdMode.idle;
     _data = const ObdData();
 
@@ -225,6 +246,7 @@ class ObdProvider extends ChangeNotifier {
   }
 
   void _onUpdate(({PidKey key, num value}) update) {
+    _isResuming = false;
     switch (update.key) {
       case PidKey.engineRpm:
         _data = _data.copyWith(rpm: update.value.toInt());

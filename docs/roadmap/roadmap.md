@@ -83,7 +83,7 @@ This phase reflects what is already the foundation of the project or is in the c
 - [x] Add command timeout
 - [x] Handle `NO DATA`, `STOPPED`, `SEARCHING`, `UNABLE TO CONNECT` responses
 - [ ] Add raw command/response logging for debugging
-- [ ] Add safe buffer clearing on disconnect/reconnect
+- [x] Add safe buffer clearing on disconnect/reconnect
 
 ## PID Core
 
