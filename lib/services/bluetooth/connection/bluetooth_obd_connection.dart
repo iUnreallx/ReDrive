@@ -26,9 +26,8 @@ class BluetoothObdConnection implements ObdConnection {
     provider.sendCommand(command);
   }
 
-  /// DONT IMPLEMENTS!!!!!
   @override
-  Future<void> connect() async {}
+  Future<void> reconnect() async {}
 
   @override
   Future<void> disconnect() async {
