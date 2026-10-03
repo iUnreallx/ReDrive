@@ -98,6 +98,9 @@ class AppLocalizations {
       _text('无法连接到车辆 ECU', '無法連線到車輛 ECU', 'Unable to connect to ECU');
   String get disconnectEcuFirst =>
       _text('请先断开车辆 ECU 连接', '請先中斷車輛 ECU 連線', 'Disconnect from the ECU first');
+  String get bannerRestoring =>
+      _text('正在恢复连接', '正在恢復連線', 'Restoring connection');
+  String get bannerReconnecting => _text('正在重新连接', '正在重新連線', 'Reconnecting');
 
   static const delegate = _AppLocalizationsDelegate();
   static const supportedLocales = [
