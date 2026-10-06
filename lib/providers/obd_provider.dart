@@ -94,6 +94,7 @@ class ObdProvider extends ChangeNotifier {
       if (isReconnecting) {
         unawaited(_handleReconnectStarted());
       } else {
+        notifyListeners();
         if (_connection?.isConnected == true && _mode == ObdMode.real) {
           _startLiveSource();
         }
