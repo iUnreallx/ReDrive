@@ -27,7 +27,9 @@ class BluetoothObdConnection implements ObdConnection {
   }
 
   @override
-  Future<void> reconnect() async {}
+  Future<void> reconnect() async {
+    await provider.disconnect(isIntentional: false);
+  }
 
   @override
   Future<void> disconnect() async {
