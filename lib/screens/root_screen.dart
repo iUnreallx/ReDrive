@@ -7,6 +7,7 @@ import 'package:redrive/screens/connection_screen.dart';
 import 'package:redrive/widget/bottom_bar/custom_bottom_bar.dart';
 import 'package:redrive/widget/common/reconnection_banner.dart';
 import 'home_screen.dart';
+import 'dart:async';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -17,6 +18,7 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
   int _currentIndex = 0;
+  StreamSubscription<Object>? _errorsSubscription;
 
   late final List<Widget> _screens = [
     const HomeScreen(),
@@ -25,6 +27,20 @@ class _RootScreenState extends State<RootScreen> {
     const CarScreen(),
     Container(color: Colors.black),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _errorsSubscription = context.read<ObdProvider>().errors.listen((_) {
+      if (!mounted) return;
+
+      final l = AppLocalizations.of(context);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l.connectionLost)));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,5 +84,11 @@ class _RootScreenState extends State<RootScreen> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _errorsSubscription?.cancel();
+    super.dispose();
   }
 }

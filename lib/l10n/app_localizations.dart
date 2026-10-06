@@ -101,6 +101,13 @@ class AppLocalizations {
   String get bannerRestoring =>
       _text('正在恢复连接', '正在恢復連線', 'Restoring connection');
   String get bannerReconnecting => _text('正在重新连接', '正在重新連線', 'Reconnecting');
+  String get reconnectWait =>
+      _text('正在重新连接，请稍候', '正在重新連線，請稍候', 'Reconnecting, please wait');
+  String get connectionLost => _text(
+    '连接已断开，请重新连接',
+    '連線已中斷，請重新連線',
+    'Connection lost. Please connect again',
+  );
 
   static const delegate = _AppLocalizationsDelegate();
   static const supportedLocales = [

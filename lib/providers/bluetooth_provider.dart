@@ -65,6 +65,12 @@ class BluetoothProvider extends ChangeNotifier {
   bool _isReconnectingBackground = false;
   bool get isReconnectingBackground => _isReconnectingBackground;
 
+  static const Duration _quickDropWindow = Duration(seconds: 15);
+  static const int _maxQuickDrops = 3;
+
+  DateTime? _lastReconnectSuccessAt;
+  int _quickDrops = 0;
+
   Timer? _scanTimer;
 
   bool _isHardwareOn = false;
@@ -311,6 +317,8 @@ class BluetoothProvider extends ChangeNotifier {
 
         _connection = newSocket;
         _connectedDevice = device;
+        _quickDrops = 0;
+        _lastReconnectSuccessAt = null;
         _setConnected(true);
         _setupListen();
 
@@ -393,6 +401,8 @@ class BluetoothProvider extends ChangeNotifier {
     }
 
     if (isIntentional) {
+      _quickDrops = 0;
+      _lastReconnectSuccessAt = null;
       _setConnected(false);
       _connectedDevice = null;
       _isConnecting = false;
@@ -404,6 +414,21 @@ class BluetoothProvider extends ChangeNotifier {
 
   Future<void> _startBackgroundReconnect() async {
     if (_connectedDevice == null || _isReconnectingBackground) return;
+
+    final lastSuccessAt = _lastReconnectSuccessAt;
+    final isQuickDrop =
+        lastSuccessAt != null &&
+        DateTime.now().difference(lastSuccessAt) < _quickDropWindow;
+    _quickDrops = isQuickDrop ? _quickDrops + 1 : 0;
+
+    if (_quickDrops >= _maxQuickDrops) {
+      developer.log(
+        "Соединение умирает сразу после переподключения, сдаёмся",
+        name: 'reBlue',
+      );
+      await disconnect();
+      return;
+    }
 
     _connectionId++;
     final int currentId = _connectionId;
@@ -446,6 +471,7 @@ class BluetoothProvider extends ChangeNotifier {
         _setConnected(true);
         _setReconnecting(false);
         _setupListen();
+        _lastReconnectSuccessAt = DateTime.now();
         notifyListeners();
         return;
       } catch (e) {

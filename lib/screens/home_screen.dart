@@ -60,11 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final bool isReal = obdProvider.mode == ObdMode.real;
     final bool isDemo = obdProvider.mode == ObdMode.demo;
     final bool isDeviceConnected = obdProvider.isDeviceConnected;
-    final bool isObdConnected =
-        isReal &&
-        (obdProvider.state == ObdSourceState.polling ||
-            obdProvider.state == ObdSourceState.recovering ||
-            obdProvider.isReconnecting);
+    final bool isReconnecting = obdProvider.isReconnecting;
+    final bool isObdConnected = obdProvider.isEcuConnected;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -78,14 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HeaderBar(), // шапка ( название + настройки )
+                HeaderBar(),
                 const SizedBox(height: 15),
 
-                const CarDisplay(), // отображение карусели машин
+                const CarDisplay(),
                 const SizedBox(height: 10),
 
-                /// отображение телеметрии
-                /// ( две карточки связующие с obd модулем )
                 Row(
                   children: [
                     Expanded(
@@ -121,8 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                /// кнопки для подключения к эбу
-                /// либо для подключения демо режима
                 ConnectionButtons(
                   isConnected: isObdConnected,
                   isDemoMode: isDemo,
@@ -134,17 +127,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                       return;
                     }
-
                     if (isReal) {
                       await obdProvider.stopRealMode();
+                      return;
+                    }
+                    if (isReconnecting) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(l.reconnectWait)));
                       return;
                     }
 
                     await _connectWithDialog(obdProvider);
 
                     if (obdProvider.mode != ObdMode.real && context.mounted) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(l.ecuFailed)));
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(l.ecuFailed)));
                     }
                   },
 
@@ -174,46 +173,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _connectWithDialog(ObdProvider obdProvider) async {
-    final l = AppLocalizations.of(context);
-    bool isCancelled = false;
+    var isCancelled = false;
 
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) {
-        return PopScope(
-          canPop: false,
-          child: Consumer<ObdProvider>(
-            builder: (context, obd, child) {
-              return AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const CircularProgressIndicator(),
-                    const SizedBox(height: 24),
-                    Text(
-                      _connectionMessage(context, obd.state),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () async {
-                      isCancelled = true;
-                      await obd.stopRealMode();
-
-                      if (dialogContext.mounted) {
-                        Navigator.pop(dialogContext);
-                      }
-                    },
-                    child: Text(l.cancel),
-                  ),
-                ],
-              );
-            },
-          ),
-        );
+    _showConnectingDialog(
+      onCancel: () async {
+        isCancelled = true;
+        await obdProvider.stopRealMode();
       },
     );
 
@@ -222,5 +187,47 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!mounted || isCancelled) return;
 
     Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  void _showConnectingDialog({required Future<void> Function() onCancel}) {
+    final l = AppLocalizations.of(context);
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(height: 24),
+                Selector<ObdProvider, ObdSourceState>(
+                  selector: (_, obd) => obd.state,
+                  builder: (context, state, _) => Text(
+                    _connectionMessage(context, state),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  await onCancel();
+
+                  if (dialogContext.mounted) {
+                    Navigator.pop(dialogContext);
+                  }
+                },
+                child: Text(l.cancel),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
