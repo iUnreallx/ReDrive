@@ -374,4 +374,101 @@ void main() {
     await source.dispose();
     await connection.dispose();
   });
+  test('recovery attempts are restored once the session works again', () async {
+    final connection = FakeObdConnection();
+
+    final source = LiveObdSource(
+      connection: connection,
+      registry: PidRegistry(),
+    );
+
+    final speeds = <num>[];
+    source.updates.listen(
+      (update) => speeds.add(update.value),
+      onError: (_) {},
+    );
+
+    final handshake = _completeNextHandshake(connection);
+    final startFuture = source.start();
+    await handshake;
+    await startFuture;
+
+    source.setWatchlist(WatchSource.visibleScreen, {PidKey.vehicleSpeed});
+    await _waitForCommand(connection, '010D\r');
+    final speedCommandsBefore = _commandCount(connection, '010D\r');
+
+    final recovery = _completeNextHandshake(connection);
+    connection.failNextSends = 1;
+    connection.emit('41 0D 2A\r>');
+    await recovery;
+    await _waitUntil(
+      () => source.state == ObdSourceState.polling,
+      'polling after the first recovery',
+    );
+
+    await _waitForCommand(
+      connection,
+      '010D\r',
+      occurrence: speedCommandsBefore + 2,
+    );
+
+    final sessionStartsBefore = _commandCount(connection, 'ATZ\r');
+    connection.sendError = StateError('adapter stuck');
+    connection.emit('41 0D 2B\r>');
+    await _waitUntil(() => speeds.length == 2, 'speed after recovery');
+    await _waitUntil(
+      () => source.state == ObdSourceState.error,
+      'error after the second failure',
+    );
+
+    expect(_commandCount(connection, 'ATZ\r') - sessionStartsBefore, 2);
+
+    await source.dispose();
+    await connection.dispose();
+  });
+}
+
+Future<void> _completeNextHandshake(FakeObdConnection connection) async {
+  const steps = {
+    'ATZ\r': 'ELM327 v1.5\r>',
+    'ATE0\r': 'OK\r>',
+    'ATL0\r': 'OK\r>',
+    'ATSP0\r': 'OK\r>',
+    '0100\r': '41 00 08 18 00 00\r>',
+  };
+  final before = {
+    for (final command in steps.keys)
+      command: _commandCount(connection, command),
+  };
+
+  for (final step in steps.entries) {
+    await _waitForCommand(
+      connection,
+      step.key,
+      occurrence: before[step.key]! + 1,
+    );
+    connection.emit(step.value);
+  }
+}
+
+Future<void> _waitForCommand(
+  FakeObdConnection connection,
+  String command, {
+  int occurrence = 1,
+}) => _waitUntil(
+  () => _commandCount(connection, command) >= occurrence,
+  '$command occurrence $occurrence',
+);
+
+int _commandCount(FakeObdConnection connection, String command) =>
+    connection.sentCommands.where((sent) => sent == command).length;
+
+Future<void> _waitUntil(bool Function() condition, String description) async {
+  final deadline = DateTime.now().add(const Duration(seconds: 3));
+  while (!condition()) {
+    if (DateTime.now().isAfter(deadline)) {
+      throw StateError('Timed out waiting for $description');
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 1));
+  }
 }
