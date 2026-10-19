@@ -14,6 +14,8 @@ class FakeObdConnection implements ObdConnection {
 
   Object? sendError;
 
+  int failNextSends = 0;
+
   @override
   Stream<String> get incoming => _incomingController.stream;
 
@@ -47,8 +49,15 @@ class FakeObdConnection implements ObdConnection {
     _setConnected(true);
   }
 
+  int reconnectCalls = 0;
+
+  Future<void> Function()? onReconnect;
+
   @override
-  Future<void> reconnect() async {}
+  Future<void> reconnect() async {
+    reconnectCalls++;
+    await onReconnect?.call();
+  }
 
   @override
   Future<void> disconnect() async {
@@ -58,6 +67,11 @@ class FakeObdConnection implements ObdConnection {
   @override
   Future<void> send(String command) async {
     sentCommands.add(command);
+
+    if (failNextSends > 0) {
+      failNextSends--;
+      throw StateError('send failed');
+    }
 
     if (sendError != null) {
       throw sendError!;
