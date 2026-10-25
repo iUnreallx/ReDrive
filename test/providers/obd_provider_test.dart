@@ -473,6 +473,103 @@ void main() {
       },
     );
   });
+
+  group('ObdProvider detach', () {
+    test('stops the running source of the detached connection', () async {
+      final provider = ObdProvider();
+      final bluetooth = FakeObdConnection();
+      final wifi = FakeObdConnection();
+
+      await bluetooth.connect();
+      provider.attachConnection(bluetooth);
+      provider.setWatchlist(WatchSource.visibleScreen, {PidKey.vehicleSpeed});
+
+      final startFuture = provider.startRealMode();
+      await _completeHandshake(bluetooth);
+      await startFuture;
+
+      await _waitForCommand(bluetooth, '010D\r');
+      bluetooth.emit('41 0D 2A\r>');
+      await _waitUntil(() => provider.data.speed == 42, 'speed update');
+
+      await provider.detachConnection();
+
+      expect(provider.mode, ObdMode.idle);
+      expect(provider.state, ObdSourceState.disconnected);
+      expect(provider.isDeviceConnected, isFalse);
+      expect(provider.data.speed, 0);
+
+      final sentBeforeSwitch = bluetooth.sentCommands.length;
+
+      await wifi.connect();
+      provider.attachConnection(wifi);
+
+      final wifiStart = provider.startRealMode();
+      await _completeHandshake(wifi);
+      await wifiStart;
+
+      await _waitForCommand(wifi, '010D\r');
+      wifi.emit('41 0D 2B\r>');
+      await _waitUntil(() => provider.data.speed == 43, 'speed over Wi-Fi');
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      expect(bluetooth.sentCommands, hasLength(sentBeforeSwitch));
+      expect(provider.state, ObdSourceState.polling);
+
+      await provider.stopRealMode();
+      provider.dispose();
+      await bluetooth.dispose();
+      await wifi.dispose();
+    });
+
+    test('cancels an ELM handshake that is still running', () async {
+      final provider = ObdProvider();
+      final connection = FakeObdConnection();
+
+      await connection.connect();
+      provider.attachConnection(connection);
+
+      final startFuture = provider.startRealMode();
+      await _waitForCommand(connection, 'ATZ\r');
+
+      await provider.detachConnection();
+      await startFuture;
+      connection.emit('ELM327 v1.5\r>');
+      await pumpEventQueue();
+
+      expect(provider.mode, ObdMode.idle);
+      expect(provider.state, ObdSourceState.disconnected);
+      expect(connection.sentCommands, ['ATZ\r']);
+
+      provider.dispose();
+      await connection.dispose();
+    });
+
+    test('ignores state events of the detached connection', () async {
+      final provider = ObdProvider();
+      final connection = FakeObdConnection();
+      final errors = <Object>[];
+      provider.errors.listen(errors.add);
+
+      await connection.connect();
+      provider.attachConnection(connection);
+      await provider.detachConnection();
+
+      var notifications = 0;
+      provider.addListener(() => notifications++);
+
+      connection.setReconnecting(true);
+      await connection.disconnect();
+      await pumpEventQueue();
+
+      expect(notifications, 0);
+      expect(errors, isEmpty);
+      expect(provider.recoveryStage, ObdRecoveryStage.none);
+
+      provider.dispose();
+      await connection.dispose();
+    });
+  });
 }
 
 Future<void> _completeHandshake(

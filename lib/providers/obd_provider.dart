@@ -104,11 +104,21 @@ class ObdProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void detachConnection() {
+  Future<void> detachConnection() async {
     _connectionStateSubscription?.cancel();
     _connectionStateSubscription = null;
     _reconnectingStateSubscription?.cancel();
     _reconnectingStateSubscription = null;
+
+    if (_mode == ObdMode.real) {
+      _mode = ObdMode.idle;
+      _data = const ObdData();
+    }
+    _isResuming = false;
+    _transportReconnectUsed = false;
+    _hadData = false;
+
+    await _stopLive();
 
     _connection = null;
     notifyListeners();
