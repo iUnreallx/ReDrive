@@ -45,11 +45,6 @@ class AppLocalizations {
   String get bluetooth => _text('蓝牙', '藍牙', 'Bluetooth');
   String get wifi => _text('无线网络', '無線網路', 'Wi-Fi');
   String get usb => 'USB';
-  String get wifiDeveloping => _text(
-    'Wi‑Fi 连接功能正在开发中',
-    'Wi‑Fi 連線功能正在開發中',
-    'Wi-Fi connection is under development',
-  );
   String get usbDeveloping => _text(
     'USB 连接功能正在开发中',
     'USB 連線功能正在開發中',

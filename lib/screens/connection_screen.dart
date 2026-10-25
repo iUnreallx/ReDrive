@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:redrive/widget/connection/bluetooth/bluetooth_tab.dart';
 import 'package:redrive/widget/connection/bluetooth/bluetooth_waiting_widget.dart';
 import 'package:redrive/widget/connection/connection_screen/custom_tab_bar.dart';
+import 'package:redrive/widget/connection/wifi/wifi_tab.dart';
 
 class ConnectionScreen extends StatefulWidget {
   const ConnectionScreen({super.key});
@@ -74,12 +75,7 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
             ? const BluetoothTab()
             : BluetoothWaitingWidget(onActivate: _activateBluetooth),
 
-        Center(
-          child: Text(
-            l.wifiDeveloping,
-            style: const TextStyle(color: Colors.white54),
-          ),
-        ),
+        const WifiTab(),
 
         Center(
           child: Text(
