@@ -12,6 +12,9 @@
         <!-- legacy for Android 9 or lower -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28" />
 
+    <!-- Wi-Fi adapters are reached over a TCP socket -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:label="redrive"
         android:name="${applicationName}"

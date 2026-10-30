@@ -33,6 +33,6 @@ class BluetoothObdConnection implements ObdConnection {
 
   @override
   Future<void> disconnect() async {
-    await provider.disconnect();
+    provider.cancelConnection();
   }
 }

@@ -45,11 +45,6 @@ class AppLocalizations {
   String get bluetooth => _text('蓝牙', '藍牙', 'Bluetooth');
   String get wifi => _text('无线网络', '無線網路', 'Wi-Fi');
   String get usb => 'USB';
-  String get wifiDeveloping => _text(
-    'Wi‑Fi 连接功能正在开发中',
-    'Wi‑Fi 連線功能正在開發中',
-    'Wi-Fi connection is under development',
-  );
   String get usbDeveloping => _text(
     'USB 连接功能正在开发中',
     'USB 連線功能正在開發中',
@@ -62,6 +57,28 @@ class AppLocalizations {
     '連接 OBD2 適配器後，\n即可查看車輛即時資料。',
     'Connect your OBD2 adapter to see\nreal-time vehicle data.',
   );
+  String get wifiConnection =>
+      _text('Wi‑Fi 连接', 'Wi‑Fi 連線', 'Wi-Fi Connection');
+  String get wifiDescription => _text(
+    '请先连接适配器的 Wi‑Fi 网络，\n然后输入其地址。',
+    '請先連接適配器的 Wi‑Fi 網路，\n然後輸入其位址。',
+    "Join the adapter's Wi-Fi network,\nthen enter its address.",
+  );
+  String get ipAddress => _text('IP 地址', 'IP 位址', 'IP address');
+  String get port => _text('端口', '連接埠', 'Port');
+  String get disconnect => _text('断开连接', '中斷連線', 'Disconnect');
+  String get notConnected => _text('未连接', '未連線', 'Not connected');
+  String connectingTo(String target) =>
+      _text('正在连接 $target...', '正在連線 $target...', 'Connecting to $target...');
+  String connectedTo(String target) =>
+      _text('已连接到 $target', '已連線到 $target', 'Connected to $target');
+  String get invalidAddress => _text(
+    '请输入有效的 IP 地址和端口',
+    '請輸入有效的 IP 位址和連接埠',
+    'Enter a valid IP address and port',
+  );
+  String adapterNotResponding(String target) =>
+      _text('$target 无响应', '$target 無回應', 'No response from $target');
   String get startScanning => _text('开始扫描', '開始掃描', 'Start Scanning');
   String get scanning => _text('扫描中...', '掃描中...', 'Scanning...');
   String get scanningComplete => _text('扫描完成', '掃描完成', 'Scanning complete');
