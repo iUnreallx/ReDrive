@@ -1,0 +1,246 @@
+{
+  "@@locale": "en",
+  "home": "Home",
+  "@home": {
+    "description": "Bottom bar tab: home screen"
+  },
+  "dashboard": "Dashboard",
+  "@dashboard": {
+    "description": "Bottom bar tab: live data dashboard"
+  },
+  "connection": "Connection",
+  "@connection": {
+    "description": "Bottom bar tab: adapter connection"
+  },
+  "garage": "Garage",
+  "@garage": {
+    "description": "Bottom bar tab: saved vehicles"
+  },
+  "dtc": "DTC",
+  "@dtc": {
+    "description": "Bottom bar tab: d iagnostic trouble codes"
+  },
+  "speed": "Speed",
+  "@speed": {
+    "description": "Gauge label for vehicle speed"
+  },
+  "rpm": "RPM",
+  "@rpm": {
+    "description": "Gauge label for engine revolutions per minute"
+  },
+  "preparing": "Preparing connection...",
+  "@preparing": {
+    "description": "Connection status: before the connection starts"
+  },
+  "connectingEcu": "Connecting to ECU...",
+  "@connectingEcu": {
+    "description": "Connection status: talking to the car ECU"
+  },
+  "initializing": "Initializing ELM327...",
+  "@initializing": {
+    "description": "Connection status: setting up the adapter"
+  },
+  "connected": "Connected",
+  "@connected": {
+    "description": "Connection status: connected"
+  },
+  "recovering": "Recovering connection...",
+  "@recovering": {
+    "description": "Connection status: automatic recovery in progress"
+  },
+  "connectionError": "Connection error",
+  "@connectionError": {
+    "description": "Connection status: failed"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings title"
+  },
+  "bluetooth": "Bluetooth",
+  "@bluetooth": {
+    "description": "Connection type tab"
+  },
+  "wifi": "Wi-Fi",
+  "@wifi": {
+    "description": "Connection type tab"
+  },
+  "usb": "USB",
+  "@usb": {
+    "description": "Connection type tab"
+  },
+  "usbDeveloping": "USB connection is under development",
+  "@usbDeveloping": {
+    "description": "Placeholder text on the USB tab"
+  },
+  "bluetoothConnection": "Bluetooth Connection",
+  "@bluetoothConnection": {
+    "description": "Title of the Bluetooth tab"
+  },
+  "bluetoothDescription": "Connect your OBD2 adapter to see\nreal-time vehicle data.",
+  "@bluetoothDescription": {
+    "description": "Hint under the Bluetooth tab title. The line break is intentional"
+  },
+  "wifiConnection": "Wi-Fi Connection",
+  "@wifiConnection": {
+    "description": "Title of the Wi-Fi tab"
+  },
+  "wifiDescription": "Join the adapter's Wi-Fi network,\nthen enter its address.",
+  "@wifiDescription": {
+    "description": "Hint under the Wi-Fi tab title. The line break is intentional"
+  },
+  "ipAddress": "IP address",
+  "@ipAddress": {
+    "description": "Wi-Fi tab: address field label"
+  },
+  "port": "Port",
+  "@port": {
+    "description": "Wi-Fi tab: port field label"
+  },
+  "disconnect": "Disconnect",
+  "@disconnect": {
+    "description": "Button: disconnect from the adapter"
+  },
+  "notConnected": "Not connected",
+  "@notConnected": {
+    "description": "Status: no adapter connected"
+  },
+  "connectingTo": "Connecting to {target}...",
+  "@connectingTo": {
+    "description": "Status while connecting to an adapter",
+    "placeholders": {
+      "target": {
+        "type": "String",
+        "example": "192.168.0.10:35000"
+      }
+    }
+  },
+  "connectedTo": "Connected to {target}",
+  "@connectedTo": {
+    "description": "Status after connecting to an adapter",
+    "placeholders": {
+      "target": {
+        "type": "String",
+        "example": "192.168.0.10:35000"
+      }
+    }
+  },
+  "invalidAddress": "Enter a valid IP address and port",
+  "@invalidAddress": {
+    "description": "Validation error on the Wi-Fi tab"
+  },
+  "adapterNotResponding": "No response from {target}",
+  "@adapterNotResponding": {
+    "description": "Error when the adapter does not answer",
+    "placeholders": {
+      "target": {
+        "type": "String",
+        "example": "192.168.0.10:35000"
+      }
+    }
+  },
+  "startScanning": "Start Scanning",
+  "@startScanning": {
+    "description": "Button: start searching for Bluetooth devices"
+  },
+  "scanning": "Scanning...",
+  "@scanning": {
+    "description": "Status while searching for Bluetooth devices"
+  },
+  "scanningComplete": "Scanning complete",
+  "@scanningComplete": {
+    "description": "Status after the search finished"
+  },
+  "searchingAdapter": "Searching for your adapter...",
+  "@searchingAdapter": {
+    "description": "Hint while searching for the adapter"
+  },
+  "devicesFound": "{n, plural, =1{Found {n} device} other{Found {n} devices}}",
+  "@devicesFound": {
+    "description": "Number of Bluetooth devices found",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "permissionTitle": "Bluetooth access required",
+  "@permissionTitle": {
+    "description": "Title when the Bluetooth permission is missing"
+  },
+  "permissionDescription": "Bluetooth permission was permanently denied. Please enable it from app settings.",
+  "@permissionDescription": {
+    "description": "Explanation when the Bluetooth permission is permanently denied"
+  },
+  "openSettings": "Open settings",
+  "@openSettings": {
+    "description": "Button: open system app settings"
+  },
+  "garageTitle": "My Garage",
+  "@garageTitle": {
+    "description": "Title of the garage screen"
+  },
+  "garageDescription": "Your vehicles will appear here",
+  "@garageDescription": {
+    "description": "Hint on the garage screen"
+  },
+  "noVehicles": "No vehicles",
+  "@noVehicles": {
+    "description": "Empty state title on the garage screen"
+  },
+  "addFirstVehicle": "Add your first\nvehicle",
+  "@addFirstVehicle": {
+    "description": "Empty state text on the garage screen. The line break is intentional"
+  },
+  "addVehicle": "Add vehicle",
+  "@addVehicle": {
+    "description": "Button: add a vehicle"
+  },
+  "vehicleConnected": "Vehicle is connected",
+  "@vehicleConnected": {
+    "description": "Status on the home screen"
+  },
+  "connect": "Connect",
+  "@connect": {
+    "description": "Button: connect to the vehicle"
+  },
+  "disconnectDemo": "Disconnect",
+  "@disconnectDemo": {
+    "description": "Button: stop the demo mode"
+  },
+  "viewDemo": "View demo",
+  "@viewDemo": {
+    "description": "Button: start the demo mode"
+  },
+  "connectAdapterFirst": "Connect a Bluetooth, Wi-Fi, or USB adapter first",
+  "@connectAdapterFirst": {
+    "description": "Hint when no adapter is connected"
+  },
+  "ecuFailed": "Unable to connect to ECU",
+  "@ecuFailed": {
+    "description": "Error: the car ECU did not answer"
+  },
+  "disconnectEcuFirst": "Disconnect from the ECU first",
+  "@disconnectEcuFirst": {
+    "description": "Hint: the ECU connection must be closed before the demo"
+  },
+  "bannerRestoring": "Restoring connection",
+  "@bannerRestoring": {
+    "description": "Banner while the OBD session is being restored"
+  },
+  "bannerReconnecting": "Reconnecting",
+  "@bannerReconnecting": {
+    "description": "Banner while the Bluetooth link is being reopened"
+  },
+  "reconnectWait": "Reconnecting, please wait",
+  "@reconnectWait": {
+    "description": "Message while a reconnect is in progress"
+  },
+  "connectionLost": "Connection lost. Please connect again",
+  "@connectionLost": {
+    "description": "Message after all recovery attempts failed"
+  }
+}
