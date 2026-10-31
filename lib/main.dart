@@ -47,22 +47,8 @@ class RedriveApp extends StatelessWidget {
     return MaterialApp(
       title: 'Redrive OBD2',
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [AppLocalizations.delegate],
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      localeResolutionCallback: (locale, supported) {
-        if (locale?.languageCode.toLowerCase() == 'zh') {
-          final region = (locale?.countryCode ?? '').toUpperCase();
-          final script = (locale?.scriptCode ?? '').toLowerCase();
-          if (script == 'hant' ||
-              region == 'HK' ||
-              region == 'MO' ||
-              region == 'TW') {
-            return Locale('zh', region.isEmpty ? 'TW' : region);
-          }
-          return const Locale('zh', 'CN');
-        }
-        return const Locale('en');
-      },
       theme: AppThemes.darkTheme,
       home: const RootScreen(),
     );

@@ -1,154 +1,481 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
 
-/// App strings selected from the system locale.
-/// zh-SG and other zh-* locales default to Simplified Chinese, while
-/// zh-HK, zh-MO, zh-TW, and zh-Hant use Traditional Chinese.
-class AppLocalizations {
-  final Locale locale;
-  const AppLocalizations(this.locale);
+import 'app_localizations_en.dart';
+import 'app_localizations_ru.dart';
+import 'app_localizations_zh.dart';
 
-  bool get isChinese => locale.languageCode.toLowerCase() == 'zh';
-  bool get isTraditionalChinese {
-    if (!isChinese) return false;
-    final region = (locale.countryCode ?? '').toUpperCase();
-    final script = (locale.scriptCode ?? '').toLowerCase();
-    return script == 'hant' ||
-        region == 'HK' ||
-        region == 'MO' ||
-        region == 'TW';
+// ignore_for_file: type=lint
+
+/// Callers can lookup localized strings with an instance of AppLocalizations
+/// returned by `AppLocalizations.of(context)`.
+///
+/// Applications need to include `AppLocalizations.delegate()` in their app's
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
+///
+/// ```dart
+/// import 'l10n/app_localizations.dart';
+///
+/// return MaterialApp(
+///   localizationsDelegates: AppLocalizations.localizationsDelegates,
+///   supportedLocales: AppLocalizations.supportedLocales,
+///   home: MyApplicationHome(),
+/// );
+/// ```
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the AppLocalizations.supportedLocales
+/// property.
+abstract class AppLocalizations {
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+
+  final String localeName;
+
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  String _text(String simplified, String traditional, String english) {
-    if (!isChinese) return english;
-    return isTraditionalChinese ? traditional : simplified;
-  }
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
-  String get home => _text('主页', '首頁', 'Home');
-  String get dashboard => _text('仪表盘', '儀表板', 'Dashboard');
-  String get connection => _text('连接', '連線', 'Connection');
-  String get garage => _text('车库', '車庫', 'Garage');
-  String get dtc => _text('故障码', '故障碼', 'DTC');
-  String get speed => _text('车速', '車速', 'Speed');
-  String get rpm => _text('转速', '轉速', 'RPM');
-  String get preparing =>
-      _text('准备连接...', '準備連線...', 'Preparing connection...');
-  String get connectingEcu =>
-      _text('正在连接车辆 ECU...', '正在連線車輛 ECU...', 'Connecting to ECU...');
-  String get initializing =>
-      _text('正在初始化 ELM327...', '正在初始化 ELM327...', 'Initializing ELM327...');
-  String get connected => _text('已连接', '已連線', 'Connected');
-  String get recovering =>
-      _text('正在恢复连接...', '正在恢復連線...', 'Recovering connection...');
-  String get connectionError => _text('连接错误', '連線錯誤', 'Connection error');
-  String get cancel => _text('取消', '取消', 'Cancel');
-  String get settings => _text('设置', '設定', 'Settings');
-  String get bluetooth => _text('蓝牙', '藍牙', 'Bluetooth');
-  String get wifi => _text('无线网络', '無線網路', 'Wi-Fi');
-  String get usb => 'USB';
-  String get usbDeveloping => _text(
-    'USB 连接功能正在开发中',
-    'USB 連線功能正在開發中',
-    'USB connection is under development',
-  );
-  String get bluetoothConnection =>
-      _text('蓝牙连接', '藍牙連線', 'Bluetooth Connection');
-  String get bluetoothDescription => _text(
-    '连接 OBD2 适配器后，\n即可查看车辆实时数据。',
-    '連接 OBD2 適配器後，\n即可查看車輛即時資料。',
-    'Connect your OBD2 adapter to see\nreal-time vehicle data.',
-  );
-  String get wifiConnection =>
-      _text('Wi‑Fi 连接', 'Wi‑Fi 連線', 'Wi-Fi Connection');
-  String get wifiDescription => _text(
-    '请先连接适配器的 Wi‑Fi 网络，\n然后输入其地址。',
-    '請先連接適配器的 Wi‑Fi 網路，\n然後輸入其位址。',
-    "Join the adapter's Wi-Fi network,\nthen enter its address.",
-  );
-  String get ipAddress => _text('IP 地址', 'IP 位址', 'IP address');
-  String get port => _text('端口', '連接埠', 'Port');
-  String get disconnect => _text('断开连接', '中斷連線', 'Disconnect');
-  String get notConnected => _text('未连接', '未連線', 'Not connected');
-  String connectingTo(String target) =>
-      _text('正在连接 $target...', '正在連線 $target...', 'Connecting to $target...');
-  String connectedTo(String target) =>
-      _text('已连接到 $target', '已連線到 $target', 'Connected to $target');
-  String get invalidAddress => _text(
-    '请输入有效的 IP 地址和端口',
-    '請輸入有效的 IP 位址和連接埠',
-    'Enter a valid IP address and port',
-  );
-  String adapterNotResponding(String target) =>
-      _text('$target 无响应', '$target 無回應', 'No response from $target');
-  String get startScanning => _text('开始扫描', '開始掃描', 'Start Scanning');
-  String get scanning => _text('扫描中...', '掃描中...', 'Scanning...');
-  String get scanningComplete => _text('扫描完成', '掃描完成', 'Scanning complete');
-  String get searchingAdapter =>
-      _text('正在搜索适配器...', '正在搜尋適配器...', 'Searching for your adapter...');
-  String devicesFound(int n) =>
-      _text('发现 $n 个设备', '找到 $n 個裝置', 'Found $n devices');
-  String get permissionTitle =>
-      _text('蓝牙权限不足', '藍牙權限不足', 'Bluetooth access required');
-  String get permissionDescription => _text(
-    '蓝牙权限已被永久拒绝，请前往系统设置开启。',
-    '藍牙權限已被永久拒絕，請前往系統設定開啟。',
-    'Bluetooth permission was permanently denied. Please enable it from app settings.',
-  );
-  String get openSettings => _text('打开设置', '開啟設定', 'Open settings');
-  String get garageTitle => _text('我的车库', '我的車庫', 'My Garage');
-  String get garageDescription =>
-      _text('这里将显示你的车辆', '這裡將顯示你的車輛', 'Your vehicles will appear here');
-  String get noVehicles => _text('暂无车辆', '暫無車輛', 'No vehicles');
-  String get addFirstVehicle =>
-      _text('添加你的第一辆\n汽车', '新增你的第一輛\n汽車', 'Add your first\nvehicle');
-  String get addVehicle => _text('添加车辆', '新增車輛', 'Add vehicle');
-  String get vehicleConnected =>
-      _text('车辆已连接', '車輛已連線', 'Vehicle is connected');
-  String get connect => _text('连接', '連線', 'Connect');
-  String get disconnectDemo => _text('断开演示', '中斷示範', 'Disconnect');
-  String get viewDemo => _text('查看演示', '查看示範', 'View demo');
-  String get connectAdapterFirst => _text(
-    '请先连接蓝牙、Wi‑Fi 或 USB 适配器',
-    '請先連接藍牙、Wi‑Fi 或 USB 適配器',
-    'Connect a Bluetooth, Wi-Fi, or USB adapter first',
-  );
-  String get ecuFailed =>
-      _text('无法连接到车辆 ECU', '無法連線到車輛 ECU', 'Unable to connect to ECU');
-  String get disconnectEcuFirst =>
-      _text('请先断开车辆 ECU 连接', '請先中斷車輛 ECU 連線', 'Disconnect from the ECU first');
-  String get bannerRestoring =>
-      _text('正在恢复连接', '正在恢復連線', 'Restoring connection');
-  String get bannerReconnecting => _text('正在重新连接', '正在重新連線', 'Reconnecting');
-  String get reconnectWait =>
-      _text('正在重新连接，请稍候', '正在重新連線，請稍候', 'Reconnecting, please wait');
-  String get connectionLost => _text(
-    '连接已断开，请重新连接',
-    '連線已中斷，請重新連線',
-    'Connection lost. Please connect again',
-  );
+  /// A list of this localizations delegate along with the default localizations
+  /// delegates.
+  ///
+  /// Returns a list of localizations delegates containing this delegate along with
+  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+  /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
-  static const delegate = _AppLocalizationsDelegate();
-  static const supportedLocales = [
+  /// A list of this localizations delegate's supported locales.
+  static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
+    Locale('ru'),
     Locale('zh'),
-    Locale('zh', 'SG'),
-    Locale('zh', 'HK'),
-    Locale('zh', 'MO'),
-    Locale('zh', 'TW'),
+    Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
   ];
-  static AppLocalizations of(BuildContext context) =>
-      Localizations.of<AppLocalizations>(context, AppLocalizations)!;
+
+  /// Bottom bar tab: home screen
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// Bottom bar tab: live data dashboard
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboard;
+
+  /// Bottom bar tab: adapter connection
+  ///
+  /// In en, this message translates to:
+  /// **'Connection'**
+  String get connection;
+
+  /// Bottom bar tab: saved vehicles
+  ///
+  /// In en, this message translates to:
+  /// **'Garage'**
+  String get garage;
+
+  /// Bottom bar tab: d iagnostic trouble codes
+  ///
+  /// In en, this message translates to:
+  /// **'DTC'**
+  String get dtc;
+
+  /// Gauge label for vehicle speed
+  ///
+  /// In en, this message translates to:
+  /// **'Speed'**
+  String get speed;
+
+  /// Gauge label for engine revolutions per minute
+  ///
+  /// In en, this message translates to:
+  /// **'RPM'**
+  String get rpm;
+
+  /// Connection status: before the connection starts
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing connection...'**
+  String get preparing;
+
+  /// Connection status: talking to the car ECU
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to ECU...'**
+  String get connectingEcu;
+
+  /// Connection status: setting up the adapter
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing ELM327...'**
+  String get initializing;
+
+  /// Connection status: connected
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get connected;
+
+  /// Connection status: automatic recovery in progress
+  ///
+  /// In en, this message translates to:
+  /// **'Recovering connection...'**
+  String get recovering;
+
+  /// Connection status: failed
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error'**
+  String get connectionError;
+
+  /// Cancel button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Settings title
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// Connection type tab
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth'**
+  String get bluetooth;
+
+  /// Connection type tab
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi'**
+  String get wifi;
+
+  /// Connection type tab
+  ///
+  /// In en, this message translates to:
+  /// **'USB'**
+  String get usb;
+
+  /// Placeholder text on the USB tab
+  ///
+  /// In en, this message translates to:
+  /// **'USB connection is under development'**
+  String get usbDeveloping;
+
+  /// Title of the Bluetooth tab
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth Connection'**
+  String get bluetoothConnection;
+
+  /// Hint under the Bluetooth tab title. The line break is intentional
+  ///
+  /// In en, this message translates to:
+  /// **'Connect your OBD2 adapter to see\nreal-time vehicle data.'**
+  String get bluetoothDescription;
+
+  /// Title of the Wi-Fi tab
+  ///
+  /// In en, this message translates to:
+  /// **'Wi-Fi Connection'**
+  String get wifiConnection;
+
+  /// Hint under the Wi-Fi tab title. The line break is intentional
+  ///
+  /// In en, this message translates to:
+  /// **'Join the adapter\'s Wi-Fi network,\nthen enter its address.'**
+  String get wifiDescription;
+
+  /// Wi-Fi tab: address field label
+  ///
+  /// In en, this message translates to:
+  /// **'IP address'**
+  String get ipAddress;
+
+  /// Wi-Fi tab: port field label
+  ///
+  /// In en, this message translates to:
+  /// **'Port'**
+  String get port;
+
+  /// Button: disconnect from the adapter
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect'**
+  String get disconnect;
+
+  /// Status: no adapter connected
+  ///
+  /// In en, this message translates to:
+  /// **'Not connected'**
+  String get notConnected;
+
+  /// Status while connecting to an adapter
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to {target}...'**
+  String connectingTo(String target);
+
+  /// Status after connecting to an adapter
+  ///
+  /// In en, this message translates to:
+  /// **'Connected to {target}'**
+  String connectedTo(String target);
+
+  /// Validation error on the Wi-Fi tab
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid IP address and port'**
+  String get invalidAddress;
+
+  /// Error when the adapter does not answer
+  ///
+  /// In en, this message translates to:
+  /// **'No response from {target}'**
+  String adapterNotResponding(String target);
+
+  /// Button: start searching for Bluetooth devices
+  ///
+  /// In en, this message translates to:
+  /// **'Start Scanning'**
+  String get startScanning;
+
+  /// Status while searching for Bluetooth devices
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning...'**
+  String get scanning;
+
+  /// Status after the search finished
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning complete'**
+  String get scanningComplete;
+
+  /// Hint while searching for the adapter
+  ///
+  /// In en, this message translates to:
+  /// **'Searching for your adapter...'**
+  String get searchingAdapter;
+
+  /// Number of Bluetooth devices found
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{Found {n} device} other{Found {n} devices}}'**
+  String devicesFound(int n);
+
+  /// Title when the Bluetooth permission is missing
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth access required'**
+  String get permissionTitle;
+
+  /// Explanation when the Bluetooth permission is permanently denied
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth permission was permanently denied. Please enable it from app settings.'**
+  String get permissionDescription;
+
+  /// Button: open system app settings
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get openSettings;
+
+  /// Title of the garage screen
+  ///
+  /// In en, this message translates to:
+  /// **'My Garage'**
+  String get garageTitle;
+
+  /// Hint on the garage screen
+  ///
+  /// In en, this message translates to:
+  /// **'Your vehicles will appear here'**
+  String get garageDescription;
+
+  /// Empty state title on the garage screen
+  ///
+  /// In en, this message translates to:
+  /// **'No vehicles'**
+  String get noVehicles;
+
+  /// Empty state text on the garage screen. The line break is intentional
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first\nvehicle'**
+  String get addFirstVehicle;
+
+  /// Button: add a vehicle
+  ///
+  /// In en, this message translates to:
+  /// **'Add vehicle'**
+  String get addVehicle;
+
+  /// Status on the home screen
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle is connected'**
+  String get vehicleConnected;
+
+  /// Button: connect to the vehicle
+  ///
+  /// In en, this message translates to:
+  /// **'Connect'**
+  String get connect;
+
+  /// Button: stop the demo mode
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect'**
+  String get disconnectDemo;
+
+  /// Button: start the demo mode
+  ///
+  /// In en, this message translates to:
+  /// **'View demo'**
+  String get viewDemo;
+
+  /// Hint when no adapter is connected
+  ///
+  /// In en, this message translates to:
+  /// **'Connect a Bluetooth, Wi-Fi, or USB adapter first'**
+  String get connectAdapterFirst;
+
+  /// Error: the car ECU did not answer
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to connect to ECU'**
+  String get ecuFailed;
+
+  /// Hint: the ECU connection must be closed before the demo
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnect from the ECU first'**
+  String get disconnectEcuFirst;
+
+  /// Banner while the OBD session is being restored
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring connection'**
+  String get bannerRestoring;
+
+  /// Banner while the Bluetooth link is being reopened
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting'**
+  String get bannerReconnecting;
+
+  /// Message while a reconnect is in progress
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting, please wait'**
+  String get reconnectWait;
+
+  /// Message after all recovery attempts failed
+  ///
+  /// In en, this message translates to:
+  /// **'Connection lost. Please connect again'**
+  String get connectionLost;
 }
 
 class _AppLocalizationsDelegate
     extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
+
+  @override
+  Future<AppLocalizations> load(Locale locale) {
+    return SynchronousFuture<AppLocalizations>(lookupAppLocalizations(locale));
+  }
+
   @override
   bool isSupported(Locale locale) =>
-      locale.languageCode.toLowerCase() == 'en' ||
-      locale.languageCode.toLowerCase() == 'zh';
-  @override
-  Future<AppLocalizations> load(Locale locale) async =>
-      AppLocalizations(locale);
+      <String>['en', 'ru', 'zh'].contains(locale.languageCode);
+
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
+}
+
+AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when language+script codes are specified.
+  switch (locale.languageCode) {
+    case 'zh':
+      {
+        switch (locale.scriptCode) {
+          case 'Hant':
+            return AppLocalizationsZhHant();
+        }
+        break;
+      }
+  }
+
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'en':
+      return AppLocalizationsEn();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'zh':
+      return AppLocalizationsZh();
+  }
+
+  throw FlutterError(
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }
