@@ -1,4 +1,5 @@
 import 'elm_response.dart';
+import 'elm_multiframe.dart';
 
 class ElmResponseParser {
   const ElmResponseParser();
@@ -109,6 +110,17 @@ class ElmResponseParser {
           raw: raw,
           lines: responseLines,
           wasSearching: wasSearching,
+        );
+      }
+
+      final List<int>? multiFrame = assembleMultiFrame(responseLines);
+      if (multiFrame != null) {
+        return ElmResponse(
+          type: ElmResponseType.multiFrame,
+          raw: raw,
+          lines: responseLines,
+          wasSearching: wasSearching,
+          assembledBytes: multiFrame,
         );
       }
     }
