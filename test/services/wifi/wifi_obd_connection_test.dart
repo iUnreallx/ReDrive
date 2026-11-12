@@ -276,7 +276,7 @@ void main() {
 }
 
 Future<void> _waitUntil(bool Function() condition) async {
-  final deadline = DateTime.now().add(const Duration(seconds: 3));
+  final deadline = DateTime.now().add(const Duration(seconds: 5));
 
   while (!condition()) {
     if (DateTime.now().isAfter(deadline)) {

@@ -134,4 +134,58 @@ void main() {
     expect(response.type, ElmResponseType.malformed);
     expect(response.lines, isEmpty);
   });
+
+  test('parses multi-frame response', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse(
+      '014\r'
+      '0: 49 02 01 31 44 34\r'
+      '1: 47 50 30 30 52 35 35\r'
+      '2: 42 31 32 33 34 35 36\r'
+      '\r>',
+    );
+
+    expect(response.type, ElmResponseType.multiFrame);
+    expect(response.assembledBytes, hasLength(20));
+    expect(response.assembledBytes!.take(3), [0x49, 0x02, 0x01]);
+  });
+
+  test('parses multi-frame response after SEARCHING', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse(
+      'SEARCHING...\r'
+      '006\r'
+      '0: 01 02 03 04 05 06\r'
+      '\r>',
+    );
+
+    expect(response.type, ElmResponseType.multiFrame);
+    expect(response.assembledBytes, [1, 2, 3, 4, 5, 6]);
+    expect(response.wasSearching, isTrue);
+  });
+
+  test('returns malformed for multi-frame response with a missing part', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse(
+      '014\r'
+      '0: 49 02 01 31 44 34\r'
+      '2: 42 31 32 33 34 35 36\r'
+      '\r>',
+    );
+
+    expect(response.type, ElmResponseType.malformed);
+    expect(response.assembledBytes, isNull);
+  });
+
+  test('keeps single-frame data response without assembled bytes', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse('41 0D 2A\r>');
+
+    expect(response.type, ElmResponseType.data);
+    expect(response.assembledBytes, isNull);
+  });
 }
