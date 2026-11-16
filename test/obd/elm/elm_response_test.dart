@@ -27,6 +27,26 @@ void main() {
     expect(response.wasSearching, isFalse);
   });
 
+  test('parses an empty Mode 03 response', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse('43 00\r>');
+
+    expect(response.type, ElmResponseType.data);
+    expect(response.lines, ['43 00']);
+    expect(response.wasSearching, isFalse);
+  });
+
+  test('parses a positive Mode 04 response', () {
+    const parser = ElmResponseParser();
+
+    final response = parser.parse('44\r>');
+
+    expect(response.type, ElmResponseType.data);
+    expect(response.lines, ['44']);
+    expect(response.wasSearching, isFalse);
+  });
+
   test('parses OK response', () {
     const parser = ElmResponseParser();
 
