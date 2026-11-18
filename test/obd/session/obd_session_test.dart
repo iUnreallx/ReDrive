@@ -43,9 +43,47 @@ void main() {
     ]);
 
     connection.emit('41 00 08 18 00 00\r>');
+    await pumpEventQueue();
+    expect(connection.sentCommands.last, 'ATDPN\r');
+    expect(session.state, ObdSessionState.initializing);
+
+    connection.emit('A6\r>');
     final supportedPids = await initialization;
 
     expect(supportedPids, {5, 12, 13});
+    expect(session.protocolNumber, 6);
+    expect(session.state, ObdSessionState.ready);
+    expect(session.lastError, isNull);
+  });
+
+  test('keeps the session ready when ATDPN returns ?', () async {
+    final connection = FakeObdConnection();
+    final client = ElmClient(connection: connection);
+    final session = ObdSession(elmClient: client);
+
+    addTearDown(() async {
+      await client.dispose();
+      await connection.dispose();
+    });
+
+    final initialization = session.initialize();
+    const replies = {
+      'ATZ\r': 'ELM327 v1.5\r>',
+      'ATE0\r': 'OK\r>',
+      'ATL0\r': 'OK\r>',
+      'ATSP0\r': 'OK\r>',
+      '0100\r': '41 00 08 18 00 00\r>',
+      'ATDPN\r': '?\r>',
+    };
+
+    for (final reply in replies.entries) {
+      expect(connection.sentCommands.last, reply.key);
+      connection.emit(reply.value);
+      await pumpEventQueue();
+    }
+
+    expect(await initialization, {5, 12, 13});
+    expect(session.protocolNumber, isNull);
     expect(session.state, ObdSessionState.ready);
     expect(session.lastError, isNull);
   });
@@ -71,6 +109,8 @@ void main() {
     connection.emit('OK\r>');
     await pumpEventQueue();
     connection.emit('41 0C 08 18 00 00\r>');
+    await pumpEventQueue();
+    connection.emit('A6\r>');
 
     await expectLater(initialization, throwsA(isA<FormatException>()));
 
