@@ -79,6 +79,8 @@ class FakeElm327Server {
         answer = 'OK';
       case '0100':
         answer = 'SEARCHING...\r41 00 BE 3F A8 13';
+      case 'ATDPN':
+        answer = 'A6';
       case '010C':
         answer = '41 0C 1A F8';
       case '010D':
