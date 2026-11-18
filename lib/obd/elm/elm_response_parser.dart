@@ -34,6 +34,17 @@ class ElmResponseParser {
   static bool _isObdDataLine(String line) {
     final bytes = line.split(RegExp(r'\s+'));
 
+    // obd error DTC response
+    if (bytes.length == 2 && bytes[0] == "43" && bytes[1] == "00") {
+      return true;
+    }
+
+    // obd error clean's response
+    if (bytes.length == 1 && bytes[0] == "44") {
+      return true;
+    }
+
+    // standart obd response
     if (bytes.length < 3) {
       return false;
     }

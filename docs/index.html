@@ -1,205 +1,279 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en" data-lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ReDrive — open-source OBD2 приложение</title>
-  <meta name="description" content="ReDrive — open-source Flutter приложение для OBD2: телеметрия, подключение к ELM327, диагностика и чистый UI без рекламы." />
-  <meta name="theme-color" content="#0b0d0a" />
-  <meta property="og:title" content="ReDrive — drive smarter" />
-  <meta property="og:description" content="Открытая OBD2-платформа для водителей и контрибьюторов." />
-  <meta property="og:image" content="assets/redrive-logo.webp" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ReDrive · your car, in numbers</title>
+<meta name="description" content="ReDrive is a free, open-source OBD2 app. Plug in an ELM327 adapter and read your engine in real time: RPM, speed, coolant temperature and voltage. No ads, no subscriptions.">
+<meta name="theme-color" content="#0A0B0C">
+<meta property="og:title" content="ReDrive · your car, in numbers">
+<meta property="og:description" content="Free, open-source OBD2 app. No ads, no subscriptions.">
+<meta property="og:image" content="assets/redrive-car.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script>
+  (() => {
+    let l; try { l = localStorage.getItem('rd-lang'); } catch (e) {}
+    const q = new URLSearchParams(location.search).get('lang');
+    if (q === 'ru' || q === 'en') l = q;
+    if (l !== 'ru' && l !== 'en') l = (navigator.language || '').toLowerCase().startsWith('ru') ? 'ru' : 'en';
+    document.documentElement.dataset.lang = l;
+    document.documentElement.lang = l;
+    document.documentElement.classList.add('js');
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112.5,400;75..112.5,500&family=Sofia+Sans+Extra+Condensed:wght@700;800&family=Sofia+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="noise" aria-hidden="true"></div>
-  <header class="topbar" data-elevate>
-    <a class="brand" href="#top" aria-label="ReDrive home">
-      <span class="brand-mark">R</span>
-      <span>Re<span>Drive</span></span>
-    </a>
-    <nav class="nav" aria-label="Основная навигация">
-      <a href="#features">Возможности</a>
-      <a href="#architecture">Архитектура</a>
-      <a href="#roadmap">Roadmap</a>
-      <a href="#contribute">Контрибьютинг</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gh" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .8.1-.7.4-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></symbol>
+  <symbol id="tg" viewBox="0 0 24 24"><path fill="currentColor" d="M21.9 4.3 18.7 19.4c-.2 1-.9 1.3-1.7.8l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8c.4-.3-.1-.5-.6-.2L6.5 13.2l-4.7-1.5c-1-.3-1-1 .2-1.5L20.5 3c.9-.3 1.6.2 1.4 1.3z"/></symbol>
+  <symbol id="arr" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+  <symbol id="ok" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="no" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="m7 7 10 10M17 7 7 17"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path fill="currentColor" d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5-5.9-3.1-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></symbol>
+</svg>
+<header class="nav" id="nav">
+  <a class="logo" href="#top"><img src="assets/icon-redrive.webp" alt="" width="26" height="26"><span>ReDrive</span></a>
+  <nav class="nav-links">
+    <a href="#how"><span lang="en">How it works</span><span lang="ru">Как работает</span></a>
+    <a href="#features"><span lang="en">Features</span><span lang="ru">Возможности</span></a>
+    <a href="#app"><span lang="en">The app</span><span lang="ru">Приложение</span></a>
+    <a href="#faq"><span lang="en">FAQ</span><span lang="ru">Вопросы</span></a>
+  </nav>
+  <div class="nav-end">
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-set="en">EN</button><button type="button" data-set="ru">RU</button>
+    </div>
+    <a class="btn btn-sm btn-lime nav-gh" href="https://github.com/iUnreallx/ReDrive" target="_blank" rel="noopener"><svg><use href="#gh"/></svg>GitHub</a>
+  </div>
+</header>
+<main id="top">
+<section class="hero hB">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-copy">
+    <h1 class="h1"><span lang="en"><span class="ln">Your car,</span><span class="ln"><mark>in numbers.</mark></span></span><span lang="ru"><span class="ln">Машина</span><span class="ln"><mark>в&nbsp;цифрах.</mark></span></span></h1>
+    <p class="lead">
+      <span lang="en">Plug a cheap ELM327 adapter into the OBD-II port and read your engine in real time. Free, open source, no ads, no subscriptions.</span>
+      <span lang="ru">Вставь недорогой адаптер ELM327 в разъём OBD-II и смотри данные двигателя в реальном времени. Бесплатно, с&nbsp;открытым кодом, без рекламы и подписок.</span>
+    </p>
+    <div class="cta">
+      <a class="btn btn-lime" href="https://github.com/iUnreallx/ReDrive" target="_blank" rel="noopener"><svg><use href="#gh"/></svg><span lang="en">Get ReDrive on GitHub</span><span lang="ru">ReDrive на GitHub</span></a>
+      <a class="btn btn-ghost" href="#how"><span lang="en">How it works</span><span lang="ru">Как это работает</span><svg><use href="#arr"/></svg></a>
+    </div>
+    <ul class="trust">
+      <li><svg><use href="#ok"/></svg><span lang="en">Free forever</span><span lang="ru">Бесплатно навсегда</span></li>
+      <li><svg><use href="#ok"/></svg><span lang="en">No ads</span><span lang="ru">Без рекламы</span></li>
+      <li data-stars-wrap hidden><svg><use href="#star"/></svg><span><b data-stars></b> <span lang="en">stars on GitHub</span><span lang="ru">звёзд на GitHub</span></span></li>
+    </ul>
+  </div>
+  <div class="stageB" data-callouts>
+    <div class="floor" aria-hidden="true"></div>
+    <figure class="carB"><img src="assets/redrive-car.webp" alt="" width="1791" height="853"></figure>
+    <span class="pin" data-at="32,44" aria-hidden="true"></span>
+    <span class="pin" data-at="26,70" aria-hidden="true"></span>
+    <span class="pin" data-at="58,74" aria-hidden="true"></span>
+    <div class="tag-live cb1" aria-hidden="true" data-for="1" data-place="2,86"><span class="tag-ic"><img src="assets/ic-temp.webp" alt="" width="40" height="40"></span><span><span class="tl-k"><span lang="en">Coolant</span><span lang="ru">Антифриз</span></span><b class="tl-v"><span data-live="temp">88</span><small><span lang="en">°C</span><span lang="ru">°C</span></small></b></span></div>
+    <div class="tag-live cb2" aria-hidden="true" data-for="2" data-place="62,86"><span class="tag-ic"><img src="assets/ic-speed.webp" alt="" width="40" height="40"></span><span><span class="tl-k"><span lang="en">Speed</span><span lang="ru">Скорость</span></span><b class="tl-v"><span data-live="speed">0</span><small><span lang="en">km/h</span><span lang="ru">км/ч</span></small></b></span></div>
+    <div class="tag-live cb3" aria-hidden="true" data-for="0" data-place="18,10"><span class="tag-ic"><img src="assets/ic-rpm.webp" alt="" width="40" height="40"></span><span><span class="tl-k"><span lang="en">RPM</span><span lang="ru">Обороты</span></span><b class="tl-v"><span data-live="rpm">820</span></b></span></div>
+  </div>
+</section>
+<div class="frames" aria-hidden="true">
+  <div class="frames-track" data-frames></div>
+</div>
+<section class="section split" id="how">
+  <div class="split-head reveal">
+    <p class="kicker"><span lang="en">How it works</span><span lang="ru">Как это работает</span></p>
+    <h2><span lang="en">Plug in.<br>Connect.<br>Read.</span><span lang="ru">Вставил.<br>Подключил.<br>Смотришь.</span></h2>
+    <p class="sub"><span lang="en">About thirty seconds from the parking lot to live data. No account, no setup wizard.</span><span lang="ru">От парковки до живых данных секунд тридцать. Без аккаунта и долгой настройки.</span></p>
+  </div>
+  <ol class="steps">
+    <li class="step reveal">
+      <div class="step-art art-ic" aria-hidden="true"><img src="assets/ic-adapter.webp" alt="" width="120" height="120"></div>
+      <div class="step-body">
+        <span class="step-n"><span lang="en">Step</span><span lang="ru">Шаг</span> 01</span>
+        <h3><span lang="en">Plug in the adapter</span><span lang="ru">Вставь адаптер</span></h3>
+        <p><span lang="en">Any ELM327-compatible adapter fits the OBD-II port. In most cars it’s under the steering wheel.</span><span lang="ru">Подойдёт любой адаптер, совместимый с ELM327. В большинстве машин разъём OBD-II под рулём.</span></p>
+      </div>
+    </li>
+    <li class="step reveal">
+      <div class="step-art art-ic" aria-hidden="true"><img src="assets/ic-bluetooth.webp" alt="" width="120" height="120"></div>
+      <div class="step-body">
+        <span class="step-n"><span lang="en">Step</span><span lang="ru">Шаг</span> 02</span>
+        <h3><span lang="en">Connect in the app</span><span lang="ru">Подключись в приложении</span></h3>
+        <p><span lang="en">Pick it over Bluetooth or Wi-Fi. ReDrive handles the handshake and reconnects on its own if the link drops.</span><span lang="ru">Выбери его по Bluetooth или Wi-Fi. ReDrive сам проведёт инициализацию и переподключится, если связь пропадёт.</span></p>
+      </div>
+    </li>
+    <li class="step reveal">
+      <div class="step-art art-ic" aria-hidden="true"><img src="assets/ic-phone.webp" alt="" width="120" height="120"></div>
+      <div class="step-body">
+        <span class="step-n"><span lang="en">Step</span><span lang="ru">Шаг</span> 03</span>
+        <h3><span lang="en">Read the data</span><span lang="ru">Смотри данные</span></h3>
+        <p><span lang="en">Big, calm numbers that read at a glance. Glance when you’re stopped, not while you drive.</span><span lang="ru">Крупные цифры читаются с одного взгляда. Смотри на остановке, а не на ходу.</span></p>
+      </div>
+    </li>
+  </ol>
+</section>
+<section class="section" id="features">
+  <div class="head head-center reveal">
+    <p class="kicker"><span lang="en">Features</span><span lang="ru">Возможности</span></p>
+    <h2><span lang="en">The numbers that matter.<br>None of the clutter.</span><span lang="ru">Главное о машине.<br>Без мусора.</span></h2>
+  </div>
+  <div class="bento">
+    <article class="card card-live reveal">
+      <img class="card-ic" src="assets/ic-rpm.webp" alt="" width="64" height="64">
+      <div class="card-head">
+        <h3><span lang="en">Live data</span><span lang="ru">Живые данные</span></h3>
+        <p><span lang="en">RPM, speed, coolant and voltage, refreshed several times a second.</span><span lang="ru">Обороты, скорость, антифриз и напряжение, несколько обновлений в секунду.</span></p>
+      </div>
+      <div class="chart">
+        <div class="chart-top"><span>RPM</span><b data-live="rpm">820</b></div>
+        <svg viewBox="0 0 300 90" preserveAspectRatio="none" aria-hidden="true"><g class="chart-grid"><line x1="0" x2="300" y1="22" y2="22"/><line x1="0" x2="300" y1="45" y2="45"/><line x1="0" x2="300" y1="68" y2="68"/></g><path class="spark-fill" data-spark-fill/><path class="spark" data-spark/></svg>
+        <div class="chart-labels"><span data-lo></span><span data-hi></span></div>
+      </div>
+      <div class="tiles">
+        <div><span><span lang="en">Speed</span><span lang="ru">Скорость</span></span><b data-live="speed">0</b><small><span lang="en">km/h</span><span lang="ru">км/ч</span></small></div>
+        <div><span><span lang="en">Coolant</span><span lang="ru">Антифриз</span></span><b data-live="temp">88</b><small>°C</small></div>
+        <div><span><span lang="en">Battery</span><span lang="ru">Бортсеть</span></span><b data-live="volt">14.2</b><small><span lang="en">V</span><span lang="ru">В</span></small></div>
+      </div>
+    </article>
+    <article class="card card-dtc reveal">
+      <img class="card-ic" src="assets/ic-engine.webp" alt="" width="64" height="64">
+      <span class="badge"><span lang="en">Coming next</span><span lang="ru">Скоро</span></span>
+      <h3><span lang="en">Check Engine, explained</span><span lang="ru">Check Engine по‑человечески</span></h3>
+      <p><span lang="en">Read fault codes and see what they mean in plain words.</span><span lang="ru">Читай коды ошибок и смотри, что они значат, простыми словами.</span></p>
+      <ul class="codes">
+        <li><code>P0301</code><span lang="en">Cylinder 1 misfire</span><span lang="ru">Пропуски зажигания в 1-м цилиндре</span></li>
+        <li><code>P0171</code><span lang="en">Fuel mixture too lean</span><span lang="ru">Слишком бедная смесь</span></li>
+        <li><code class="amber">P0420</code><span lang="en">Catalyst efficiency low</span><span lang="ru">Низкая эффективность катализатора</span></li>
+      </ul>
+      <button class="btn-clear" type="button" disabled><span lang="en">Clear codes</span><span lang="ru">Сбросить ошибки</span></button>
+      <p class="dtc-meta">3 DTC · ECU 7E8 · Mode 03</p>
+    </article>
+    <article class="card card-link reveal">
+      <img class="card-ic" src="assets/ic-bluetooth.webp" alt="" width="64" height="64">
+      <h3><span lang="en">A link that holds</span><span lang="ru">Связь не рвётся</span></h3>
+      <p><span lang="en">Bluetooth Classic or Wi-Fi, with automatic reconnect.</span><span lang="ru">Bluetooth Classic или Wi-Fi с автоматическим переподключением.</span></p>
+      <div class="switch" data-switch>
+        <button type="button" class="on">Bluetooth</button><button type="button">Wi-Fi</button><button type="button" disabled>USB<sup><span lang="en">soon</span><span lang="ru">скоро</span></sup></button>
+      </div>
+    </article>
+    <article class="card card-demo reveal">
+      <img class="card-ic" src="assets/ic-phone.webp" alt="" width="64" height="64">
+      <h3><span lang="en">Demo mode</span><span lang="ru">Демо‑режим</span></h3>
+      <p><span lang="en">No car nearby? The whole app runs on simulated data. Try it right here:</span><span lang="ru">Машины рядом нет? Всё приложение работает на тестовых данных. Попробуй прямо тут:</span></p>
+      <div class="modes modes-sm" role="group" aria-label="Demo scenario">
+        <button type="button" data-mode="idle"><span lang="en">Idle</span><span lang="ru">Холостой</span></button>
+        <button type="button" data-mode="city"><span lang="en">City</span><span lang="ru">Город</span></button>
+        <button type="button" data-mode="highway"><span lang="en">Highway</span><span lang="ru">Трасса</span></button>
+      </div>
+    </article>
+    <article class="card card-open reveal">
+      <img class="card-ic" src="assets/ic-code.webp" alt="" width="64" height="64">
+      <h3><span lang="en">Open source</span><span lang="ru">Открытый код</span></h3>
+      <p><span lang="en">Every line is on GitHub under GPL-3.0. Read it, fork it, make it better.</span><span lang="ru">Весь код на GitHub под GPL-3.0. Читай, форкай, улучшай.</span></p>
+      <a class="repo-link" href="https://github.com/iUnreallx/ReDrive" target="_blank" rel="noopener"><svg><use href="#gh"/></svg>iUnreallx/ReDrive<span class="repo-stars" data-stars-wrap hidden><svg><use href="#star"/></svg><b data-stars></b></span></a>
+    </article>
+  </div>
+</section>
+<section class="section app-sec" id="app">
+  <div class="app-copy reveal">
+    <p class="kicker"><span lang="en">The app</span><span lang="ru">Приложение</span></p>
+    <h2><span lang="en">Made for a<br>quick glance.</span><span lang="ru">Сделано для<br>быстрого взгляда.</span></h2>
+    <ul class="points">
+      <li><b><span lang="en">No internet needed</span><span lang="ru">Без интернета</span></b><span lang="en">Talks straight to the adapter.</span><span lang="ru">Работает напрямую с адаптером.</span></li>
+      <li><b><span lang="en">Auto-reconnect</span><span lang="ru">Автопереподключение</span></b><span lang="en">Link dropped and came back? ReDrive picks it up on its own.</span><span lang="ru">Связь пропала и вернулась? ReDrive подхватит её сам.</span></li>
+      <li><b><span lang="en">Demo mode</span><span lang="ru">Демо‑режим</span></b><span lang="en">Explore the whole app without a car.</span><span lang="ru">Можно посмотреть всё приложение без машины.</span></li>
+    </ul>
+  </div>
+  <div class="phones reveal" aria-hidden="true">
+    <div class="device device-back"><img src="assets/redrive-connect.webp" alt="" width="760" height="1613" loading="lazy"></div>
+    <div class="device device-front"><img src="assets/redrive-home.webp" alt="" width="760" height="1611" loading="lazy"></div>
+  </div>
+</section>
+<section class="section split" id="compare">
+  <div class="split-head sticky reveal">
+    <p class="kicker"><span lang="en">Why ReDrive</span><span lang="ru">Почему ReDrive</span></p>
+    <h2><span lang="en">OBD apps got old.<br>We started over.</span><span lang="ru">OBD‑приложения устарели.<br>Мы начали заново.</span></h2>
+  </div>
+  <div class="compare reveal">
+    <div class="c-col c-us">
+      <span class="c-title">ReDrive</span>
+      <div><svg><use href="#ok"/></svg><span><small><span lang="en">Price</span><span lang="ru">Цена</span></small><span lang="en">Free, every feature</span><span lang="ru">Бесплатно, все функции</span></span></div>
+      <div><svg><use href="#ok"/></svg><span><small><span lang="en">Ads</span><span lang="ru">Реклама</span></small><span lang="en">None</span><span lang="ru">Нет</span></span></div>
+      <div><svg><use href="#ok"/></svg><span><small><span lang="en">Code</span><span lang="ru">Код</span></small><span lang="en">Open, GPL-3.0</span><span lang="ru">Открыт, GPL-3.0</span></span></div>
+      <div><svg><use href="#ok"/></svg><span><small><span lang="en">Lost link</span><span lang="ru">Пропала связь</span></small><span lang="en">Reconnects on its own</span><span lang="ru">Переподключается сам</span></span></div>
+    </div>
+    <div class="c-col c-them">
+      <span class="c-title"><span lang="en">Other free apps</span><span lang="ru">Другие бесплатные приложения</span></span>
+      <div><svg><use href="#no"/></svg><span><small><span lang="en">Price</span><span lang="ru">Цена</span></small><span lang="en">Key features behind a paywall</span><span lang="ru">Нужные функции платные</span></span></div>
+      <div><svg><use href="#no"/></svg><span><small><span lang="en">Ads</span><span lang="ru">Реклама</span></small><span lang="en">Banners and pop-ups</span><span lang="ru">Баннеры и всплывающие окна</span></span></div>
+      <div><svg><use href="#no"/></svg><span><small><span lang="en">Code</span><span lang="ru">Код</span></small><span lang="en">Closed</span><span lang="ru">Закрыт</span></span></div>
+      <div><svg><use href="#no"/></svg><span><small><span lang="en">Lost link</span><span lang="ru">Пропала связь</span></small><span lang="en">Restart and pair again</span><span lang="ru">Нужно перезапускать и подключать заново</span></span></div>
+    </div>
+  </div>
+</section>
+<section class="section" id="roadmap">
+  <div class="head reveal">
+    <p class="kicker"><span lang="en">Roadmap</span><span lang="ru">План</span></p>
+    <h2><span lang="en">Where we’re heading.</span><span lang="ru">Куда едем дальше.</span></h2>
+  </div>
+  <div class="road reveal">
+    <div class="road-track"><i></i></div>
+    <div class="r done"><span class="r-dot"></span><span class="r-tag"><span lang="en">Done</span><span lang="ru">Готово</span></span><b><span lang="en">Live data</span><span lang="ru">Живые данные</span></b><p><span lang="en">Dashboard, Bluetooth, demo mode.</span><span lang="ru">Приборка, Bluetooth, демо‑режим.</span></p></div>
+    <div class="r done"><span class="r-dot"></span><span class="r-tag"><span lang="en">Done</span><span lang="ru">Готово</span></span><b><span lang="en">New OBD core</span><span lang="ru">Новое OBD-ядро</span></b><p><span lang="en">Command queue, PID decoders, Wi-Fi.</span><span lang="ru">Очередь команд, декодеры PID, Wi-Fi.</span></p></div>
+    <div class="r now"><span class="r-dot"></span><span class="r-tag"><span lang="en">Now</span><span lang="ru">Сейчас</span></span><b><span lang="en">Fault codes</span><span lang="ru">Коды ошибок</span></b><p><span lang="en">Read and clear Check Engine codes.</span><span lang="ru">Чтение и сброс Check Engine.</span></p></div>
+    <div class="r"><span class="r-dot"></span><span class="r-tag"><span lang="en">Next</span><span lang="ru">Дальше</span></span><b><span lang="en">USB and garage</span><span lang="ru">USB и гараж</span></b><p><span lang="en">USB adapters and car profiles.</span><span lang="ru">USB-адаптеры и профили машин.</span></p></div>
+    <div class="r"><span class="r-dot"></span><span class="r-tag"><span lang="en">Later</span><span lang="ru">Потом</span></span><b><span lang="en">Trip recording</span><span lang="ru">Запись поездок</span></b><p><span lang="en">Save a trip and play it back.</span><span lang="ru">Сохрани поездку и посмотри её потом.</span></p></div>
+  </div>
+</section>
+<section class="section split" id="faq">
+  <div class="split-head reveal">
+    <p class="kicker">FAQ</p>
+    <h2><span lang="en">Questions.</span><span lang="ru">Вопросы.</span></h2>
+    <p class="sub"><span lang="en">Didn’t find yours?</span><span lang="ru">Не нашёл свой?</span> <a class="link" href="https://github.com/iUnreallx/ReDrive/issues" target="_blank" rel="noopener"><span lang="en">Ask in Issues</span><span lang="ru">Спроси в Issues</span> →</a></p>
+  </div>
+  <div class="faq reveal">
+    <details><summary><span lang="en">Which adapter should I buy?</span><span lang="ru">Какой адаптер купить?</span></summary>
+      <p><span lang="en">Any ELM327-compatible one. For the widest car support, pick v1.5 on the PIC18F25K80 chip, Bluetooth or Wi-Fi.</span><span lang="ru">Любой, совместимый с ELM327. Для лучшей совместимости бери версию v1.5 на чипе PIC18F25K80, с Bluetooth или Wi-Fi.</span></p></details>
+    <details><summary><span lang="en">Will it work with my car?</span><span lang="ru">Подойдёт к моей машине?</span></summary>
+      <p><span lang="en">If your car has an OBD-II port, most likely yes. It’s standard on most cars from the early 2000s on.</span><span lang="ru">Если в машине есть разъём OBD-II, скорее всего да. Он стоит на большинстве машин начиная с начала 2000-х.</span></p></details>
+    <details><summary><span lang="en">Does it need internet?</span><span lang="ru">Нужен ли интернет?</span></summary>
+      <p><span lang="en">No. ReDrive talks straight to the adapter over Bluetooth or Wi-Fi.</span><span lang="ru">Нет. ReDrive общается с адаптером напрямую по Bluetooth или Wi-Fi.</span></p></details>
+    <details><summary><span lang="en">Can it harm my car?</span><span lang="ru">Может навредить машине?</span></summary>
+      <p><span lang="en">Live data is read-only: ReDrive asks the car for values and changes nothing. Clearing fault codes, when it arrives, will only run when you confirm it.</span><span lang="ru">Живые данные только читаются: ReDrive запрашивает значения и ничего не меняет. Сброс ошибок, когда появится, будет срабатывать только после твоего подтверждения.</span></p></details>
+  </div>
+</section>
+<section class="final reveal">
+  <div class="final-box">
+  <div class="final-copy">
+    <h2 class="h1"><span lang="en"><span class="ln">A cheap adapter.</span><span class="ln"><mark>Zero subscriptions.</mark></span></span><span lang="ru"><span class="ln">Недорогой адаптер.</span><span class="ln"><mark>Ноль подписок.</mark></span></span></h2>
+    <div class="cta">
+      <a class="btn btn-lime btn-lg" href="https://github.com/iUnreallx/ReDrive" target="_blank" rel="noopener"><svg><use href="#gh"/></svg><span lang="en">Get ReDrive on GitHub</span><span lang="ru">ReDrive на GitHub</span></a>
+      <a class="btn btn-ghost btn-lg" href="https://t.me/redrivestudio" target="_blank" rel="noopener"><svg><use href="#tg"/></svg><span lang="en">Follow development</span><span lang="ru">Следить за разработкой</span></a>
+    </div>
+  </div>
+  <div class="final-stage" aria-hidden="true"><img class="final-car" src="assets/redrive-car-cut.webp" alt="" width="1702" height="739" loading="lazy"></div></div>
+</section>
+</main>
+<footer class="foot">
+  <div class="foot-row">
+    <a class="logo" href="#top"><img src="assets/icon-redrive.webp" alt="" width="22" height="22"><span>ReDrive</span></a>
+    <nav class="foot-links">
+      <a href="https://github.com/iUnreallx/ReDrive" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/iUnreallx/ReDrive/issues" target="_blank" rel="noopener">Issues</a>
+      <a href="https://github.com/iUnreallx/ReDrive/blob/main/LICENSE" target="_blank" rel="noopener">GPL-3.0</a>
+      <a href="https://t.me/redrivestudio" target="_blank" rel="noopener">Telegram</a>
     </nav>
-    <a class="github-link" href="https://github.com/iUnreallx/ReDrive" target="_blank" rel="noreferrer">GitHub</a>
-  </header>
-
-  <main id="top">
-    <section class="hero section" aria-labelledby="hero-title">
-      <div class="hero-copy reveal">
-        <p class="eyebrow"><span></span> Flutter · Dart · OBD2 · ELM327</p>
-        <h1 id="hero-title">Open-source приборка и диагностика автомобиля.</h1>
-        <p class="hero-text">ReDrive превращает смартфон в чистый OBD2-дэшборд: скорость, RPM, температура, напряжение, подключение к адаптеру и база для диагностики без рекламы и пейволлов.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="https://github.com/iUnreallx/ReDrive" target="_blank" rel="noreferrer">Стать контрибьютором</a>
-          <a class="button ghost" href="#roadmap">Смотреть план</a>
-        </div>
-        <div class="metrics" aria-label="Кратко о проекте">
-          <div><b>174</b><span>коммита</span></div>
-          <div><b>5</b><span>звёзд</span></div>
-          <div><b>GPLv3</b><span>лицензия</span></div>
-        </div>
-      </div>
-      <div class="hero-visual reveal" aria-label="Интерфейс ReDrive">
-        <div class="car-glow"></div>
-        <img class="car" src="assets/car.webp" alt="Автомобиль ReDrive" />
-        <div class="phone phone-left">
-          <img src="assets/screen-dashboard.webp" alt="Главный экран ReDrive с телеметрией" />
-        </div>
-        <div class="phone phone-right">
-          <img src="assets/screen-connection.webp" alt="Экран подключения ReDrive" />
-        </div>
-      </div>
-    </section>
-
-    <section class="section strip reveal" aria-label="Ценность продукта">
-      <p>Задача ReDrive простая: <strong>дать водителю данные из ECU в понятном виде</strong>, а разработчику — чистую базу для расширения OBD2-функций.</p>
-    </section>
-
-    <section id="features" class="section reveal">
-      <div class="section-head">
-        <p class="eyebrow"><span></span> Что уже есть</p>
-        <h2>Функциональность без визуального мусора.</h2>
-      </div>
-      <div class="feature-grid">
-        <article class="feature-card">
-          <span class="icon">01</span>
-          <h3>Live Data</h3>
-          <p>Скорость, обороты двигателя, температура охлаждающей жидкости и напряжение адаптера/бортовой сети.</p>
-        </article>
-        <article class="feature-card">
-          <span class="icon">02</span>
-          <h3>ELM327 handshake</h3>
-          <p>Инициализация ATZ, ATE0, ATL0, ATSP0 и polling базовых PID через OBD-соединение.</p>
-        </article>
-        <article class="feature-card">
-          <span class="icon">03</span>
-          <h3>Bluetooth Classic</h3>
-          <p>Поиск устройств, подключение, отмена, защита от race conditions и фоновое переподключение.</p>
-        </article>
-        <article class="feature-card">
-          <span class="icon">04</span>
-          <h3>Demo mode</h3>
-          <p>Тестовые данные без машины — удобно для UI, отладки и будущих contributor-friendly сценариев.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section product-showcase reveal">
-      <div class="showcase-copy">
-        <p class="eyebrow"><span></span> UI/UX</p>
-        <h2>Большие числа. Тёмная тема. Никаких отвлекающих элементов.</h2>
-        <p>Интерфейс ориентирован на быстрый взгляд в машине: крупная телеметрия, явные состояния подключения, нижняя навигация и акцентный цвет.</p>
-      </div>
-      <div class="screens">
-        <img src="assets/screen-dashboard.webp" alt="Dashboard ReDrive" />
-        <img src="assets/screen-connection.webp" alt="Connection ReDrive" />
-      </div>
-    </section>
-
-    <section id="architecture" class="section reveal">
-      <div class="section-head narrow">
-        <p class="eyebrow"><span></span> Архитектура</p>
-        <h2>Понятный путь от UI до адаптера.</h2>
-        <p>Сейчас проект уже разделён на providers, services, models, screens и reusable widgets. Следующий большой шаг — вынести OBD/ELM-логику из provider в отдельные сервисы.</p>
-      </div>
-      <div class="flow" aria-label="Архитектура ReDrive">
-        <div><b>UI</b><span>screens / widgets</span></div>
-        <i></i>
-        <div><b>Provider</b><span>готовое состояние</span></div>
-        <i></i>
-        <div><b>ObdService</b><span>polling / session</span></div>
-        <i></i>
-        <div><b>ElmClient</b><span>commands / queue</span></div>
-        <i></i>
-        <div><b>Transport</b><span>Bluetooth / Wi‑Fi / USB</span></div>
-      </div>
-      <div class="repo-grid">
-        <div><code>core/</code><span>тема, цвета</span></div>
-        <div><code>models/</code><span>OBD data, device</span></div>
-        <div><code>providers/</code><span>Bluetooth, OBD state</span></div>
-        <div><code>services/</code><span>connection abstractions</span></div>
-        <div><code>screens/</code><span>Home, Connection, Garage</span></div>
-        <div><code>widget/</code><span>карточки, bottom bar, баннеры</span></div>
-      </div>
-    </section>
-
-    <section id="roadmap" class="section reveal">
-      <div class="section-head">
-        <p class="eyebrow"><span></span> Roadmap</p>
-        <h2>Куда двигать проект дальше.</h2>
-      </div>
-      <div class="timeline">
-        <article class="done">
-          <span>Готово</span>
-          <h3>База MVP</h3>
-          <p>Flutter-структура, тёмный UI, карточки телеметрии, Bluetooth, demo mode, reconnect banner, базовый ELM327 polling.</p>
-        </article>
-        <article>
-          <span>MVP</span>
-          <h3>OBD architecture cleanup</h3>
-          <p>ElmClient, ElmCommandQueue, PID registry/decoder, error types, тесты парсинга и очереди команд.</p>
-        </article>
-        <article>
-          <span>MVP</span>
-          <h3>Wi‑Fi + Dashboard</h3>
-          <p>TCP transport для Wi‑Fi адаптеров, переключатель Bluetooth/Wi‑Fi/USB, крупные gauge-режимы и выбор датчиков.</p>
-        </article>
-        <article>
-          <span>MVP</span>
-          <h3>DTC + Garage</h3>
-          <p>Чтение/очистка ошибок, freeze frame, профили автомобилей, история ошибок и настройки dashboard под машину.</p>
-        </article>
-        <article>
-          <span>После MVP</span>
-          <h3>Packs, logs, replay</h3>
-          <p>Безопасные ReDrive Packs, raw logs, OBD replay, adapter benchmark и community registry через GitHub.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="contribute" class="section contribute reveal">
-      <div>
-        <p class="eyebrow"><span></span> Для контрибьюторов</p>
-        <h2>Есть конкретные зоны, где помощь сразу полезна.</h2>
-      </div>
-      <div class="contribute-grid">
-        <div>
-          <h3>Код</h3>
-          <p>OBD core, Wi‑Fi transport, DTC decoder, Garage, настройки, оптимизация UI rebuilds.</p>
-        </div>
-        <div>
-          <h3>Тесты</h3>
-          <p>PID-формулы, ELM327 ответы, reconnect, таймауты, mock TCP loss, parsing Mode 03/07/0A.</p>
-        </div>
-        <div>
-          <h3>Документация</h3>
-          <p>ReDrive Packs, contributor guide, sample logs без персональных данных, UX-гайды для dashboard.</p>
-        </div>
-      </div>
-      <div class="terminal" aria-label="Команды запуска">
-        <div><span></span><span></span><span></span></div>
-        <pre><code>git clone https://github.com/iUnreallx/ReDrive.git
-cd ReDrive
-flutter pub get
-flutter run</code></pre>
-      </div>
-      <div class="final-cta">
-        <h2>Хочешь OBD2 без мусора — заходи в проект.</h2>
-        <a class="button primary" href="https://github.com/iUnreallx/ReDrive" target="_blank" rel="noreferrer">Открыть GitHub</a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <span>ReDrive · open-source OBD2</span>
-    <a href="https://github.com/iUnreallx/ReDrive" target="_blank" rel="noreferrer">github.com/iUnreallx/ReDrive</a>
-  </footer>
-
-  <script src="script.js"></script>
+  </div>
+  <div class="foot-row foot-small">
+    <span><span lang="en">Open-source OBD2 app</span><span lang="ru">Открытое OBD2-приложение</span></span>
+    <span>© 2026 <a href="https://unreallx.ru" target="_blank" rel="noopener">iUnreallx</a></span>
+  </div>
+</footer>
+<script src="app.js"></script>
 </body>
 </html>
