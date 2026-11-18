@@ -590,6 +590,9 @@ Future<void> _completeHandshake(
 
   await _waitForCommand(connection, '0100\r', occurrence: occurrence);
   connection.emit('41 00 08 18 00 00\r>');
+
+  await _waitForCommand(connection, 'ATDPN\r', occurrence: occurrence);
+  connection.emit('A6\r>');
 }
 
 /// Completes the next handshake, however many failed attempts came before it.
@@ -603,6 +606,7 @@ Future<void> _completeNextHandshake(FakeObdConnection connection) async {
     'ATL0\r': 'OK\r>',
     'ATSP0\r': 'OK\r>',
     '0100\r': '41 00 08 18 00 00\r>',
+    'ATDPN\r': 'A6\r>',
   };
   final before = {
     for (final command in steps.keys)
