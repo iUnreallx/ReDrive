@@ -75,6 +75,9 @@ void main() {
 
     connection.emit('41 00 08 18 00 00\r>');
 
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
+
     await startFuture;
     await statesFuture;
 
@@ -92,6 +95,7 @@ void main() {
       'ATL0\r',
       'ATSP0\r',
       '0100\r',
+      'ATDPN\r',
     ]);
 
     await source.dispose();
@@ -139,6 +143,9 @@ void main() {
     }
 
     connection.emit('41 00 08 18 00 00\r>');
+
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
 
     await startFuture;
 
@@ -205,6 +212,9 @@ void main() {
     }
 
     connection.emit('41 00 00 10 00 00\r>');
+
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
 
     await startFuture;
 
@@ -284,6 +294,9 @@ void main() {
 
     connection.emit('41 00 08 18 00 00\r>');
 
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
+
     await startFuture;
 
     expect(source.state, ObdSourceState.polling);
@@ -341,6 +354,9 @@ void main() {
     }
 
     connection.emit('41 00 08 18 00 00\r>');
+
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
 
     await startFuture;
 
@@ -435,6 +451,7 @@ Future<void> _completeNextHandshake(FakeObdConnection connection) async {
     'ATL0\r': 'OK\r>',
     'ATSP0\r': 'OK\r>',
     '0100\r': '41 00 08 18 00 00\r>',
+    'ATDPN\r': 'A6\r>',
   };
   final before = {
     for (final command in steps.keys)
