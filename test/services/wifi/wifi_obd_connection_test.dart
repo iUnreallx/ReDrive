@@ -211,8 +211,17 @@ void main() {
     final response = await client.execute('010C');
 
     expect(session.state, ObdSessionState.ready);
+    expect(session.protocolNumber, 6);
     expect(supportedPids, isNotEmpty);
-    expect(server.received, ['ATZ', 'ATE0', 'ATL0', 'ATSP0', '0100', '010C']);
+    expect(server.received, [
+      'ATZ',
+      'ATE0',
+      'ATL0',
+      'ATSP0',
+      '0100',
+      'ATDPN',
+      '010C',
+    ]);
     expect(response.type, ElmResponseType.data);
     expect(response.lines.last, '41 0C 1A F8');
   });
