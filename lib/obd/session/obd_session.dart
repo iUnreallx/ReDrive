@@ -15,15 +15,18 @@ class ObdSession {
 
   ObdSessionState _state = ObdSessionState.disconnected;
   Object? _lastError;
+  int? _protocolNumber;
 
   ObdSession({required ElmClient elmClient}) : _elmClient = elmClient;
 
   ObdSessionState get state => _state;
   Object? get lastError => _lastError;
+  int? get protocolNumber => _protocolNumber;
 
   Future<Set<int>> initialize() async {
     _state = ObdSessionState.initializing;
     _lastError = null;
+    _protocolNumber = null;
 
     try {
       await _executeAndExpect('ATZ', ElmResponseType.adapterInfo);
@@ -34,6 +37,10 @@ class ObdSession {
         '0100',
         ElmResponseType.data,
       );
+      final protocolNum = await _elmClient.execute("ATDPN");
+      if (protocolNum.lines.length == 1) {
+        _protocolNumber = _parseProtocolNumber(protocolNum.lines.single);
+      }
 
       final supportedPids = decodeSupportedPids(supportedPidsResponse);
 
@@ -57,5 +64,19 @@ class ObdSession {
     }
 
     return response;
+  }
+
+  int? _parseProtocolNumber(String protocolLine) {
+    var value = protocolLine.trim().toUpperCase();
+
+    if (value.length == 2 && value.startsWith('A')) {
+      value = value.substring(1);
+    }
+
+    if (!RegExp(r'^[1-9A-C]$').hasMatch(value)) {
+      return null;
+    }
+
+    return int.parse(value, radix: 16);
   }
 }
