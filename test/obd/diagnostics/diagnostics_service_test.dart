@@ -5,7 +5,7 @@ import 'package:redrive/obd/elm/elm_client.dart';
 import '../fakes/fake_obd_connection.dart';
 
 void main() {
-  group('DiagnosticsService.readStoredCodes', () {
+  group('DiagnosticsService', () {
     late FakeObdConnection connection;
     late ElmClient client;
 
@@ -50,6 +50,18 @@ void main() {
       connection.emit('008\r0: 43 03 01 33 03 00\r1: 04 20\r>');
 
       expect(await result, ['P0133', 'P0300', 'P0420']);
+    });
+
+    test('requires a single 44 confirmation for Mode 04', () async {
+      final service = serviceFor(6);
+      final success = service.clearStoredCodes();
+      expect(connection.sentCommands, ['04\r']);
+      connection.emit('44\r>');
+      await success;
+
+      final failure = service.clearStoredCodes();
+      connection.emit('43 00\r>');
+      await expectLater(failure, throwsFormatException);
     });
 
     test('rejects protocol 5 before sending Mode 03', () async {
