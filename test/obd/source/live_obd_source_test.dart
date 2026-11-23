@@ -75,6 +75,9 @@ void main() {
 
     connection.emit('41 00 08 18 00 00\r>');
 
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
+
     await startFuture;
     await statesFuture;
 
@@ -92,10 +95,38 @@ void main() {
       'ATL0\r',
       'ATSP0\r',
       '0100\r',
+      'ATDPN\r',
     ]);
 
     await source.dispose();
     await connection.dispose();
+  });
+
+  test('reads stored codes and rejects reads as soon as stop begins', () async {
+    final connection = FakeObdConnection();
+    final source = LiveObdSource(
+      connection: connection,
+      registry: PidRegistry(),
+    );
+    addTearDown(() async {
+      await source.dispose();
+      await connection.dispose();
+    });
+
+    final handshake = _completeNextHandshake(connection);
+    final starting = source.start();
+    await handshake;
+    await starting;
+
+    final codes = source.readStoredCodes();
+    await _waitForCommand(connection, '03\r');
+    connection.emit('43 01 01 33\r>');
+    expect(await codes, ['P0133']);
+
+    final stopping = source.stop();
+    await expectLater(source.readStoredCodes(), throwsStateError);
+    await stopping;
+    expect(_commandCount(connection, '03\r'), 1);
   });
 
   test('screen watchlists starts polling requested PID', () async {
@@ -139,6 +170,9 @@ void main() {
     }
 
     connection.emit('41 00 08 18 00 00\r>');
+
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
 
     await startFuture;
 
@@ -205,6 +239,9 @@ void main() {
     }
 
     connection.emit('41 00 00 10 00 00\r>');
+
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
 
     await startFuture;
 
@@ -284,6 +321,9 @@ void main() {
 
     connection.emit('41 00 08 18 00 00\r>');
 
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
+
     await startFuture;
 
     expect(source.state, ObdSourceState.polling);
@@ -341,6 +381,9 @@ void main() {
     }
 
     connection.emit('41 00 08 18 00 00\r>');
+
+    await _waitForCommand(connection, 'ATDPN\r');
+    connection.emit('A6\r>');
 
     await startFuture;
 
@@ -435,6 +478,7 @@ Future<void> _completeNextHandshake(FakeObdConnection connection) async {
     'ATL0\r': 'OK\r>',
     'ATSP0\r': 'OK\r>',
     '0100\r': '41 00 08 18 00 00\r>',
+    'ATDPN\r': 'A6\r>',
   };
   final before = {
     for (final command in steps.keys)

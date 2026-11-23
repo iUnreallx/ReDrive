@@ -124,6 +124,24 @@ class ObdProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> clearStoredCodes() async {
+    final source = _liveSource;
+    if (source == null || _mode != ObdMode.real || isReconnecting) {
+      throw StateError('OBD diagnostics is unavailable');
+    }
+    await source.clearStoredCodes();
+  }
+
+  Future<List<String>> readStoredCodes() async {
+    final source = _liveSource;
+
+    if (source == null || _mode != ObdMode.real || isReconnecting) {
+      throw StateError('OBD diagnostics is unavailable');
+    }
+
+    return source.readStoredCodes();
+  }
+
   Future<void> startDemoMode() async {
     if (_mode == ObdMode.real || _mode == ObdMode.demo) return;
 

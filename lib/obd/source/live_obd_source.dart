@@ -5,6 +5,7 @@ import '../pid/pid_key.dart';
 import '../pid/pid_registry.dart';
 import '../polling/polling_controller.dart';
 import '../session/obd_session.dart';
+import '../diagnostics/diagnostics_service.dart';
 import 'obd_source_state.dart';
 
 /// Manages a live OBD - II data source.
@@ -17,6 +18,7 @@ class LiveObdSource {
   final ObdConnection _connection;
   final PidRegistry _registry;
 
+  DiagnosticsService? _diagnosticsService;
   ElmClient? _elmClient;
   ObdSession? _session;
   PollingController? _pollingController;
@@ -42,6 +44,7 @@ class LiveObdSource {
 
   ObdSourceState get state => _state;
   ObdSession? get session => _session;
+
   Stream<ObdSourceState> get stateStream => _stateController.stream;
   Set<PidKey> get supportedKeys => _supportedKeys;
   Stream<({PidKey key, num value})> get updates => _updatesController.stream;
@@ -100,6 +103,21 @@ class LiveObdSource {
     }
   }
 
+  Future<void> clearStoredCodes() async {
+    final service = _diagnosticsService;
+    if (service == null) throw StateError('OBD diagnostics is unavailable');
+    await service.clearStoredCodes();
+  }
+
+  Future<List<String>> readStoredCodes() async {
+    final service = _diagnosticsService;
+    if (service == null) {
+      throw StateError('OBD diagnostics is unavailable');
+    }
+
+    return service.readStoredCodes();
+  }
+
   Future<void> _startSession() async {
     final client = ElmClient(connection: _connection);
     _elmClient = client;
@@ -109,6 +127,11 @@ class LiveObdSource {
 
     final rawSupportedPids = await session.initialize();
     if (_stopRequested) return;
+
+    _diagnosticsService = DiagnosticsService(
+      elmClient: client,
+      protocolNumber: session.protocolNumber,
+    );
 
     _supportedKeys = _registry.findSupportedEcuKeys(rawSupportedPids);
 
@@ -177,6 +200,9 @@ class LiveObdSource {
   }
 
   Future<void> _cleanupActiveComponents() async {
+    _diagnosticsService = null;
+    _session = null;
+
     await _pollingSubscription?.cancel();
     _pollingSubscription = null;
 
@@ -185,8 +211,6 @@ class LiveObdSource {
 
     await _elmClient?.dispose();
     _elmClient = null;
-
-    _session = null;
   }
 
   Future<void> dispose() async {

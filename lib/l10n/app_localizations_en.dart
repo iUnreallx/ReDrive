@@ -9,6 +9,55 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get dtcClearing => 'Clearing codes…';
+
+  @override
+  String get dtcClearFailed => 'Clear request not confirmed. Rescan to check.';
+
+  @override
+  String get dtcClearTitle => 'Clear stored codes?';
+
+  @override
+  String get dtcClearBody =>
+      'This resets diagnostic data in the vehicle. ReDrive will read the codes again after the reset.';
+
+  @override
+  String get dtcScan => 'Read codes';
+
+  @override
+  String get dtcRescan => 'Rescan';
+
+  @override
+  String get dtcStored => 'Stored codes';
+
+  @override
+  String get dtcPending => 'Pending';
+
+  @override
+  String get dtcPermanent => 'Permanent';
+
+  @override
+  String get dtcConfirmed => 'Confirmed';
+
+  @override
+  String get dtcIdle => 'Ready to scan';
+
+  @override
+  String get dtcLoading => 'Reading codes…';
+
+  @override
+  String get dtcEmpty => 'No stored codes';
+
+  @override
+  String get dtcFailure => 'Couldn’t read codes';
+
+  @override
+  String get dtcUnsupported => 'Unsupported protocol';
+
+  @override
+  String get dtcClear => 'Clear codes';
+
+  @override
   String get home => 'Home';
 
   @override

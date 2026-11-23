@@ -9,6 +9,55 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
+  String get dtcClearing => 'Стираем коды…';
+
+  @override
+  String get dtcClearFailed => 'Сброс не подтверждён. Прочитайте коды ещё раз.';
+
+  @override
+  String get dtcClearTitle => 'Стереть сохранённые коды?';
+
+  @override
+  String get dtcClearBody =>
+      'Это сбросит диагностические данные автомобиля. После сброса ReDrive заново прочитает коды.';
+
+  @override
+  String get dtcScan => 'Прочитать коды';
+
+  @override
+  String get dtcRescan => 'Повторить';
+
+  @override
+  String get dtcStored => 'Сохранённые коды';
+
+  @override
+  String get dtcPending => 'Ожидающие';
+
+  @override
+  String get dtcPermanent => 'Постоянные';
+
+  @override
+  String get dtcConfirmed => 'Подтверждённые';
+
+  @override
+  String get dtcIdle => 'Можно начать чтение';
+
+  @override
+  String get dtcLoading => 'Читаем коды…';
+
+  @override
+  String get dtcEmpty => 'Сохранённых кодов нет';
+
+  @override
+  String get dtcFailure => 'Не удалось прочитать коды';
+
+  @override
+  String get dtcUnsupported => 'Протокол не поддерживается';
+
+  @override
+  String get dtcClear => 'Стереть коды';
+
+  @override
   String get home => 'Главная';
 
   @override

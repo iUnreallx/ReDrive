@@ -7,6 +7,7 @@ import 'package:redrive/screens/connection_screen.dart';
 import 'package:redrive/widget/bottom_bar/custom_bottom_bar.dart';
 import 'package:redrive/widget/common/reconnection_banner.dart';
 import 'home_screen.dart';
+import 'dtc_screen.dart';
 import 'dart:async';
 
 class RootScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _RootScreenState extends State<RootScreen> {
     Container(color: Colors.black),
     const ConnectionScreen(),
     const CarScreen(),
-    Container(color: Colors.black),
+    const DtcScreen(),
   ];
 
   @override
