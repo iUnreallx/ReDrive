@@ -9,6 +9,54 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get dtcClearing => '正在清除故障码…';
+
+  @override
+  String get dtcClearFailed => '未确认清除结果，请重新扫描。';
+
+  @override
+  String get dtcClearTitle => '清除已存储的故障码？';
+
+  @override
+  String get dtcClearBody => '这会重置车辆的诊断数据。重置后，ReDrive 将重新读取故障码。';
+
+  @override
+  String get dtcScan => '读取故障码';
+
+  @override
+  String get dtcRescan => '重新扫描';
+
+  @override
+  String get dtcStored => '已存储故障码';
+
+  @override
+  String get dtcPending => '待定';
+
+  @override
+  String get dtcPermanent => '永久';
+
+  @override
+  String get dtcConfirmed => '已确认';
+
+  @override
+  String get dtcIdle => '准备读取';
+
+  @override
+  String get dtcLoading => '正在读取…';
+
+  @override
+  String get dtcEmpty => '没有已存储的故障码';
+
+  @override
+  String get dtcFailure => '无法读取故障码';
+
+  @override
+  String get dtcUnsupported => '不支持此协议';
+
+  @override
+  String get dtcClear => '清除故障码';
+
+  @override
   String get home => '主页';
 
   @override
@@ -190,6 +238,54 @@ class AppLocalizationsZh extends AppLocalizations {
 /// The translations for Chinese, using the Han script (`zh_Hant`).
 class AppLocalizationsZhHant extends AppLocalizationsZh {
   AppLocalizationsZhHant() : super('zh_Hant');
+
+  @override
+  String get dtcClearing => '正在清除故障碼…';
+
+  @override
+  String get dtcClearFailed => '未確認清除結果，請重新掃描。';
+
+  @override
+  String get dtcClearTitle => '清除已儲存的故障碼？';
+
+  @override
+  String get dtcClearBody => '這會重設車輛的診斷資料。重設後，ReDrive 將重新讀取故障碼。';
+
+  @override
+  String get dtcScan => '讀取故障碼';
+
+  @override
+  String get dtcRescan => '重新掃描';
+
+  @override
+  String get dtcStored => '已儲存故障碼';
+
+  @override
+  String get dtcPending => '待定';
+
+  @override
+  String get dtcPermanent => '永久';
+
+  @override
+  String get dtcConfirmed => '已確認';
+
+  @override
+  String get dtcIdle => '準備讀取';
+
+  @override
+  String get dtcLoading => '正在讀取…';
+
+  @override
+  String get dtcEmpty => '沒有已儲存的故障碼';
+
+  @override
+  String get dtcFailure => '無法讀取故障碼';
+
+  @override
+  String get dtcUnsupported => '不支援此協定';
+
+  @override
+  String get dtcClear => '清除故障碼';
 
   @override
   String get home => '首頁';
