@@ -12,6 +12,15 @@ class DiagnosticsService {
   }) : _elmClient = elmClient,
        _protocolNumber = protocolNumber;
 
+  Future<void> clearStoredCodes() async {
+    final response = await _elmClient.execute('04');
+    if (response.type != ElmResponseType.data ||
+        response.lines.length != 1 ||
+        response.lines.single != '44') {
+      throw const FormatException('Expected Mode 04 confirmation (44)');
+    }
+  }
+
   Future<List<String>> readStoredCodes() async {
     final protocol = _protocolNumber;
     if (protocol == null || protocol < 6 || protocol > 9) {
