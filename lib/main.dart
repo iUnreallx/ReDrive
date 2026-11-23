@@ -8,6 +8,7 @@ import 'package:redrive/services/wifi/connection/wifi_obd_connection.dart';
 
 import 'providers/obd_provider.dart';
 import 'providers/bluetooth_provider.dart';
+import 'providers/dtc_provider.dart';
 import 'core/app_themes.dart';
 import 'screens/root_screen.dart';
 
@@ -32,6 +33,13 @@ void main() {
 
             return obdProvider;
           },
+        ),
+
+        ChangeNotifierProvider(
+          create: (context) => DtcProvider(
+            readStoredCodes: context.read<ObdProvider>().readStoredCodes,
+            clearStoredCodes: context.read<ObdProvider>().clearStoredCodes,
+          ),
         ),
       ],
       child: const RedriveApp(),
