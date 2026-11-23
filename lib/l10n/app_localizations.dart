@@ -101,6 +101,102 @@ abstract class AppLocalizations {
     Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
   ];
 
+  /// No description provided for @dtcClearing.
+  ///
+  /// In en, this message translates to:
+  /// **'Clearing codes…'**
+  String get dtcClearing;
+
+  /// No description provided for @dtcClearFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear request not confirmed. Rescan to check.'**
+  String get dtcClearFailed;
+
+  /// No description provided for @dtcClearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear stored codes?'**
+  String get dtcClearTitle;
+
+  /// No description provided for @dtcClearBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This resets diagnostic data in the vehicle. ReDrive will read the codes again after the reset.'**
+  String get dtcClearBody;
+
+  /// No description provided for @dtcScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Read codes'**
+  String get dtcScan;
+
+  /// No description provided for @dtcRescan.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescan'**
+  String get dtcRescan;
+
+  /// No description provided for @dtcStored.
+  ///
+  /// In en, this message translates to:
+  /// **'Stored codes'**
+  String get dtcStored;
+
+  /// No description provided for @dtcPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get dtcPending;
+
+  /// No description provided for @dtcPermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent'**
+  String get dtcPermanent;
+
+  /// No description provided for @dtcConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get dtcConfirmed;
+
+  /// No description provided for @dtcIdle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to scan'**
+  String get dtcIdle;
+
+  /// No description provided for @dtcLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading codes…'**
+  String get dtcLoading;
+
+  /// No description provided for @dtcEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No stored codes'**
+  String get dtcEmpty;
+
+  /// No description provided for @dtcFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t read codes'**
+  String get dtcFailure;
+
+  /// No description provided for @dtcUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported protocol'**
+  String get dtcUnsupported;
+
+  /// No description provided for @dtcClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear codes'**
+  String get dtcClear;
+
   /// Bottom bar tab: home screen
   ///
   /// In en, this message translates to:
