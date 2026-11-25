@@ -8,6 +8,7 @@ import '../obd/demo/demo_data_generator.dart';
 import '../obd/models/obd_data.dart';
 import '../obd/connection/obd_connection.dart';
 import '../obd/pid/pid_registry.dart';
+import '../obd/session/obd_session.dart';
 import '../obd/source/live_obd_source.dart';
 import '../obd/source/obd_source_state.dart';
 
@@ -65,6 +66,14 @@ class ObdProvider extends ChangeNotifier {
       _mode == ObdMode.real &&
       (state == ObdSourceState.polling ||
           (_hadData && recoveryStage != ObdRecoveryStage.none));
+
+  ObdSession? get diagnosticsSession =>
+      _mode == ObdMode.real &&
+          isDeviceConnected &&
+          !isReconnecting &&
+          state == ObdSourceState.polling
+      ? _liveSource?.session
+      : null;
 
   ObdData _data = const ObdData();
   ObdData get data => _data;
@@ -126,7 +135,7 @@ class ObdProvider extends ChangeNotifier {
 
   Future<void> clearStoredCodes() async {
     final source = _liveSource;
-    if (source == null || _mode != ObdMode.real || isReconnecting) {
+    if (source == null || diagnosticsSession == null) {
       throw StateError('OBD diagnostics is unavailable');
     }
     await source.clearStoredCodes();
@@ -135,7 +144,7 @@ class ObdProvider extends ChangeNotifier {
   Future<List<String>> readStoredCodes() async {
     final source = _liveSource;
 
-    if (source == null || _mode != ObdMode.real || isReconnecting) {
+    if (source == null || diagnosticsSession == null) {
       throw StateError('OBD diagnostics is unavailable');
     }
 
