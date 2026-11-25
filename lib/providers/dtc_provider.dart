@@ -1,17 +1,33 @@
 import 'package:flutter/foundation.dart';
 
+import '../obd/session/obd_session.dart';
+import 'obd_provider.dart';
+
 enum DtcState { idle, loading, clearing, success, error, clearFailed }
 
 class DtcProvider extends ChangeNotifier {
-  final Future<List<String>> Function() _readStoredCodes;
+  final ObdProvider _obd;
+  ObdSession? _session;
 
-  final Future<void> Function() _clearStoredCodes;
+  DtcProvider(this._obd) : _session = _obd.diagnosticsSession {
+    _obd.addListener(_syncSession);
+  }
 
-  DtcProvider({
-    required Future<List<String>> Function() readStoredCodes,
-    required Future<void> Function() clearStoredCodes,
-  }) : _readStoredCodes = readStoredCodes,
-       _clearStoredCodes = clearStoredCodes;
+  bool get canScan => _session != null && !isBusy;
+  bool get canClear =>
+      canScan && _state == DtcState.success && _codes.isNotEmpty;
+  ObdSession? get session => _session;
+  bool get connected => _session != null;
+
+  void _syncSession() {
+    final session = _obd.diagnosticsSession;
+    if (identical(_session, session)) return;
+    _session = session;
+    _codes = const [];
+    _error = null;
+    _state = DtcState.idle;
+    notifyListeners();
+  }
 
   DtcState _state = DtcState.idle;
   DtcState get state => _state;
@@ -25,42 +41,53 @@ class DtcProvider extends ChangeNotifier {
   bool get isBusy => _state == DtcState.loading || _state == DtcState.clearing;
 
   Future<void> clearCodes() async {
-    if (_state != DtcState.success || _codes.isEmpty) return;
+    final session = _session;
+    if (session == null || !canClear) return;
     _state = DtcState.clearing;
     _error = null;
     notifyListeners();
 
     try {
-      await _clearStoredCodes();
+      await _obd.clearStoredCodes();
     } catch (error) {
+      if (_session != session) return;
       _error = error;
       _state = DtcState.clearFailed;
       notifyListeners();
       return;
     }
-    await _loadCodes();
+    if (_session == session) await _loadCodes(session);
   }
 
   Future<void> loadCodes() async {
-    if (isBusy) return;
-    await _loadCodes();
+    final session = _session;
+    if (session == null || !canScan) return;
+    await _loadCodes(session);
   }
 
-  Future<void> _loadCodes() async {
+  Future<void> _loadCodes(ObdSession session) async {
     _state = DtcState.loading;
     _error = null;
     notifyListeners();
 
     try {
-      _codes = await _readStoredCodes();
+      final codes = await _obd.readStoredCodes();
+      if (_session != session) return;
+      _codes = codes;
       _state = DtcState.success;
       notifyListeners();
     } catch (error) {
+      if (_session != session) return;
       _error = error;
       _state = DtcState.error;
       notifyListeners();
     }
   }
 
-  Future<void> clearStoredCodes() async {}
+  @override
+  void dispose() {
+    _obd.removeListener(_syncSession);
+    _session = null;
+    super.dispose();
+  }
 }

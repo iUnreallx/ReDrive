@@ -22,7 +22,7 @@ class DtcScreen extends StatelessWidget {
     final loading = dtc.isBusy;
     final count = success ? dtc.codes.length : null;
     final status = switch (dtc.state) {
-      DtcState.idle => l.dtcIdle,
+      DtcState.idle => dtc.connected ? l.dtcIdle : l.notConnected,
       DtcState.loading => l.dtcLoading,
       DtcState.clearing => l.dtcClearing,
       DtcState.clearFailed => l.dtcClearFailed,
@@ -49,13 +49,17 @@ class DtcScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Tooltip(
-                message: dtc.state == DtcState.idle ? l.dtcScan : l.dtcRescan,
+                message: !dtc.connected
+                    ? l.notConnected
+                    : dtc.state == DtcState.idle
+                    ? l.dtcScan
+                    : l.dtcRescan,
                 child: Material(
                   color: AppColors.cardBg,
                   borderRadius: BorderRadius.circular(20),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
-                    onTap: loading ? null : dtc.loadCodes,
+                    onTap: dtc.canScan ? dtc.loadCodes : null,
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Row(
@@ -112,7 +116,7 @@ class DtcScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          if (!loading)
+                          if (dtc.canScan)
                             const CircleAvatar(
                               radius: 18,
                               backgroundColor: _greenTint,
@@ -165,9 +169,7 @@ class DtcScreen extends StatelessWidget {
               ],
               const SizedBox(height: 16),
               OutlinedButton.icon(
-                onPressed: success && dtc.codes.isNotEmpty
-                    ? () => _confirmClear(context)
-                    : null,
+                onPressed: dtc.canClear ? () => _confirmClear(context) : null,
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(60),
                   foregroundColor: AppColors.warning,
@@ -176,7 +178,7 @@ class DtcScreen extends StatelessWidget {
                   ),
                   side: BorderSide(
                     color: AppColors.warning.withValues(
-                      alpha: success && dtc.codes.isNotEmpty ? 1 : .45,
+                      alpha: dtc.canClear ? 1 : .45,
                     ),
                     width: 2,
                   ),
@@ -203,6 +205,8 @@ class DtcScreen extends StatelessWidget {
 
 Future<void> _confirmClear(BuildContext context) async {
   final l = AppLocalizations.of(context);
+  final obd = context.read<DtcProvider>();
+  final session = obd.session;
   final confirmed = await showModalBottomSheet<bool>(
     context: context,
     showDragHandle: true,
@@ -210,49 +214,66 @@ Future<void> _confirmClear(BuildContext context) async {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
     ),
-    builder: (sheet) => SafeArea(
-      top: false,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l.dtcClearTitle,
-              style: Theme.of(sheet).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 10),
-            Text(l.dtcClearBody, style: const TextStyle(color: Colors.white70)),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(sheet, false),
-                    child: Text(l.cancel),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.warning,
-                      foregroundColor: Colors.black,
+    builder: (sheet) {
+      final currentSession = sheet.select((DtcProvider dtc) => dtc.session);
+      if (!identical(currentSession, session)) {
+        final route = ModalRoute.of(sheet)!;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (route.isCurrent) {
+            route.navigator!.pop(false);
+          } else if (route.isActive) {
+            route.navigator!.removeRoute(route);
+          }
+        });
+        return const SizedBox.shrink();
+      }
+      return SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l.dtcClearTitle,
+                style: Theme.of(sheet).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                l.dtcClearBody,
+                style: const TextStyle(color: Colors.white70),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(sheet, false),
+                      child: Text(l.cancel),
                     ),
-                    onPressed: () => Navigator.pop(sheet, true),
-                    child: Text(l.dtcClear),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppColors.warning,
+                        foregroundColor: Colors.black,
+                      ),
+                      onPressed: () => Navigator.pop(sheet, true),
+                      child: Text(l.dtcClear),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-    ),
+      );
+    },
   );
-  if (confirmed == true && context.mounted) {
-    await context.read<DtcProvider>().clearCodes();
+  if (confirmed == true && context.mounted && identical(session, obd.session)) {
+    await obd.clearCodes();
   }
 }
 

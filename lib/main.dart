@@ -36,10 +36,7 @@ void main() {
         ),
 
         ChangeNotifierProvider(
-          create: (context) => DtcProvider(
-            readStoredCodes: context.read<ObdProvider>().readStoredCodes,
-            clearStoredCodes: context.read<ObdProvider>().clearStoredCodes,
-          ),
+          create: (context) => DtcProvider(context.read<ObdProvider>()),
         ),
       ],
       child: const RedriveApp(),
