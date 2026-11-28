@@ -15,6 +15,28 @@
   "dtcFailure": "Couldn’t read codes",
   "dtcUnsupported": "Unsupported protocol",
   "dtcClear": "Clear codes",
+  "dtcConnectTitle": "Connect the adapter",
+  "dtcConnectBody": "Plug the ELM327 into the OBD port under the steering wheel and turn on the ignition.",
+  "dtcScanTitle": "Check your car",
+  "dtcScanBody": "The adapter is connected. Reading takes a few seconds, the engine can stay off.",
+  "dtcKeepIgnition": "Keep the ignition on",
+  "dtcCheckedAt": "Checked at {time}",
+  "@dtcCheckedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dtcCount": "{n, plural, one{{n} code} other{{n} codes}}",
+  "@dtcCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "dtcAllGood": "Check Engine has no stored codes",
   "@@locale": "en",
   "home": "Home",
   "@home": {
