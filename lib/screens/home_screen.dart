@@ -199,32 +199,83 @@ class _HomeScreenState extends State<HomeScreen> {
         return PopScope(
           canPop: false,
           child: AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(height: 24),
-                Selector<ObdProvider, ObdSourceState>(
-                  selector: (_, obd) => obd.state,
-                  builder: (context, state, _) => Text(
-                    _connectionMessage(context, state),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
+            insetPadding: const EdgeInsets.symmetric(horizontal: 60),
+            backgroundColor: const Color(0xFF131315),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
             ),
-            actions: [
-              TextButton(
-                onPressed: () async {
-                  await onCancel();
+            contentPadding: EdgeInsets.zero,
+            content: SizedBox(
+              height: 220,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(
+                      width: 55,
+                      height: 55,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 4.5,
+                        color: Color(0xFFC4FF47),
+                      ),
+                    ),
 
-                  if (dialogContext.mounted) {
-                    Navigator.pop(dialogContext);
-                  }
-                },
-                child: Text(l.cancel),
+                    Selector<ObdProvider, ObdSourceState>(
+                      selector: (_, obd) => obd.state,
+                      builder: (context, state, _) {
+                        return Text(
+                          _connectionMessage(context, state),
+                          textAlign: TextAlign.center,
+                          textScaler: TextScaler.noScaling,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        );
+                      },
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 26,
+                        right: 26,
+                        bottom: 8,
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await onCancel();
+                            if (dialogContext.mounted) {
+                              Navigator.pop(dialogContext);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFC4FF47),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                          ),
+                          child: Text(
+                            l.cancel,
+                            textScaler: TextScaler.noScaling,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
         );
       },
