@@ -58,6 +58,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dtcClear => 'Clear codes';
 
   @override
+  String get dtcConnectTitle => 'Connect the adapter';
+
+  @override
+  String get dtcConnectBody =>
+      'Plug the ELM327 into the OBD port under the steering wheel and turn on the ignition.';
+
+  @override
+  String get dtcScanTitle => 'Check your car';
+
+  @override
+  String get dtcScanBody =>
+      'The adapter is connected. Reading takes a few seconds, the engine can stay off.';
+
+  @override
+  String get dtcKeepIgnition => 'Keep the ignition on';
+
+  @override
+  String dtcCheckedAt(String time) {
+    return 'Checked at $time';
+  }
+
+  @override
+  String dtcCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n codes',
+      one: '$n code',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dtcAllGood => 'Check Engine has no stored codes';
+
+  @override
   String get home => 'Home';
 
   @override
