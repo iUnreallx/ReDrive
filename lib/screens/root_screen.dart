@@ -26,7 +26,7 @@ class _RootScreenState extends State<RootScreen> {
     Container(color: Colors.black),
     const ConnectionScreen(),
     const CarScreen(),
-    const DtcScreen(),
+    DtcScreen(onOpenConnection: () => setState(() => _currentIndex = 2)),
   ];
 
   @override
