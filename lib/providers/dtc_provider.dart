@@ -25,9 +25,14 @@ class DtcProvider extends ChangeNotifier {
     _session = session;
     _codes = const [];
     _error = null;
+    _checkedAt = null;
     _state = DtcState.idle;
     notifyListeners();
   }
+
+  DateTime? _checkedAt;
+
+  DateTime? get checkedAt => _checkedAt;
 
   DtcState _state = DtcState.idle;
   DtcState get state => _state;
@@ -74,6 +79,7 @@ class DtcProvider extends ChangeNotifier {
       final codes = await _obd.readStoredCodes();
       if (_session != session) return;
       _codes = codes;
+      _checkedAt = DateTime.now();
       _state = DtcState.success;
       notifyListeners();
     } catch (error) {

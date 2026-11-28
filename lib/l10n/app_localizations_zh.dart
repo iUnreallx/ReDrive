@@ -57,6 +57,39 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dtcClear => '清除故障码';
 
   @override
+  String get dtcConnectTitle => '连接适配器';
+
+  @override
+  String get dtcConnectBody => '将 ELM327 插入方向盘下方的 OBD 接口，并打开点火开关。';
+
+  @override
+  String get dtcScanTitle => '检查车辆';
+
+  @override
+  String get dtcScanBody => '适配器已连接。读取只需几秒钟，无需启动发动机。';
+
+  @override
+  String get dtcKeepIgnition => '请保持点火开关打开';
+
+  @override
+  String dtcCheckedAt(String time) {
+    return '检查时间 $time';
+  }
+
+  @override
+  String dtcCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n 个故障码',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dtcAllGood => '控制单元中没有存储的故障码';
+
+  @override
   String get home => '主页';
 
   @override
@@ -286,6 +319,39 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get dtcClear => '清除故障碼';
+
+  @override
+  String get dtcConnectTitle => '連接轉接器';
+
+  @override
+  String get dtcConnectBody => '將 ELM327 插入方向盤下方的 OBD 接口，並打開點火開關。';
+
+  @override
+  String get dtcScanTitle => '檢查車輛';
+
+  @override
+  String get dtcScanBody => '轉接器已連接。讀取只需幾秒鐘，無需啟動引擎。';
+
+  @override
+  String get dtcKeepIgnition => '請保持點火開關開啟';
+
+  @override
+  String dtcCheckedAt(String time) {
+    return '檢查時間 $time';
+  }
+
+  @override
+  String dtcCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n 個故障碼',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dtcAllGood => '控制單元中沒有儲存的故障碼';
 
   @override
   String get home => '首頁';

@@ -46,7 +46,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dtcLoading => 'Читаем коды…';
 
   @override
-  String get dtcEmpty => 'Сохранённых кодов нет';
+  String get dtcEmpty => 'Ошибок нет';
 
   @override
   String get dtcFailure => 'Не удалось прочитать коды';
@@ -56,6 +56,44 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get dtcClear => 'Стереть коды';
+
+  @override
+  String get dtcConnectTitle => 'Подключите адаптер';
+
+  @override
+  String get dtcConnectBody =>
+      'Вставьте ELM327 в разъём OBD под рулём и включите зажигание.';
+
+  @override
+  String get dtcScanTitle => 'Проверьте машину';
+
+  @override
+  String get dtcScanBody =>
+      'Адаптер подключён. Чтение займёт несколько секунд, двигатель можно не заводить.';
+
+  @override
+  String get dtcKeepIgnition => 'Не выключайте зажигание';
+
+  @override
+  String dtcCheckedAt(String time) {
+    return 'Проверено в $time';
+  }
+
+  @override
+  String dtcCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n ошибки',
+      many: '$n ошибок',
+      few: '$n ошибки',
+      one: '$n ошибка',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dtcAllGood => 'Блок не хранит кодов ошибок';
 
   @override
   String get home => 'Главная';

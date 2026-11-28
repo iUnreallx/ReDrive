@@ -197,6 +197,54 @@ abstract class AppLocalizations {
   /// **'Clear codes'**
   String get dtcClear;
 
+  /// No description provided for @dtcConnectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect the adapter'**
+  String get dtcConnectTitle;
+
+  /// No description provided for @dtcConnectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Plug the ELM327 into the OBD port under the steering wheel and turn on the ignition.'**
+  String get dtcConnectBody;
+
+  /// No description provided for @dtcScanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your car'**
+  String get dtcScanTitle;
+
+  /// No description provided for @dtcScanBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The adapter is connected. Reading takes a few seconds, the engine can stay off.'**
+  String get dtcScanBody;
+
+  /// No description provided for @dtcKeepIgnition.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the ignition on'**
+  String get dtcKeepIgnition;
+
+  /// No description provided for @dtcCheckedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked at {time}'**
+  String dtcCheckedAt(String time);
+
+  /// No description provided for @dtcCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, one{{n} code} other{{n} codes}}'**
+  String dtcCount(int n);
+
+  /// No description provided for @dtcAllGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Engine has no stored codes'**
+  String get dtcAllGood;
+
   /// Bottom bar tab: home screen
   ///
   /// In en, this message translates to:
